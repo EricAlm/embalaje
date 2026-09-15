@@ -5,15 +5,10 @@
   const stage = document.getElementById('hero-stage');
   const hud = document.getElementById('hud');
   const header = document.getElementById('site-header');
-  const motionToggle = document.getElementById('motion-toggle');
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
-  let userReduced = false;
-  try { userReduced = localStorage.getItem('linea-reduced-motion') === 'true'; } catch { /* Preferencia solo para esta sesión. */ }
   const setMotion = () => {
-    const reduced = preference.matches || userReduced;
+    const reduced = preference.matches;
     root.classList.toggle('reduce-motion', reduced);
-    motionToggle.setAttribute('aria-pressed', String(reduced));
-    motionToggle.textContent = reduced ? 'Movimiento reducido' : 'Reducir movimiento';
     document.dispatchEvent(new Event('pagemotionchange'));
     schedule();
   };
@@ -36,11 +31,6 @@
     if (event.key === 'Escape' && !document.getElementById('diagram-dialog').open && stage.classList.contains('is-exploring')) setExplore(false);
   });
   document.getElementById('sim-pause').addEventListener('click', () => document.getElementById('btn-pause').click());
-  motionToggle.addEventListener('click', () => {
-    userReduced = !root.classList.contains('reduce-motion');
-    try { localStorage.setItem('linea-reduced-motion', String(userReduced)); } catch { /* Sin almacenamiento disponible. */ }
-    setMotion();
-  });
   preference.addEventListener('change', setMotion);
 
   const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
@@ -141,5 +131,26 @@
     document.getElementById('sim-pause').disabled = false;
   }, { once: true });
   if (stage.classList.contains('is-ready')) document.getElementById('sim-pause').disabled = false;
+
+  // Videos del equipo: en miniatura, a velocidad ×1.3 y con reproducción al entrar en pantalla.
+  const teamVideos = [...document.querySelectorAll('.team-video')];
+  teamVideos.forEach(video => {
+    video.defaultPlaybackRate = 1.3;
+    video.playbackRate = 1.3;
+    video.addEventListener('loadedmetadata', () => { video.playbackRate = 1.3; });
+  });
+  const playTeamVideo = video => {
+    if (root.classList.contains('reduce-motion')) return;
+    video.playbackRate = 1.3;
+    if (video.paused) { const attempt = video.play(); if (attempt) attempt.catch(() => {}); }
+  };
+  const teamObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) playTeamVideo(entry.target);
+    else entry.target.pause();
+  }), { threshold: .05 });
+  teamVideos.forEach(video => teamObserver.observe(video));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) teamVideos.forEach(video => video.pause()); });
+  document.addEventListener('pagemotionchange', () => { if (root.classList.contains('reduce-motion')) teamVideos.forEach(video => video.pause()); });
+
   setMotion();
 })();
