@@ -1,0 +1,10 @@
+# Fuentes y herramientas locales: no pertenecen a la web publicada.
+*.docx
+*.py
+*.bat
+path.txt
+__pycache__/
+node_modules/
+.wrangler/
+.DS_Store
+Thumbs.db

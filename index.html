@@ -1,0 +1,2818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Embalaje · Más control para tu producción</title>
+<meta name="description" content="Conectá identificación, etiquetado y verificación en una línea automatizada. Descubrí cómo EMBALAJE integra el equipo y su caja en un mismo flujo de producción."/>
+<meta name="theme-color" content="#101512"/>
+<link rel="stylesheet" href="site.css?v=20260915-04"/>
+<script src="site.js?v=20260915-04" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#vision">Saltar al contenido</a>
+<header class="site-header" id="site-header">
+  <a class="wordmark" href="#inicio" aria-label="Embalaje · Inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a>
+  <nav class="site-nav" aria-label="Navegación principal"><a href="#sistema">El sistema</a><a href="#recorrido">El recorrido</a><a href="#precision">La precisión</a><a href="#detalles">El detalle</a></nav>
+  <button class="nav-action" type="button" data-open-simulator>Explorar 3D <span aria-hidden="true">↗</span></button>
+</header>
+<div class="reading-progress" aria-hidden="true"><span id="reading-progress"></span></div>
+<main id="main-content">
+<section class="hero" id="inicio" aria-labelledby="hero-heading">
+<div class="hero-stage" id="hero-stage">
+  <div class="hero-media">
+    <img class="hero-poster" src="assets/circuito.webp" alt="" width="755" height="530" fetchpriority="high"/>
+    <canvas id="c" aria-label="Simulación 3D de la línea automatizada de montaje" tabindex="-1"></canvas>
+  </div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-topline"><span><i class="live-dot" aria-hidden="true"></i>EXPERIENCIA 3D EN TIEMPO REAL</span><span id="model-count">PREPARANDO LA LÍNEA</span></div>
+  <div id="sim-load" class="sim-load" role="status">Iniciando la experiencia 3D…</div>
+  <div class="hero-copy" id="hero-copy">
+    <p class="kicker">IDENTIFICACIÓN · ETIQUETADO · VERIFICACIÓN</p>
+    <h1 id="hero-heading">Más control.<br/><span>Mejor embalaje.</span></h1>
+    <p class="hero-description">Identificación, etiquetado y verificación en una sola línea.<br/>Del equipo a la caja, cada movimiento suma control a tu producción.</p>
+  </div>
+  <div class="hero-bottom">
+    <div class="live-state"><span class="micro-label">EN LA SIMULACIÓN</span><span id="live-station">C1 · Lectura e inspección</span></div>
+    <div class="hero-controls">
+      <button id="sim-pause" class="round-control" type="button" disabled aria-pressed="false">Ⅱ <span>Pausar</span></button>
+      <button id="sim-explore" class="pill-button" type="button" data-open-simulator aria-expanded="false" aria-controls="hud">Explorar en 3D <span aria-hidden="true">↗</span></button>
+      <button id="sim-exit" class="pill-button" type="button" data-close-simulator hidden>Salir de 3D <span aria-hidden="true">×</span></button>
+    </div>
+    <a class="scroll-cue" href="#vision"><span>CONOCÉ EL SISTEMA</span><span class="circle-arrow" aria-hidden="true">↓</span></a>
+  </div>
+<div id="hud" hidden aria-label="Controles de la simulación">
+  <button id="hud-close" class="hud-close" type="button" data-close-simulator aria-label="Cerrar controles 3D">×</button>
+  <div class="eyebrow">CONTROL DE LA EXPERIENCIA</div>
+  <h2>La línea, en tus manos.</h2>
+  <div class="fila">
+    <button class="btn" id="btn-pause" type="button" aria-pressed="false">Ⅱ Pausa</button>
+    <button class="btn" id="btn-reset" type="button">↺ Reiniciar</button>
+  </div>
+  <button class="btn" id="btn-camera" type="button">◎ Restablecer vista</button>
+  <div id="modo" role="status">EN MARCHA · Seguimiento + mouse</div>
+  <div id="estaciones" aria-label="Estación actual">
+    <span data-station="C1">C1 · IA/USB</span><span data-station="C2">C2 · Etiqueta</span><span data-station="C3">C3 · Caja</span><span data-station="C4">C4 · Retiro</span><span data-station="RET">Retorno</span>
+  </div>
+  <div id="estado">INICIANDO CICLO AUTOMÁTICO…</div>
+  <div id="progwrap" role="progressbar" aria-label="Progreso del paso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="prog"></div></div>
+  <div id="contador">TELÉFONOS PROCESADOS: 0</div>
+  <details><summary>Sensores y actuadores</summary>
+  <div class="fila">
+    <span class="item"><span class="lamp" id="lmp-motor"></span>MOTOR C1</span>
+    <span class="item"><span class="lamp" id="lmp-home"></span>HOME</span>
+    <span class="item"><span class="lamp" id="lmp-lim"></span>LÍMITE</span>
+    <span class="item"><span class="lamp" id="lmp-ev1"></span>EV1</span>
+    <span class="item"><span class="lamp" id="lmp-ev2"></span>EV2</span>
+    <span class="item"><span class="lamp" id="lmp-ev3"></span>EV3</span>
+    <span class="item"><span class="lamp" id="lmp-cam"></span>IA (CÁMARA)</span>
+    <span class="item"><span class="lamp" id="lmp-ok"></span>OK</span>
+    <span class="item"><span class="lamp" id="lmp-ocr2"></span>OCR C2</span>
+    <span class="item"><span class="lamp" id="lmp-tel"></span>CARGA</span>
+  </div>
+  <div class="fila">
+    <span class="item"><span class="lamp" id="lmp-brazo"></span>BRAZO C2</span>
+    <span class="item"><span class="lamp" id="lmp-ev1c2"></span>EV1 C2</span>
+    <span class="item"><span class="lamp" id="lmp-ev2c2"></span>EV2 C2</span>
+    <span class="item"><span class="lamp" id="lmp-m5"></span>MOTOR C4</span>
+    <span class="item"><span class="lamp" id="lmp-home5"></span>HOME C4</span>
+    <span class="item"><span class="lamp" id="lmp-lim5"></span>LÍMITE C4</span>
+  </div>
+  <div class="fila">
+    <span class="item"><span class="lamp" id="lmp-a3"></span>BRAZO C3 (XYZ)</span>
+    <span class="item"><span class="lamp" id="lmp-a2"></span>BRAZO C3 (XZ)</span>
+    <span class="item"><span class="lamp" id="lmp-z3"></span>CL4NX C3</span>
+    <span class="item"><span class="lamp" id="lmp-ocr3"></span>OCR C3</span>
+    <span class="item"><span class="lamp" id="lmp-ev1c3"></span>EV1 C3</span>
+    <span class="item"><span class="lamp" id="lmp-ev2c3"></span>EV2 C3</span>
+    <span class="item"><span class="lamp" id="lmp-box"></span>CAJAS EN RAMPA: <b id="nbox">6</b></span>
+  </div>
+  <div class="fila">
+    <span class="item"><b>EJES C2:</b></span>
+    <span class="item"><span class="lamp" id="lmp-xh2"></span>X·H</span>
+    <span class="item"><span class="lamp" id="lmp-xl2"></span>X·L</span>
+    <span class="item"><span class="lamp" id="lmp-yh2"></span>Y·H</span>
+    <span class="item"><span class="lamp" id="lmp-yl2"></span>Y·L</span>
+    <span class="item"><span class="lamp" id="lmp-zh2"></span>Z·H</span>
+    <span class="item"><span class="lamp" id="lmp-zl2"></span>Z·L</span>
+    <span class="item"><b>EJES C3:</b></span>
+    <span class="item"><span class="lamp" id="lmp-xh3"></span>X·H</span>
+    <span class="item"><span class="lamp" id="lmp-xl3"></span>X·L</span>
+    <span class="item"><span class="lamp" id="lmp-yh3"></span>Y·H</span>
+    <span class="item"><span class="lamp" id="lmp-yl3"></span>Y·L</span>
+    <span class="item"><span class="lamp" id="lmp-zh3"></span>Z·H</span>
+    <span class="item"><span class="lamp" id="lmp-zl3"></span>Z·L</span>
+  </div>
+  <div class="fila">
+    <span class="item"><span class="lamp" id="lmp-ent2"></span>C2 ENT</span>
+    <span class="item"><span class="lamp" id="lmp-sal2"></span>C2 SAL</span>
+    <span class="item"><span class="lamp" id="lmp-ent3"></span>C3 ENT</span>
+    <span class="item"><span class="lamp" id="lmp-sal3"></span>C3 SAL</span>
+    <span class="item"><span class="lamp" id="lmp-entr"></span>RET ENT</span>
+    <span class="item"><span class="lamp" id="lmp-salr"></span>RET SAL</span>
+  </div>
+  </details>
+  <details><summary>Secuencia del proceso · 33 pasos</summary><ol id="pasos"></ol></details>
+  <details><summary>Modelos GLB · Motores NEMA 23</summary>
+    <div id="model-status" role="status">Preparando modelos…</div>
+    <label class="model-input">Conveyor.glb<input id="file-conveyor" type="file" accept=".glb"/></label>
+    <label class="model-input">CL4NX_Impresora.glb<input id="file-printer" type="file" accept=".glb"/></label>
+    <label class="model-input">Elevador.glb · C1 y C4<input id="file-elevator" type="file" accept=".glb"/></label>
+    <label class="model-input">Pallet_celular.glb · Bandeja<input id="file-pallet" type="file" accept=".glb"/></label>
+    <label class="model-input">Robot_Etiquetado_Celulares.glb · C2 y C3<input id="file-robot" type="file" accept=".glb"/></label>
+    <label class="model-input">Ensamblaje_Ventosas.glb · Punta Z de C2<input id="file-suction" type="file" accept=".glb"/></label>
+    <label class="model-input">Mesa_impresora.glb · C2 y C3<input id="file-table" type="file" accept=".glb"/></label>
+    <label class="model-input">EnsamSTOPPER.glb · C1, C2 y C3<input id="file-stopper" type="file" accept=".glb"/></label>
+    <label class="model-input">EnsambConjUSB-C.glb · USB móvil de C1<input id="file-usb" type="file" accept=".glb"/></label>
+  </details>
+</div>
+<div id="hint">Arrastrar: rotar · Rueda: zoom · Botón derecho: desplazar · La cámara sigue la estación</div>
+</div>
+</section>
+
+<section class="section intro" id="vision" aria-labelledby="vision-heading">
+  <div class="section-index reveal"><span>01 / LA VISIÓN</span><span>AUTOMATIZACIÓN QUE CIERRA EL CICLO</span></div>
+  <div class="intro-grid">
+    <h2 class="display-heading reveal" id="vision-heading" data-parallax="-22">Del equipo<br/>a la caja.<br/><em>Todo conectado.</em></h2>
+    <div class="intro-copy reveal" data-parallax="24"><p class="lead">Menos tareas aisladas. Más control sobre el conjunto.</p><p>EMBALAJE conecta la lectura del IMEI con las etiquetas del teléfono y de su caja. El pallet mantiene reunidos el equipo, la SIM Tray y la caja, mientras cada estación aporta identificación, posicionamiento y control visual.</p><a class="text-link" href="#recorrido">Descubrí cómo se conecta el proceso <span aria-hidden="true">↘</span></a></div>
+  </div>
+  <div class="project-metrics">
+    <div class="metric reveal"><span class="metric-number">01</span><div><strong>Fuente de datos única</strong><p>El IMEI sale del propio equipo, sin digitación.</p></div></div>
+    <div class="metric reveal"><span class="metric-number">03</span><div><strong>Componentes reunidos</strong><p>Equipo, SIM Tray y caja en un mismo pallet.</p></div></div>
+    <div class="metric reveal"><span class="metric-number">02</span><div><strong>Puntos de etiquetado</strong><p>Equipo y caja identificados dentro del mismo flujo.</p></div></div>
+  </div>
+  <p class="source-note">Explorá la representación 3D del sistema y conocé cómo se integran sus estaciones.</p>
+</section>
+
+<section class="section system-section" id="sistema" aria-labelledby="system-heading">
+  <div class="section-index reveal"><span>02 / EL SISTEMA</span><span>DISEÑADO PARA VOLVER A EMPEZAR</span></div>
+  <div class="editorial-grid">
+    <figure class="diagram-card system-diagram reveal" data-parallax="-32">
+      <a class="diagram-link" href="assets/circuito.webp" data-lightbox data-caption="Circuito de ida y retorno · Esquema de diseño" aria-label="Ampliar el diseño del circuito de conveyors"><img src="assets/circuito.webp" width="755" height="530" loading="lazy" decoding="async" alt="Diseño 3D de los conveyors superior e inferior, con pallets y elevadores en los extremos."/><span class="image-expand" aria-hidden="true">↗</span></a>
+      <figcaption><span>FIG. 01 — CIRCUITO CERRADO</span><span>ESQUEMA DE DISEÑO</span></figcaption>
+    </figure>
+    <div class="editorial-copy" data-parallax="24"><p class="kicker reveal">IDA. RETORNO. CONTINUIDAD.</p><h2 class="section-heading reveal" id="system-heading">Un flujo que<br/>vuelve a empezar.</h2><p class="reveal">El nivel superior lleva cada pallet de una operación a la siguiente. El inferior lo devuelve al inicio. Los elevadores conectan ambos recorridos y automatizan la recirculación.</p><p class="reveal">La distribución reúne transporte, estaciones y acceso a consumibles en un mismo entorno, con las zonas de carga y descarga al alcance del operador.</p><div class="inline-specs reveal"><div><strong>Doble nivel</strong><span>Transporte y recirculación</span></div><div><strong>Acceso directo</strong><span>Carga, consumibles y descarga</span></div></div></div>
+  </div>
+  <div class="drift-type"><span data-drift>PRECISIÓN <span>EN MOVIMIENTO</span></span></div>
+</section>
+
+<section class="section process-section" id="recorrido" aria-labelledby="process-heading">
+  <div class="section-index reveal"><span>03 / EL RECORRIDO</span><span>EL DATO CONECTA CADA OPERACIÓN</span></div>
+  <div class="process-intro"><h2 class="display-heading reveal" id="process-heading">Cada etapa cuenta.<br/><em>Juntas, suman control.</em></h2><p class="reveal">Descubrí cómo la identificación del equipo se transforma en un proceso coordinado de etiquetado, inspección y manipulación.</p></div>
+  <div class="process-layout">
+    <ol class="process-steps">
+      <li class="process-step is-active" data-process-step="0"><span class="step-number">01 / IDENTIFICAR</span><h3>El dato nace<br/>en el equipo.</h3><p>El pallet posiciona el teléfono y su SIM Tray. La inspección visual comprueba su presencia y orientación antes de la conexión.</p><p>El conjunto USB se acopla al teléfono y obtiene el IMEI que alimenta el etiquetado. La información pasa del dispositivo al proceso, sin transcripción manual.</p><span class="step-tag">LECTURA USB · POSICIONAMIENTO GUIADO</span><figure class="mobile-stage-media"><a href="assets/lectura.webp" data-lightbox data-caption="Identificación del equipo"><img src="assets/lectura.webp" width="810" height="600" loading="lazy" alt="Pallet y módulo de lectura de IMEI junto al elevador."/></a></figure></li>
+      <li class="process-step" data-process-step="1"><span class="step-number">02 / ETIQUETAR</span><h3>Del dato<br/>a la etiqueta.</h3><p>La impresora prepara la identificación del equipo y el cabezal de succión la aplica sobre la tapa trasera.</p><p>El posicionamiento del pallet, el dispensado y el movimiento cartesiano trabajan juntos para repetir la aplicación dentro del mismo ciclo.</p><span class="step-tag">IMPRESIÓN TÉRMICA · APLICACIÓN AUTOMÁTICA</span><figure class="mobile-stage-media"><a href="assets/impresoras.webp" data-lightbox data-caption="Impresión de etiquetas"><img src="assets/impresoras.webp" width="779" height="585" loading="lazy" alt="Impresoras de transferencia térmica para la identificación del equipo y la caja."/></a></figure></li>
+      <li class="process-step" data-process-step="2"><span class="step-number">03 / VERIFICAR</span><h3>La calidad también<br/>forma parte del flujo.</h3><p>La visión artificial y el OCR comprueban la lectura y la ubicación de las etiquetas durante el recorrido.</p><p>La inspección integrada aporta información sobre cada aplicación y acompaña el control del proceso.</p><span class="step-tag">VISIÓN ARTIFICIAL · AOI / OCR</span><figure class="mobile-stage-media"><a href="assets/inspeccion.webp" data-lightbox data-caption="Control óptico de etiquetas"><img src="assets/inspeccion.webp" width="1210" height="610" loading="lazy" alt="Cámara OCR sobre el teléfono etiquetado en su pallet."/></a></figure></li>
+      <li class="process-step" data-process-step="3"><span class="step-number">04 / INTEGRAR</span><h3>La caja encuentra<br/>su lugar.</h3><p>El manipulador toma la caja desde la rampa y la sostiene para recibir la etiqueta lateral. Después la coloca en el alojamiento del pallet.</p><p>El suministro, el etiquetado y la colocación se coordinan para reunir el conjunto sin trasladarlo entre operaciones manuales separadas.</p><span class="step-tag">MANIPULACIÓN · ETIQUETADO LATERAL</span><figure class="mobile-stage-media"><a href="assets/caja.webp" data-lightbox data-caption="Manipulación y etiquetado de caja"><img src="assets/caja.webp" width="1210" height="610" loading="lazy" alt="Rampa de cajas y manipulador que coloca la caja identificada sobre el pallet."/></a></figure></li>
+      <li class="process-step" data-process-step="4"><span class="step-number">05 / RECIRCULAR</span><h3>El conjunto sale.<br/>El soporte continúa.</h3><p>El equipo, la SIM Tray y la caja llegan reunidos al puesto de descarga. El pallet vacío desciende y vuelve al inicio por el conveyor inferior.</p><p>El retorno automático mantiene los soportes dentro del circuito y prepara la línea para un nuevo recorrido.</p><span class="step-tag">DESCARGA · RETORNO AUTOMÁTICO</span><figure class="mobile-stage-media"><a href="assets/retorno.webp" data-lightbox data-caption="Descarga y retorno del pallet"><img src="assets/retorno.webp" width="1210" height="610" loading="lazy" alt="Distribución de la línea con puestos de carga y descarga."/></a></figure></li>
+    </ol>
+    <div class="process-visual">
+      <div class="visual-label"><span>DISEÑO DE LA SECUENCIA</span><span id="process-counter">01 / 05</span></div>
+      <div class="process-screen">
+        <img class="is-active" data-process-image="0" src="assets/lectura.webp" width="810" height="600" alt="" loading="lazy"/>
+        <img data-process-image="1" src="assets/impresoras.webp" width="779" height="585" alt="" loading="lazy"/>
+        <img data-process-image="2" src="assets/inspeccion.webp" width="1210" height="610" alt="" loading="lazy"/>
+        <img data-process-image="3" src="assets/caja.webp" width="1210" height="610" alt="" loading="lazy"/>
+        <img data-process-image="4" src="assets/retorno.webp" width="1210" height="610" alt="" loading="lazy"/>
+      </div>
+      <div class="process-caption"><span id="process-caption">Lectura de IMEI</span><span>ESQUEMA CONCEPTUAL</span></div>
+      <div class="step-progress"><span id="step-progress"></span></div>
+      <a class="text-link" id="process-enlarge" href="assets/lectura.webp" data-lightbox data-caption="Identificación del equipo">Ver en detalle <span aria-hidden="true">↗</span></a>
+      <p class="visual-note">Conocé cada operación y descubrí sus movimientos en el recorrido 3D.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section precision-section" id="precision" aria-labelledby="precision-heading">
+  <div class="section-index reveal"><span>04 / LA PRECISIÓN</span><span>CADA APOYO TIENE UN PORQUÉ</span></div>
+  <div class="precision-grid">
+    <div><h2 class="section-heading reveal" id="precision-heading">Cada formato.<br/><em>Su ajuste preciso.</em></h2><p class="reveal">Una base común acompaña distintos modelos. Las cavidades regulables y las referencias del pallet ordenan el posicionamiento de las piezas y facilitan los cambios de formato.</p>
+      <details class="spec-detail reveal" open><summary>Adaptación del equipo <span aria-hidden="true">+</span></summary><dl><div><dt>Largo del teléfono</dt><dd>152–172 mm</dd></div><div><dt>Ancho</dt><dd>70–78 mm</dd></div><div><dt>Espesor</dt><dd>5,9–9,2 mm</dd></div></dl></details>
+      <details class="spec-detail reveal"><summary>Adaptación de la caja <span aria-hidden="true">+</span></summary><dl><div><dt>Largo</dt><dd>169–190 mm</dd></div><div><dt>Ancho</dt><dd>82–97 mm</dd></div><div><dt>Altura</dt><dd>42–62 mm</dd></div></dl></details>
+      <details class="spec-detail reveal"><summary>Conexión USB guiada <span aria-hidden="true">+</span></summary><p>El conector se aproxima al puerto desde una posición controlada. El soporte regulable acompaña el ajuste del pallet para adaptar la conexión al formato del equipo.</p></details>
+    </div>
+    <figure class="diagram-card pallet-diagram reveal" data-parallax="-38"><a class="diagram-link" href="assets/pallet.webp" data-lightbox data-caption="Pallet universal y zonas de ajuste · Esquema de diseño" aria-label="Ampliar el diseño del pallet"><img src="assets/pallet.webp" width="755" height="590" loading="lazy" decoding="async" alt="Diseño del pallet con cavidades para caja, teléfono y SIM Tray; las referencias ajustables están resaltadas en rojo."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>FIG. 02 — PALLET UNIVERSAL</span><span>REFERENCIAS Y AJUSTES</span></figcaption></figure>
+  </div>
+  <div class="tolerance-grid"><div class="reveal"><span class="micro-label">IDENTIFICACIÓN DIRECTA</span><strong>USB</strong><p>El dato parte del dispositivo y se integra al etiquetado.</p></div><div class="reveal"><span class="micro-label">INSPECCIÓN ÓPTICA</span><strong>OCR</strong><p>La lectura de las etiquetas acompaña el control del proceso.</p></div><div class="reveal"><span class="micro-label">MOVIMIENTO COORDINADO</span><strong>XYZ</strong><p>Los ejes cartesianos llevan cada aplicación a su posición.</p></div></div>
+</section>
+
+<section class="section people-section" id="ingenieria" aria-labelledby="people-heading">
+  <div class="section-index reveal"><span>05 / INGENIERÍA PARA OPERAR</span><span>EL SISTEMA COMPLETO IMPORTA</span></div>
+  <div class="people-heading"><h2 class="display-heading reveal" id="people-heading" data-parallax="-18">Automatizar el proceso.</h2><p class="reveal">La carga, el abastecimiento y la descarga se organizan alrededor de una línea que conecta las operaciones repetitivas. Más claridad en el flujo y acceso directo a cada zona de trabajo.</p></div>
+  <figure class="diagram-card wide-diagram reveal"><a class="diagram-link" href="assets/conjunto.webp" data-lightbox data-caption="Distribución general y puestos de operación · Render del sistema" aria-label="Ampliar la distribución general"><img src="assets/conjunto.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Render de la distribución general de la línea, con puestos de operación, conveyors y equipos de etiquetado." data-parallax="18"/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>FIG. 03 — VISIÓN DE CONJUNTO</span><span>RENDER DEL SISTEMA</span></figcaption></figure>
+  <div class="principles"><article class="reveal"><span>01</span><h3>Acceso simple</h3><p>Impresoras y consumibles al alcance para facilitar el cambio de rollos y la asistencia.</p></article><article class="reveal"><span>02</span><h3>Operaciones conectadas</h3><p>Transporte, etiquetado y manipulación coordinados dentro del mismo recorrido.</p></article><article class="reveal"><span>03</span><h3>Control a la vista</h3><p>Sensores, actuadores y estados de estación que permiten seguir el funcionamiento de la línea.</p></article></div>
+</section>
+
+<section class="section gallery-section" id="detalles" aria-labelledby="gallery-heading">
+  <div class="section-index reveal"><span>06 / EL DETALLE</span><span>INGENIERÍA QUE SE VE DE CERCA</span></div>
+  <div class="gallery-intro"><h2 class="display-heading reveal" id="gallery-heading">Acercate al sistema.<br/><em>Descubrí sus detalles.</em></h2><p class="reveal">Desde la entrada del equipo hasta la entrega del conjunto: una distribución que une las operaciones y hace visible el recorrido.</p></div>
+  <div class="gallery-grid">
+    <figure class="diagram-card gallery-card reveal" data-parallax="-16"><a class="diagram-link" href="assets/identificacion.webp" data-lightbox data-caption="Estación de identificación · Elevador y lectura USB" aria-label="Ampliar la estación de identificación"><img src="assets/identificacion.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Estación de identificación con el elevador, el pallet y el módulo de lectura USB."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>IDENTIFICACIÓN</span><span>LECTURA USB</span></figcaption></figure>
+    <figure class="diagram-card gallery-card reveal" data-parallax="16"><a class="diagram-link" href="assets/descarga.webp" data-lightbox data-caption="Puesto de descarga · Retiro del conjunto" aria-label="Ampliar el puesto de descarga"><img src="assets/descarga.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Puesto de descarga para retirar el equipo, la SIM Tray y la caja."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>DESCARGA</span><span>CONJUNTO REUNIDO</span></figcaption></figure>
+  </div>
+  <div class="photo-band">
+    <div class="photo-band-head"><p class="kicker reveal">LOS COMPONENTES, DE CERCA</p><p class="reveal">Equipo, soporte, caja e impresión: las piezas de tu operación, conectadas en una misma solución.</p></div>
+    <div class="photo-grid">
+      <figure class="photo-card reveal" data-parallax="-16"><a class="diagram-link" href="assets/operacion.webp" data-lightbox data-caption="Operación de referencia · Componentes del proceso" aria-label="Ampliar la foto de operación de referencia"><img src="assets/operacion.webp" width="606" height="455" loading="lazy" decoding="async" alt="Fotografía de la operación de referencia con los componentes del proceso."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>OPERACIÓN DE REFERENCIA</span><span>FIG. 09</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="-22"><a class="diagram-link" href="assets/componentes.webp" data-lightbox data-caption="Componentes del proceso · Equipo y bandeja" aria-label="Ampliar la foto de los componentes"><img src="assets/componentes.webp" width="834" height="624" loading="lazy" decoding="async" alt="Fotografía de los componentes que se cargan en el pallet."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>COMPONENTES DEL PROCESO</span><span>FIG. 10</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="-10"><a class="diagram-link" href="assets/caja-blanda.webp" data-lightbox data-caption="Caja blanda · Accesorios y cuna" aria-label="Ampliar la foto de la caja blanda"><img src="assets/caja-blanda.webp" width="798" height="599" loading="lazy" decoding="async" alt="Fotografía de la caja blanda con sus accesorios y la cuna para el equipo."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>CAJA BLANDA CON ACCESORIOS</span><span>FIG. 11</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="20"><a class="diagram-link" href="assets/impresoras.webp" data-lightbox data-caption="Impresoras de transferencia · Zebra y SATO" aria-label="Ampliar la foto de las impresoras"><img src="assets/impresoras.webp" width="779" height="585" loading="lazy" decoding="async" alt="Fotografía de las impresoras de transferencia térmica para etiquetas."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>IMPRESORAS DE ETIQUETAS</span><span>FIG. 13</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="26"><a class="diagram-link" href="assets/dispensado.webp" data-lightbox data-caption="Dispensado de etiquetas · Salida repetitiva" aria-label="Ampliar la foto del dispensado de etiquetas"><img src="assets/dispensado.webp" width="779" height="585" loading="lazy" decoding="async" alt="Fotografía de la salida de etiquetas dispensadas con papel base acerado."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>DISPENSADO DE ETIQUETAS</span><span>FIG. 14</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="closing section" aria-labelledby="closing-heading"><p class="kicker reveal">EL VALOR ESTÁ EN CÓMO SE CONECTA TODO</p><h2 class="display-heading reveal" id="closing-heading">Conocé el sistema.<br/><em>Imaginá el próximo paso.</em></h2><a class="pill-button large-button reveal" href="#inicio">Explorar EMBALAJE en 3D <span aria-hidden="true">↑</span></a></section>
+</main>
+<footer class="site-footer"><a class="wordmark" href="#inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a><p>Automatización y trazabilidad.<br/>Presentación del sistema y simulación en vivo.</p><div><button type="button" id="motion-toggle" aria-pressed="false">Reducir movimiento</button></div></footer>
+<dialog id="diagram-dialog" class="diagram-dialog" aria-labelledby="dialog-caption"><button class="dialog-close" type="button" aria-label="Cerrar imagen">×</button><img id="dialog-image" alt=""/><p id="dialog-caption"></p></dialog>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const BELT_Y = 1.6, BOT_Y = 0.55, BELT_W = 1.5;
+const C1_X = -16, C4_X = -7.3, C2_STOP = -13.0;
+const CAR_HOME = 0.55, CAR_TOP = 1.6, TOP_Y = 3.0;
+const BELT_SPEED = 2.0;
+const PUSH_LIFT = 0.05;
+// Altura del puerto respecto del carro cuando EV1 posiciona el pallet.
+const USB_AXIS_Y = 0.06 + 0.0825 + PUSH_LIFT;
+const USB_TIP_IN_Z = 0.338, USB_STROKE = 0.040, USB_TIP_OUT_Z = USB_TIP_IN_Z + USB_STROKE;
+const TOP_CINTAS = [[-11.4, -9.4]];
+const RET = [-15.0, -8.4];
+const XP = -13.0;
+const LAB_Y = 1.84, LAB_IN_Z = 1.50, LAB_OUT_Z = 1.31;
+const ARM_HOME_X = -14.2, ARM_HOME_Z = 1.6, CUP_UP = 2.5;
+const CUP_PICK = LAB_Y + 0.002, CUP_PLACE = BELT_Y + 0.06 + PUSH_LIFT + 0.1055 + 0.002;
+
+const C3_STOP = -10.4, XP3 = -10.0;
+const ARM3_HOME_X = -11.4, ARM3_HOME_Z = 1.6, CUP3_PICK = 1.96, CUP3_LABEL = 2.06;
+const ARM2_HOME_X = -11.4, ARM2_HOME_Z = -0.95;
+// Alojamiento medido en Pallet_celular.glb tras buildPallet():
+// X [0.30514, 0.58286], Z [-0.240, 0.390], fondo Y=0.01826.
+// La solapa y la etiqueta también deben caber: 5 mm de holgura en Z y ~4 mm en X.
+const BOX_X = 0.444, BOX_Z = 0.075, BOX_Y = 0.12;
+const BOX_WIDTH = 0.620, BOX_DEPTH = 0.264, BOX_SEAT_Y = 0.01826;
+const FLAP_Y = 0.13, BOX_GRIP_X = BOX_WIDTH / 2, BOX_GRIP_Z = -BOX_DEPTH / 2;
+const BOX_ARM_X = C3_STOP + BOX_X - 0.10 - BOX_DEPTH / 2;
+const BOX_ARM_Z = BOX_Z - BOX_WIDTH / 2;
+const ARM3_LABEL_Z = BOX_Z + BOX_WIDTH / 2 + 0.16;
+const NAIL_UP = 2.75, NAIL_MID = 2.205;
+const NAIL_PLACE = BELT_Y + 0.06 + PUSH_LIFT + BOX_SEAT_Y + BOX_Y / 2 + FLAP_Y;
+const SIM_X = -0.42;
+const RAMP_X = -9.5, RAMP_Z0 = -0.95, RAMP_Z1 = -2.85, RAMP_Y0 = 1.62, RAMP_Y1 = 1.95;
+const RAMP_SLOTS = [];
+for (let i = 0; i < 6; i++) {
+  const z = RAMP_Z0 - BOX_DEPTH / 2 - (BOX_DEPTH + 0.07) * i;
+  const ry = RAMP_Y0 + (RAMP_Y1 - RAMP_Y0) * (RAMP_Z0 - z) / (RAMP_Z0 - RAMP_Z1);
+  RAMP_SLOTS.push(new THREE.Vector3(RAMP_X, ry + 0.075, z));
+}
+const NAIL_PICK = RAMP_SLOTS[0].y + FLAP_Y;
+
+const PASOS = [
+  { nombre: 'INICIO · PREPARANDO NUEVO CICLO', dur: 0.7 },
+  { nombre: '1 · PLANTILLA LISTA EN EL ELEVADOR C1', dur: 0.5 },
+  { nombre: '2 · C1 SUBE (MOTOR ON, HOME → LÍMITE)', dur: 1.5 },
+  { nombre: '3 · CARGA AUTOMÁTICA DEL TELÉFONO Y SIM', dur: 2.4 },
+  { nombre: '4 · EV1 C1: EMPUJADOR ELEVA 5 cm', dur: 0.9 },
+  { nombre: '5 · EV2 C1: UÑAS AGARRAN LA PLANTILLA', dur: 0.8 },
+  { nombre: '6 · IA: VERIFICA LA POSICIÓN DEL TELÉFONO', dur: 3.0 },
+  { nombre: '7 · EV3: PISTÓN USB INSERTA EL CABLE', dur: 1.0 },
+  { nombre: '8 · USB OK ✓ → DESACTIVAN EV1/EV2/EV3 · CL4NX C2 IMPRIME ETIQUETA', dur: 2.4 },
+  { nombre: '9 · OCR C2: VERIFICA LA ETIQUETA IMPRESA', dur: 2.0 },
+  { nombre: '10 · SALE DE C1 → CINTA 2 (C1 BAJA)', dur: 1.4 },
+  { nombre: '11 · VIAJA HASTA LA ESTACIÓN C2', dur: 0.6 },
+  { nombre: '12 · EV1 C2: POSICIONA LA PLANTILLA HACIA ARRIBA', dur: 0.8 },
+  { nombre: '13 · EV2 C2: UÑAS AGARRAN LA PLANTILLA', dur: 0.8 },
+  { nombre: '14 · BRAZO C2: VA A LA CL4NX Y ABSORBE LA ETIQUETA', dur: 2.4 },
+  { nombre: '15 · BRAZO C2: PEGA LA ETIQUETA EN EL TELÉFONO', dur: 2.6 },
+  { nombre: '16 · BRAZO C2: RETORNA A HOME', dur: 1.0 },
+  { nombre: '17 · DESACTIVAN EV1/EV2 DE C2', dur: 1.5 },
+  { nombre: '18 · VIAJA DE C2 A C3', dur: 5.0 },
+  { nombre: '19 · EV1 C3: POSICIONA LA PLANTILLA HACIA ARRIBA', dur: 0.8 },
+  { nombre: '20 · EV2 C3: UÑAS AGARRAN LA PLANTILLA', dur: 0.8 },
+  { nombre: '21 · C3: BRAZO 2 EJES TOMA LA CAJA DE LA RAMPA', dur: 2.6 },
+  { nombre: '22 · C3: LLEVA LA CAJA AL MEDIO Y LA GIRA 90° · CL4NX C3 IMPRIME', dur: 1.6 },
+  { nombre: '23 · OCR C3: VERIFICA LA ETIQUETA IMPRESA', dur: 2.0 },
+  { nombre: '24 · C3: BRAZO 3 EJES TOMA LA ETIQUETA DE LA CL4NX', dur: 2.4 },
+  { nombre: '25 · C3: PEGA LA ETIQUETA EN LA CAJA (EN EL AIRE)', dur: 3.0 },
+  { nombre: '26 · C3: LA CAJA SE POSICIONA EN LA PLANTILLA', dur: 1.8 },
+  { nombre: '27 · DESACTIVAN EV1/EV2 DE C3', dur: 1.5 },
+  { nombre: '28 · VIAJA DE C3 A C4', dur: 3.5 },
+  { nombre: '29 · C4: SE RETIRAN EL TELÉFONO Y LA CAJA', dur: 1.0 },
+  { nombre: '30 · C4 BAJA (MOTOR ON)', dur: 1.5 },
+  { nombre: '31 · SALE DE C4 → CINTA DE RETORNO', dur: 1.3 },
+  { nombre: '32 · RETORNO HASTA EL ELEVADOR C1', dur: 6.0 }
+];
+const SIG = { 0: 1, 1: 2, 32: 0 };
+
+const canvas = document.getElementById('c');
+const stageElement = document.getElementById('hero-stage');
+const finePointer = matchMedia('(pointer: fine)');
+let stageVisible = true, renderNeeded = true;
+const motionReduced = () => document.documentElement.classList.contains('reduce-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.setSize(stageElement.clientWidth, stageElement.clientHeight, false);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.82;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x14201a);
+scene.fog = new THREE.Fog(0x14201a, 28, 85);
+const pmrem = new THREE.PMREMGenerator(renderer);
+const room = new RoomEnvironment();
+const environment = pmrem.fromScene(room, 0.04);
+scene.environment = environment.texture;
+room.dispose();
+pmrem.dispose();
+
+const camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(C1_X + 5.5, 3.8, 11);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(C1_X + 0.4, 1.6, 0);
+controls.enableDamping = false;
+controls.enabled = true;
+controls.maxPolarAngle = Math.PI * 0.495;
+controls.minDistance = 1.5;
+controls.maxDistance = 48;
+controls.update();
+
+scene.add(new THREE.HemisphereLight(0xe7efdf, 0x34453b, 0.95));
+const sun = new THREE.DirectionalLight(0xfff3e2, 2.4);
+sun.position.set(-8, 12, 6);
+sun.target.position.set(-12, 1, 0);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -11; sun.shadow.camera.right = 11;
+sun.shadow.camera.top = 8; sun.shadow.camera.bottom = -8;
+sun.shadow.camera.near = 2; sun.shadow.camera.far = 60;
+sun.shadow.bias = -0.0004;
+sun.shadow.normalBias = 0.025;
+scene.add(sun, sun.target);
+const fill = new THREE.DirectionalLight(0xc2deff, 1.0);
+fill.position.set(-20, 7, -6);
+fill.target.position.set(-12, 1.5, 0);
+scene.add(fill, fill.target);
+
+function makeTSlotTexture() {
+  const cv = document.createElement('canvas');
+  cv.width = 128; cv.height = 64;
+  const g = cv.getContext('2d');
+  g.fillStyle = '#c5cbd1';
+  g.fillRect(0, 0, 128, 64);
+  g.strokeStyle = '#79838d';
+  g.lineWidth = 3;
+  for (let x = 16; x < 128; x += 32) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 64); g.stroke(); }
+  g.strokeStyle = '#e1e5e9';
+  g.lineWidth = 1;
+  for (let x = 2; x < 128; x += 4) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 64); g.stroke(); }
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = 4;
+  return t;
+}
+const tSlotTex = makeTSlotTexture();
+
+function mat(color, opts = {}) {
+  return new THREE.MeshStandardMaterial(Object.assign({ color, envMapIntensity: 0.6 }, opts));
+}
+const M = {
+  floor: mat(0x191b20, { roughness: 0.95 }),
+  frame: mat(0xf0f3f6, { roughness: 0.45, metalness: 0.55, map: tSlotTex }),
+  legs: mat(0xf0f3f6, { roughness: 0.45, metalness: 0.55, map: tSlotTex }),
+  roller: mat(0x9da8b3, { roughness: 0.28, metalness: 0.85 }),
+  post: mat(0xf0f3f6, { roughness: 0.4, metalness: 0.6, map: tSlotTex }),
+  topPlate: mat(0x4d5561, { roughness: 0.5, metalness: 0.5 }),
+  brace: mat(0xf0f3f6, { roughness: 0.45, metalness: 0.55, map: tSlotTex }),
+  platform: mat(0xf0f3f6, { roughness: 0.45, metalness: 0.55, map: tSlotTex }),
+  guide: mat(0x6b7280, { roughness: 0.5 }),
+  bracket: mat(0xf0f3f6, { roughness: 0.45, metalness: 0.55, map: tSlotTex }),
+  pusherBody: mat(0x8f98a3, { roughness: 0.4, metalness: 0.6 }),
+  rod: mat(0xd3d9e0, { roughness: 0.18, metalness: 0.95 }),
+  disc: mat(0x6e7885, { roughness: 0.45, metalness: 0.55 }),
+  handBody: mat(0x7d8da3, { roughness: 0.4, metalness: 0.6 }),
+  handPad: mat(0xd9534f, { roughness: 0.55 }),
+  usbBody: mat(0x6b7480, { roughness: 0.4, metalness: 0.6 }),
+  plug: mat(0x23262c, { roughness: 0.3, metalness: 0.7 }),
+  cable: mat(0x12151a, { roughness: 0.8 }),
+  magazine: mat(0x4a5561, { roughness: 0.5 }),
+  rail: mat(0x59626e, { roughness: 0.45, metalness: 0.5 }),
+  camBox: mat(0x3b4553, { roughness: 0.5 }),
+  lens: mat(0x0d0f12, { roughness: 0.2, metalness: 0.8 }),
+  sensor: mat(0x6b7280, { roughness: 0.5 }),
+  motorBox: mat(0x3b4250, { roughness: 0.45 }),
+  shaft: mat(0x9aa2ad, { roughness: 0.3, metalness: 0.7 }),
+  flywheel: mat(0x575f6c, { roughness: 0.45, metalness: 0.5 }),
+  marker: mat(0xd9534f, { roughness: 0.5 }),
+  zebra: mat(0x2f3540, { roughness: 0.5 }),
+  zebraDark: mat(0x1c2027, { roughness: 0.5 }),
+  zebraScreen: mat(0x123a28, { emissive: 0x39b985, emissiveIntensity: 0.6, roughness: 0.22 }),
+  cup: mat(0x8a939e, { roughness: 0.4, metalness: 0.5 }),
+  boxCard: mat(0xf2f4f6, { roughness: 0.55 })
+};
+
+function box(w, h, d, material, x, y, z, cast = true, recv = true) {
+  const geometry = new THREE.BoxGeometry(w, h, d);
+  if (material.map === tSlotTex) {
+    // Las ranuras siguen el eje largo del perfil, incluso en vigas horizontales.
+    const size = [w, h, d];
+    const axis = size.indexOf(Math.max(...size));
+    const position = geometry.attributes.position;
+    const normal = geometry.attributes.normal;
+    const uv = geometry.attributes.uv;
+    for (let i = 0; i < position.count; i++) {
+      const faceAxis = [0, 1, 2].find(a => Math.abs(normal.getComponent(i, a)) > 0.5);
+      const transverse = [0, 1, 2].find(a => a !== axis && a !== faceAxis);
+      if (faceAxis !== axis) uv.setXY(i, position.getComponent(i, transverse) / size[transverse] + 0.5, position.getComponent(i, axis) / size[axis] + 0.5);
+    }
+  }
+  const m = new THREE.Mesh(geometry, material);
+  m.position.set(x, y, z);
+  m.castShadow = cast; m.receiveShadow = recv;
+  scene.add(m);
+  return m;
+}
+function cylV(r, h, material, x, y, z) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 1, 22), material);
+  m.scale.set(1, h, 1);
+  m.position.set(x, y, z);
+  m.castShadow = true; m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+function cylX(r, material, x, y, z) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 1, 20), material);
+  m.rotation.z = Math.PI / 2;
+  m.position.set(x, y, z);
+  m.castShadow = true;
+  scene.add(m);
+  return m;
+}
+function cylZ(r, material, x, y, z, length = 1) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 1, 20), material);
+  m.rotation.x = Math.PI / 2;
+  m.scale.y = length;
+  m.position.set(x, y, z);
+  m.castShadow = true;
+  scene.add(m);
+  return m;
+}
+function makeBeltTexture(base = '#07080a', line = '#1a1d22', dark = '#010102') {
+  const cv = document.createElement('canvas');
+  cv.width = 256; cv.height = 64;
+  const g = cv.getContext('2d');
+  g.fillStyle = base; g.fillRect(0, 0, 256, 64);
+  g.strokeStyle = line; g.lineWidth = 8;
+  for (let x = -64; x < 320; x += 32) { g.beginPath(); g.moveTo(x, 64); g.lineTo(x + 32, 0); g.stroke(); }
+  g.strokeStyle = dark; g.lineWidth = 3;
+  for (let x = -64; x < 320; x += 32) { g.beginPath(); g.moveTo(x, 64); g.lineTo(x + 32, 0); g.stroke(); }
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = 4;
+  return t;
+}
+function makeLabel(texto, escala = 1) {
+  const cv = document.createElement('canvas');
+  cv.width = 512; cv.height = 128;
+  const g = cv.getContext('2d');
+  g.font = 'bold 58px "Segoe UI", Arial';
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.lineWidth = 10; g.strokeStyle = 'rgba(0,0,0,.85)';
+  g.strokeText(texto, 256, 64);
+  g.fillStyle = '#dfe6f2';
+  g.fillText(texto, 256, 64);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.minFilter = THREE.LinearFilter;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
+  const ratio = Math.max(g.measureText(texto).width, 60) / 512;
+  sp.scale.set(Math.max(1.0, ratio * 3.6) * escala, 0.26 * escala, 1);
+  sp.renderOrder = 999;
+  return sp;
+}
+function label(texto, x, y, z, escala = 1) {
+  const sp = makeLabel(texto, escala);
+  sp.position.set(x, y, z);
+  scene.add(sp);
+  return sp;
+}
+function labelOn(grp, texto, x, y, z, escala = 1) {
+  const sp = makeLabel(texto, escala);
+  sp.position.set(x, y, z);
+  grp.add(sp);
+  return sp;
+}
+
+function texConcreto() {
+  const cv = document.createElement('canvas');
+  cv.width = 512; cv.height = 512;
+  const g = cv.getContext('2d');
+  g.fillStyle = '#7d878e';
+  g.fillRect(0, 0, 512, 512);
+  for (let i = 0; i < 12000; i++) {
+    const v = 110 + Math.random() * 36 | 0;
+    g.fillStyle = 'rgba(' + v + ',' + (v + 7) + ',' + (v + 12) + ',0.12)';
+    const s = 1 + Math.random();
+    g.fillRect(Math.random() * 512, Math.random() * 512, s, s);
+  }
+  for (let i = 0; i < 16; i++) {
+    const r = 14 + Math.random() * 50;
+    const grd = g.createRadialGradient(0, 0, r * 0.1, 0, 0, r);
+    grd.addColorStop(0, 'rgba(65,75,85,0.025)');
+    grd.addColorStop(1, 'rgba(15,17,20,0)');
+    g.fillStyle = grd;
+    g.save();
+    g.translate(Math.random() * 512, Math.random() * 512);
+    g.beginPath(); g.arc(0, 0, r, 0, Math.PI * 2); g.fill();
+    g.restore();
+  }
+  g.strokeStyle = '#737d84';
+  g.lineWidth = 0.8;
+  for (let x = 0; x <= 512; x += 128) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+  for (let y = 0; y <= 512; y += 128) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(18, 9);
+  t.anisotropy = 4;
+  return t;
+}
+
+const concreteTex = texConcreto();
+const floorBump = concreteTex.clone();
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(140, 70), new THREE.MeshStandardMaterial({ map: concreteTex, bumpMap: floorBump, bumpScale: 0.018, roughness: 0.78, metalness: 0.06, envMapIntensity: 0.3 }));
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = 0;
+floor.receiveShadow = true;
+scene.add(floor);
+floor.material.color.set(0x536257);
+
+function texFranjas() {
+  const cv = document.createElement('canvas');
+  cv.width = 512; cv.height = 512;
+  const g = cv.getContext('2d');
+  g.clearRect(0, 0, 512, 512);
+  g.save();
+  g.beginPath();
+  g.rect(0, 0, 512, 512);
+   g.rect(18, 18, 476, 476);
+  g.clip('evenodd');
+  g.fillStyle = '#dcae24';
+  g.fillRect(0, 0, 512, 512);
+  g.strokeStyle = '#15171b';
+  g.lineWidth = 26;
+  for (let x = -512; x < 1024; x += 64) {
+    g.beginPath(); g.moveTo(x, 0); g.lineTo(x + 512, 512); g.stroke();
+  }
+  g.restore();
+  const t = new THREE.CanvasTexture(cv);
+  t.anisotropy = 4;
+  return t;
+}
+
+const matFranjas = new THREE.MeshStandardMaterial({ map: texFranjas(), transparent: true, roughness: 0.85, polygonOffset: true, polygonOffsetFactor: -1 });
+for (const cx of [C1_X, C2_STOP, C3_STOP, C4_X]) {
+  const hz = new THREE.Mesh(new THREE.PlaneGeometry(cx === C1_X || cx === C4_X ? 2.85 : 2.4, 2.9), matFranjas);
+  hz.rotation.x = -Math.PI / 2;
+  hz.position.set(cx, 0.012, 0);
+  hz.receiveShadow = true;
+  scene.add(hz);
+}
+const linea = new THREE.Mesh(new THREE.PlaneGeometry(18, 0.10), new THREE.MeshStandardMaterial({ color: 0xe9bd37, roughness: 0.8, polygonOffset: true, polygonOffsetFactor: -1 }));
+linea.rotation.x = -Math.PI / 2;
+linea.position.set(-11, 0.011, 3.4);
+scene.add(linea);
+
+// Nave industrial: referencias de escala y superficies que recogen la luz.
+const wallMat = mat(0x26372d, { roughness: 0.9, metalness: 0.03 });
+const darkSteel = mat(0x374c5c, { roughness: 0.5, metalness: 0.65 });
+box(34, 7, 0.2, wallMat, -12, 3.5, -7.0);
+box(34, 0.8, 0.24, darkSteel, -12, 0.4, -6.96);
+for (let x = -27; x <= 3; x += 5) {
+  box(0.22, 7, 0.32, M.post, x, 3.5, -6.8);
+  box(4.72, 0.035, 0.03, M.guide, x + 2.5, 3.0, -6.88);
+}
+const lightPanel = mat(0xe5f3ff, { emissive: 0xe5f3ff, emissiveIntensity: 2 });
+for (const x of [-18, -12, -6]) {
+  box(3.1, 0.12, 0.6, darkSteel, x, 6.0, -1.0);
+  box(2.9, 0.025, 0.48, lightPanel, x, 5.93, -1.0, false);
+  for (const dx of [-1.1, 1.1]) cylV(0.012, 1.0, M.rod, x + dx, 6.55, -1.0);
+}
+
+// Gabinete eléctrico y canalización trasera de la línea.
+box(1.0, 1.6, 0.55, M.topPlate, -18.6, 0.86, -2.8);
+box(0.91, 1.48, 0.035, wallMat, -18.6, 0.87, -2.5);
+box(0.04, 0.24, 0.06, M.plug, -18.25, 0.97, -2.46);
+for (let y = 0.4; y < 0.7; y += 0.06) box(0.58, 0.015, 0.012, M.plug, -18.6, y, -2.47, false);
+box(10.8, 0.12, 0.2, darkSteel, -12.8, 0.25, -3.4);
+
+function texPantallaPC() {
+  const cv = document.createElement('canvas');
+  cv.width = 512; cv.height = 320;
+  const g = cv.getContext('2d');
+  g.fillStyle = '#0a141f';
+  g.fillRect(0, 0, 512, 320);
+  g.fillStyle = '#3b82f6';
+  g.fillRect(16, 14, 480, 36);
+  g.fillStyle = '#dbeafe';
+  g.font = 'bold 22px "Segoe UI", Arial';
+  g.textAlign = 'center';
+  g.fillText('MEGALINEA · MASTER', 256, 38);
+  const rows = ['C1 · ELEVADOR', 'C2 · CL4NX', 'C3 · CL4NX', 'C4 · RETIRO'];
+  for (let i = 0; i < rows.length; i++) {
+    g.fillStyle = '#2dd47c';
+    g.fillRect(16, 68 + i * 46, 150, 28);
+    g.fillStyle = '#cfe3f8';
+    g.font = 'bold 19px "Segoe UI", Arial';
+    g.textAlign = 'left';
+    g.fillText(rows[i], 26, 88 + i * 46);
+    g.fillStyle = '#16222f';
+    g.fillRect(180, 68 + i * 46, 316, 28);
+    g.fillStyle = '#38bdf8';
+    g.fillRect(180, 68 + i * 46, 100 + i * 52, 28);
+  }
+  g.fillStyle = '#fbbf24';
+  g.fillRect(180, 252, 316, 30);
+  const t = new THREE.CanvasTexture(cv);
+  t.anisotropy = 4;
+  return t;
+}
+const pcX = C1_X - 1.7, pcZ = 2.0;
+box(1.3, 0.05, 0.65, new THREE.MeshStandardMaterial({ color: 0x9aa3ad, roughness: 0.5, metalness: 0.4 }), pcX, 1.575, pcZ, true, true);
+for (const dx of [-0.55, 0.55]) {
+  for (const dz of [-0.25, 0.25]) box(0.06, 1.55, 0.06, M.legs, pcX + dx, 0.775, pcZ + dz, true, true);
+}
+box(0.16, 0.3, 0.16, M.post, pcX - 0.12, 1.75, pcZ);
+const monPc = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.42, 0.05), mat(0x14181e, { roughness: 0.5 }));
+monPc.position.set(pcX - 0.12, 2.11, pcZ);
+monPc.castShadow = true;
+scene.add(monPc);
+const pantPc = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.38), new THREE.MeshBasicMaterial({ map: texPantallaPC() }));
+pantPc.position.set(pcX - 0.12, 2.11, pcZ + 0.03);
+scene.add(pantPc);
+box(0.4, 0.02, 0.14, new THREE.MeshStandardMaterial({ color: 0x23272d, roughness: 0.6 }), pcX - 0.1, 1.64, pcZ + 0.15, true, true);
+box(0.28, 0.6, 0.55, new THREE.MeshStandardMaterial({ color: 0x2a2f36, roughness: 0.45, metalness: 0.5 }), pcX + 0.5, 1.9, pcZ, true, true);
+
+function texPantallaMonitor(titulo) {
+  const cv = document.createElement('canvas');
+  cv.width = 512; cv.height = 320;
+  const g = cv.getContext('2d');
+  g.fillStyle = '#0a141f';
+  g.fillRect(0, 0, 512, 320);
+  g.fillStyle = '#dbeafe';
+  g.font = 'bold 26px "Segoe UI", Arial';
+  g.textAlign = 'center';
+  g.fillText(titulo, 256, 36);
+  for (let i = 0; i < 26; i++) {
+    g.fillStyle = (i % 2 === 0) ? '#e8eef5' : '#0a141f';
+    const w = 5 + ((i * 37) % 9);
+    g.fillRect(80 + i * 14, 60, w, 90);
+  }
+  g.fillStyle = '#2dd47c';
+  g.fillRect(120, 190, 272, 34);
+  g.fillStyle = '#0a141f';
+  g.font = 'bold 24px "Segoe UI", Arial';
+  g.fillText('ETIQUETA OK', 256, 214);
+  g.fillStyle = '#38bdf8';
+  g.fillRect(16, 250, 480, 8);
+  const t = new THREE.CanvasTexture(cv);
+  t.anisotropy = 4;
+  return t;
+}
+for (const [sx, titulo] of [[XP, 'SATO CL4NX · C2'], [XP3, 'SATO CL4NX · C3']]) {
+  box(0.05, 2.05, 0.05, M.post, sx, 1.075, 2.3);
+  const mon = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.32, 0.03), mat(0x14181e, { roughness: 0.5 }));
+  mon.position.set(sx, 2.25, 2.3);
+  mon.castShadow = true;
+  scene.add(mon);
+  const pant = new THREE.Mesh(new THREE.PlaneGeometry(0.46, 0.28), new THREE.MeshBasicMaterial({ map: texPantallaMonitor(titulo) }));
+  pant.position.set(sx, 2.25, 2.317);
+  scene.add(pant);
+}
+
+const conveyorMounts = [], printerMounts = [], motorMounts = [], tableMounts = [];
+
+// Representación de respaldo: brida cuadrada NEMA 23 (57 mm), tapas y eje.
+// Escala visual x2, acorde al teléfono y los actuadores del escenario.
+function crearNema23(x, y, z, axis = 'z', parent = scene) {
+  const motor = new THREE.Group();
+  motor.name = 'Motor NEMA 23';
+  motor.position.set(x, y, z);
+  if (axis === 'x') motor.rotation.y = Math.PI / 2;
+  if (axis === 'y') motor.rotation.x = -Math.PI / 2;
+  parent.add(motor);
+  const fallback = new THREE.Group();
+  motor.add(fallback);
+  fallback.add(box(0.114, 0.114, 0.13, M.motorBox, 0, 0, 0));
+  for (const sz of [-1, 1]) fallback.add(box(0.114, 0.114, 0.014, M.roller, 0, 0, sz * 0.065));
+  fallback.add(cylZ(0.038, M.roller, 0, 0, 0.076, 0.01));
+  fallback.add(cylZ(0.008, M.shaft, 0, 0, 0.1, 0.04));
+  for (const dx of [-0.047, 0.047]) for (const dy of [-0.047, 0.047]) {
+    fallback.add(cylZ(0.005, M.plug, dx, dy, 0.074, 0.005));
+  }
+  motorMounts.push({ parent: motor, fallback });
+  return motor;
+}
+
+function crearCinta(x0, x1, yTop, w, nombre) {
+  const start = scene.children.length;
+  const L = x1 - x0, cx = (x0 + x1) / 2;
+  const bw = 0.14, bz = 0.38;
+  const legH = yTop - 0.24;
+  const lz = 0.62;
+  for (const s of [-1, 1]) {
+    box(L, 0.24, 0.10, M.frame, cx, yTop - 0.124, s * bz, false, true);
+  }
+  const legInset = Math.min(0.5, L * 0.25);
+  for (const x of [x0 + legInset, x1 - legInset]) {
+    box(0.14, 0.08, lz * 2, M.frame, x, legH - 0.04, 0, true, false);
+    for (const z of [-lz, lz]) {
+      box(0.14, legH, 0.14, M.legs, x, legH / 2, z, true, true);
+      cylV(0.11, 0.04, M.cable, x, 0.025, z);
+      cylV(0.035, 0.12, M.rod, x, 0.08, z);
+    }
+    for (const s of [-1, 1]) cylZ(0.027, M.rod, x, yTop - 0.12, s * (bz + 0.055), 0.018);
+  }
+  for (const x of [x0 + 0.12, x1 - 0.12]) {
+    for (const s of [-1, 1]) cylZ(0.13, M.roller, x, yTop - 0.14, s * bz, bw + 0.08);
+  }
+  cylZ(0.025, M.shaft, x0 + 0.12, yTop - 0.14, 0, bz * 2 + 0.14);
+  crearNema23(x0 + 0.12, yTop - 0.335, bz + 0.13);
+  const fallback = scene.children.slice(start);
+  const tex = makeBeltTexture();
+  tex.repeat.set(L * 0.9, 1);
+  for (const s of [-1, 1]) {
+    const surf = new THREE.Mesh(new THREE.PlaneGeometry(L, bw), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85 }));
+    surf.rotation.x = -Math.PI / 2;
+    surf.position.set(cx, yTop + 0.004, s * bz);
+    surf.receiveShadow = true;
+    scene.add(surf);
+    fallback.push(surf);
+  }
+  conveyorMounts.push({ parent: scene, x0, x1, yTop, fallback, tex });
+  return tex;
+}
+
+const topTexs = TOP_CINTAS.map((c, i) => crearCinta(c[0], c[1], BELT_Y, BELT_W, 'C' + (i + 3)));
+const c2Tex = crearCinta(-14.0, -12.0, BELT_Y, BELT_W, null);
+// Tramos de enlace: la plantilla siempre tiene apoyo entre estaciones.
+for (const [a, b] of [[-15, -14], [-12, -11.4], [-9.4, -8.3]]) {
+  topTexs.push(crearCinta(a, b, BELT_Y, BELT_W, null));
+}
+label('C2', -13.0, BELT_Y + 0.65, -BELT_W / 2 - 0.7, 1.2);
+label('C3', -10.4, BELT_Y + 0.65, -BELT_W / 2 - 0.7, 1.2);
+const retTex = crearCinta(RET[0], RET[1], BOT_Y, 1.2, 'CINTA DE RETORNO');
+
+function crearTorre(x) {
+  const start = scene.children.length;
+  const tower = new THREE.Group();
+  scene.add(tower);
+  for (const px of [-1.05, 1.05]) {
+    for (const pz of [-0.95, 0.95]) {
+      const p = cylV(0.06, TOP_Y, M.post, x + px, TOP_Y / 2, pz);
+      tower.add(p);
+      box(0.36, 0.1, 0.36, M.brace, x + px, 0.05, pz, true, false);
+    }
+  }
+  box(2.34, 0.08, 0.08, M.brace, x, 0.18, 1.03);
+  box(2.34, 0.08, 0.08, M.brace, x, 0.18, -1.03);
+  box(2.7, 0.15, 2.5, M.topPlate, x, TOP_Y, 0);
+  crearNema23(x + 0.14, TOP_Y + 0.16, 0, 'x');
+  const flywheel = new THREE.Group();
+  flywheel.position.set(x + 0.44, TOP_Y + 0.16, 0);
+  const fwDisc = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.03, 22), M.flywheel);
+  fwDisc.rotation.z = Math.PI / 2;
+  flywheel.add(fwDisc);
+  const fwMark = box(0.05, 0.05, 0.05, M.marker, 0, 0.13, 0);
+  flywheel.add(fwMark);
+  tower.add(flywheel);
+  cylX(0.045, M.shaft, x + 0.3, TOP_Y + 0.16, 0).scale.y = 0.28;
+  const pulleys = [];
+  for (const [px, pz] of [[-0.8, 0.6], [0.8, -0.6]]) {
+    const pu = cylZ(0.12, M.post, x + px, TOP_Y - 0.15, pz, 0.1);
+    tower.add(pu);
+    pulleys.push(pu);
+  }
+  const cables = [];
+  for (const [px, pz] of [[-0.8, 0.6], [0.8, -0.6]]) {
+    const cb = cylV(0.018, 1, M.cable, x + px, 0, pz);
+    tower.add(cb);
+    cables.push(cb);
+  }
+  return { flywheel, pulleys, cables, fallback: scene.children.slice(start) };
+}
+
+function crearBaseRectangular() {
+  const shape = new THREE.Shape();
+  shape.moveTo(-0.15, -0.10);
+  shape.lineTo(0.15, -0.10);
+  shape.quadraticCurveTo(0.22, -0.10, 0.22, -0.03);
+  shape.lineTo(0.22, 0.03);
+  shape.quadraticCurveTo(0.22, 0.10, 0.15, 0.10);
+  shape.lineTo(-0.15, 0.10);
+  shape.quadraticCurveTo(-0.22, 0.10, -0.22, 0.03);
+  shape.lineTo(-0.22, -0.03);
+  shape.quadraticCurveTo(-0.22, -0.10, -0.15, -0.10);
+  const grp = new THREE.Group();
+  const plate = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: 0.02, bevelEnabled: false }), M.disc);
+  plate.rotation.x = -Math.PI / 2;
+  plate.position.y = -0.01;
+  plate.castShadow = true;
+  plate.receiveShadow = true;
+  grp.add(plate);
+  for (const px of [-0.12, 0.12]) {
+    for (const pz of [-0.07, 0.07]) {
+      const bolt = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.05, 12), M.rod);
+      bolt.position.set(px, 0.035, pz);
+      bolt.castShadow = true;
+      grp.add(bolt);
+    }
+  }
+  return grp;
+}
+
+function agregarUnas(grp) {
+  const claws = [];
+  for (const sg of [1, -1]) {
+    const piv = new THREE.Group();
+    piv.position.set(0, 0.01, sg * 0.17);
+    grp.add(piv);
+    const finger = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.08, 0.04), M.rod);
+    finger.position.y = 0.04;
+    finger.castShadow = true;
+    piv.add(finger);
+    claws.push({ piv, sg });
+  }
+  return claws;
+}
+
+function crearCarro(x, conPusher) {
+  const carriage = new THREE.Group();
+  carriage.position.set(x, CAR_TOP, 0);
+  scene.add(carriage);
+  const plat = box(2.0, 0.1, 1.9, M.platform, 0, -0.05, 0);
+  carriage.add(plat);
+  const miniTex = makeBeltTexture();
+  miniTex.repeat.set(2.2, 1.4);
+  for (const s of [-1, 1]) {
+    const miniBelt = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 0.16), new THREE.MeshStandardMaterial({ map: miniTex, roughness: 0.85 }));
+    miniBelt.rotation.x = -Math.PI / 2;
+    miniBelt.position.set(0, 0.006, s * 0.38);
+    miniBelt.receiveShadow = true;
+    carriage.add(miniBelt);
+    for (const x of [-0.9, 0.9]) {
+      const pu = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.2, 16), M.roller);
+      pu.rotation.x = Math.PI / 2;
+      pu.position.set(x, -0.005, s * 0.38);
+      carriage.add(pu);
+    }
+  }
+  for (const z of [-0.82, 0.82]) {
+    const g = box(1.7, 0.07, 0.05, M.guide, 0, 0.055, z, true, false);
+    carriage.add(g);
+  }
+  for (const px of [-1.02, 1.02]) {
+    for (const pz of [-0.93, 0.93]) {
+      const b = box(0.16, 0.44, 0.16, M.bracket, px, -0.27, pz, true, false);
+      carriage.add(b);
+    }
+  }
+  const out = { carriage, miniTex, fallback: [...carriage.children] };
+  if (conPusher) {
+    const pusherBody = cylV(0.085, 0.27, M.pusherBody, 0, -0.415, 0);
+    carriage.add(pusherBody);
+    const pusherRod = cylV(0.04, 1, M.rod, 0, 0, 0);
+    carriage.add(pusherRod);
+    const pusherPlate = crearBaseRectangular();
+    pusherPlate.position.set(0, -0.01, 0);
+    carriage.add(pusherPlate);
+    const pusherClaws = agregarUnas(pusherPlate);
+    out.pusherRod = pusherRod;
+    out.pusherPlate = pusherPlate;
+    out.pusherClaws = pusherClaws;
+    out.pusherFallback = [pusherBody, pusherRod, pusherPlate];
+  }
+  return out;
+}
+
+const t1 = crearTorre(C1_X);
+const c1 = crearCarro(C1_X, true);
+const t5 = crearTorre(C4_X);
+const c5 = crearCarro(C4_X, false);
+c1.carriage.position.y = CAR_HOME;
+c5.carriage.position.y = CAR_TOP;
+const elevatorMounts = [
+  { x: C1_X, tower: t1, car: c1 },
+  { x: C4_X, tower: t5, car: c5 }
+];
+
+label('C1', C1_X, TOP_Y + 0.75, 0, 1.4);
+label('C4', C4_X, TOP_Y + 0.75, 0, 1.4);
+
+const loaderGrp = new THREE.Group();
+loaderGrp.position.set(C1_X, 0, -1.65);
+scene.add(loaderGrp);
+const mag = box(0.5, 0.3, 0.75, M.magazine, 0, 2.12, -0.85);
+loaderGrp.add(mag);
+const magSlot = box(0.4, 0.07, 0.04, mat(0x0c0e11), 0, 2.02, -0.64);
+loaderGrp.add(magSlot);
+const magPost1 = box(0.06, 0.655, 0.06, M.brace, -0.25, 2.5975, -0.85);
+loaderGrp.add(magPost1);
+const magPost2 = box(0.06, 0.655, 0.06, M.brace, 0.25, 2.5975, -0.85);
+loaderGrp.add(magPost2);
+for (const px of [-0.22, 0.22]) {
+  const r = box(0.03, 0.025, 1.51, M.rail, px, 1.935, -0.815, true, false);
+  r.rotation.x = 0.103;
+  loaderGrp.add(r);
+}
+
+const usb = {};
+const usbMount = new THREE.Group();
+usbMount.name = 'Montaje USB · Perfil móvil C1';
+c1.carriage.add(usbMount);
+const usbFallback = new THREE.Group();
+usbFallback.name = 'USB simplificado';
+usbMount.add(usbFallback);
+usbFallback.add(box(0.18, 0.12, 0.09, M.brace, 0.05, 0.06, 0.47));
+usb.body = cylZ(0.045, M.usbBody, 0.075, USB_AXIS_Y, 0.58, 0.10);
+usb.rod = cylZ(0.018, M.rod, 0, USB_AXIS_Y, 0.50);
+usb.plug = box(0.03, 0.012, 0.04, M.plug, 0, USB_AXIS_Y, USB_TIP_OUT_Z + 0.02);
+usb.cableBox = box(0.08, 0.08, 0.08, M.cable, 0, USB_AXIS_Y + 0.17, 0.62);
+usb.cable1 = cylV(0.01, 0.12, M.cable, 0, USB_AXIS_Y + 0.06, 0.44);
+usb.cable2 = cylZ(0.01, M.cable, 0, USB_AXIS_Y + 0.12, 0.53);
+usbFallback.add(...Object.values(usb));
+
+const camGrp = new THREE.Group();
+camGrp.position.set(C1_X, 2.4, 0);
+const camBody = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.16, 0.24), M.camBox);
+camBody.castShadow = true;
+camGrp.add(camBody);
+const camLens = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.04, 16), M.lens);
+camLens.rotation.x = Math.PI / 2;
+camLens.position.set(0, 0, -0.14);
+camGrp.add(camLens);
+camGrp.lookAt(C1_X, 1.7925, 0);
+scene.add(camGrp);
+box(0.07, 0.525, 0.07, M.brace, C1_X, 2.6625, 0);
+
+// Soporte de inspección independiente del elevador CAD (que no tiene el techo
+// de la representación anterior). Sostiene la cámara y los rieles del cargador.
+const inspectionSupport = new THREE.Group();
+inspectionSupport.name = 'Soporte de cámara y cargador C1';
+inspectionSupport.visible = false;
+scene.add(inspectionSupport);
+inspectionSupport.add(box(0.09, 2.925, 0.09, M.post, C1_X - 1.05, 1.4625, -1.15));
+inspectionSupport.add(box(1.39, 0.09, 0.09, M.post, C1_X - 0.40, 2.925, -1.15));
+for (const dx of [-0.25, 0.25]) {
+  inspectionSupport.add(box(0.07, 0.07, 2.6, M.post, C1_X + dx, 2.925, -1.25));
+}
+inspectionSupport.add(box(0.57, 0.07, 0.07, M.post, C1_X, 2.925, 0));
+
+const coneDir = new THREE.Vector3(0, -1, 0);
+const cone = new THREE.Mesh(
+  new THREE.ConeGeometry(0.24, 0.6075, 24, 1, true),
+  new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false })
+);
+cone.position.set(C1_X, 2.096, 0);
+cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), coneDir);
+cone.visible = false;
+scene.add(cone);
+
+t5.fallback.push(
+  box(2.4, 0.62, 0.06, M.brace, C4_X, 2.69, 1.13),
+  box(2.4, 0.62, 0.06, M.brace, C4_X, 2.69, -1.13),
+  box(2.6, 0.06, 2.32, M.topPlate, C4_X, 2.4, 0)
+);
+
+const c2pBody = cylV(0.09, 0.3, M.pusherBody, C2_STOP, 1.05, 0);
+const c2pRod = cylV(0.04, 1, M.rod, C2_STOP, 1.25, 0);
+const c2pGrp = crearBaseRectangular();
+c2pGrp.position.set(C2_STOP, BELT_Y + 0.004 - 0.01, 0);
+scene.add(c2pGrp);
+const c2Claws = agregarUnas(c2pGrp);
+
+const robotFallbackStart = scene.children.length;
+box(0.14, 3.4, 0.14, M.post, -14.5, 1.7, 1.7);
+box(0.14, 3.4, 0.14, M.post, -11.2, 1.7, 1.7);
+box(3.44, 0.18, 0.18, M.post, -12.85, 3.4, 1.7);
+crearNema23(-14.32, 3.56, 1.7, 'x');
+const xBeltTex2 = makeBeltTexture();
+xBeltTex2.repeat.set(3.2, 1);
+const xBelt2 = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 0.1), new THREE.MeshStandardMaterial({ map: xBeltTex2, roughness: 0.85 }));
+xBelt2.rotation.x = -Math.PI / 2;
+xBelt2.position.set(-12.85, 3.496, 1.7);
+scene.add(xBelt2);
+
+const armGrp = new THREE.Group();
+scene.add(armGrp);
+const armTrolley = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.25, 0.5), M.topPlate);
+armTrolley.position.set(0, 3.575, 1.7);
+armTrolley.castShadow = true;
+armGrp.add(armTrolley);
+const armSaddle = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 0.3), M.topPlate);
+armSaddle.position.set(0, 3.74, 1.7);
+armGrp.add(armSaddle);
+const armYBeam = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 1.85), M.post);
+armYBeam.position.set(0, 3.82, 0.775);
+armYBeam.castShadow = true;
+armGrp.add(armYBeam);
+const armYCar = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 0.18), M.brace);
+armYCar.position.set(0, 3.82, ARM_HOME_Z);
+armYCar.castShadow = true;
+armGrp.add(armYCar);
+crearNema23(0, 3.94, 1.65, 'z', armGrp);
+crearNema23(0.13, 0.02, 0, 'y', armYCar);
+const armZRail = new THREE.Mesh(new THREE.BoxGeometry(0.07, 2.05, 0.07), M.post);
+armZRail.position.set(0, CUP_UP + 1.025, ARM_HOME_Z);
+armZRail.castShadow = true;
+armGrp.add(armZRail);
+const armMount = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.26, 0.07), M.rod);
+armMount.position.set(0, CUP_UP + 0.06, ARM_HOME_Z);
+armMount.castShadow = true;
+armGrp.add(armMount);
+label('X', -11.05, 3.85, 1.7, 0.8);
+labelOn(armGrp, 'Y', 0, 4.04, 1.7, 0.7);
+const zLbl2 = labelOn(armGrp, 'Z', 0.13, CUP_UP + 1.0, ARM_HOME_Z, 0.7);
+const armCup = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.05, 18), M.cup);
+armCup.position.set(0, CUP_UP + 0.025, ARM_HOME_Z);
+armCup.castShadow = true;
+armGrp.add(armCup);
+const armTip = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.02, 14), M.disc);
+armTip.position.set(0, CUP_UP - 0.015, ARM_HOME_Z);
+armTip.castShadow = true;
+armGrp.add(armTip);
+// El cabezal simplificado sigue visible si se carga el robot antes de las ventosas.
+const suctionFallback = [armMount, armCup, armTip];
+const robotFallback = scene.children.slice(robotFallbackStart)
+  .flatMap(o => o === armGrp ? [...armGrp.children].filter(child => !suctionFallback.includes(child)) : [o]);
+
+function crearMesaImpresora(x) {
+  const fallback = [box(0.9, 0.08, 0.9, M.brace, x, 1.56, 1.7, true, true)];
+  for (const dx of [-0.4, 0.4]) {
+    for (const z of [1.3, 2.1]) fallback.push(box(0.1, 1.56, 0.1, M.legs, x + dx, 0.78, z, true, false));
+  }
+  tableMounts.push({ x, fallback });
+}
+crearMesaImpresora(XP);
+function crearImpresora(x) {
+  const fallback = [
+    box(0.5, 0.4, 0.55, M.zebra, x, 1.8, 1.7),
+    box(0.46, 0.3, 0.02, M.zebraDark, x, 1.78, 1.44),
+    box(0.16, 0.1, 0.012, M.zebraScreen, x, 1.82, 1.44),
+    box(0.44, 0.05, 0.05, M.zebraDark, x, 2.01, 1.44)
+  ];
+  printerMounts.push({ x, fallback });
+}
+crearImpresora(XP);
+box(0.36, 0.045, 0.025, mat(0x14181e), XP, LAB_Y, 1.425);
+box(0.38, 0.03, 0.12, M.zebraDark, XP, LAB_Y - 0.015, 1.375);
+
+function crearLabelGrp() {
+  const grp = new THREE.Group();
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.05), mat(0xf2f2f2, { roughness: 0.55 }));
+  plane.rotation.x = -Math.PI / 2;
+  grp.add(plane);
+  for (let i = 0; i < 5; i++) {
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.002, 0.036), mat(0x14181e));
+    bar.position.set(-0.052 + i * 0.028, 0.002, 0);
+    grp.add(bar);
+  }
+  return grp;
+}
+const labelGrp = crearLabelGrp();
+labelGrp.position.set(XP, LAB_Y, LAB_IN_Z);
+scene.add(labelGrp);
+
+box(0.05, 0.5, 0.05, M.post, XP + 0.6, 2.23, 1.55);
+box(0.05, 0.05, 0.42, M.post, XP + 0.6, 2.42, 1.42);
+box(0.05, 0.16, 0.05, M.post, XP + 0.6, 2.31, 1.31);
+const ocrCam2 = new THREE.Group();
+ocrCam2.position.set(XP + 0.6, 2.22, LAB_OUT_Z);
+const ocrCam2Body = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.2), M.camBox);
+ocrCam2Body.castShadow = true;
+ocrCam2.add(ocrCam2Body);
+const ocrCam2Lens = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.05, 14), M.lens);
+ocrCam2Lens.rotation.x = Math.PI / 2;
+ocrCam2Lens.position.set(0, 0, 0.11);
+ocrCam2.add(ocrCam2Lens);
+ocrCam2.lookAt(XP, LAB_Y, LAB_OUT_Z);
+scene.add(ocrCam2);
+const ocr2Cone = new THREE.Mesh(
+  new THREE.ConeGeometry(0.16, 0.68, 20, 1, true),
+  new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false })
+);
+ocr2Cone.position.set(XP + 0.3, 2.03, LAB_OUT_Z);
+ocr2Cone.visible = false;
+scene.add(ocr2Cone);
+
+// ===== ESTACIÓN C3: brazo cartesiano 3 ejes + Zebra + brazo 2 ejes + rampa =====
+const robot3FallbackStart = scene.children.length;
+box(0.14, 3.4, 0.14, M.post, -11.9, 1.7, 1.7);
+box(0.14, 3.4, 0.14, M.post, -8.7, 1.7, 1.7);
+box(3.15, 0.18, 0.18, M.post, -10.325, 3.4, 1.7);
+crearNema23(-11.72, 3.56, 1.7, 'x');
+const xBeltTex3 = makeBeltTexture();
+xBeltTex3.repeat.set(3.0, 1);
+const xBelt3 = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 0.1), new THREE.MeshStandardMaterial({ map: xBeltTex3, roughness: 0.85 }));
+xBelt3.rotation.x = -Math.PI / 2;
+xBelt3.position.set(-10.325, 3.496, 1.7);
+scene.add(xBelt3);
+
+const arm3Grp = new THREE.Group();
+scene.add(arm3Grp);
+const arm3Trolley = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.25, 0.5), M.topPlate);
+arm3Trolley.position.set(0, 3.575, 1.7);
+arm3Trolley.castShadow = true;
+arm3Grp.add(arm3Trolley);
+const arm3Saddle = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 0.3), M.topPlate);
+arm3Saddle.position.set(0, 3.74, 1.7);
+arm3Grp.add(arm3Saddle);
+const arm3YBeam = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 1.85), M.post);
+arm3YBeam.position.set(0, 3.82, 0.775);
+arm3YBeam.castShadow = true;
+arm3Grp.add(arm3YBeam);
+const arm3YCar = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 0.18), M.brace);
+arm3YCar.position.set(0, 3.82, ARM3_HOME_Z);
+arm3YCar.castShadow = true;
+arm3Grp.add(arm3YCar);
+crearNema23(0, 3.94, 1.65, 'z', arm3Grp);
+crearNema23(0.13, 0.02, 0, 'y', arm3YCar);
+const arm3ZRail = new THREE.Mesh(new THREE.BoxGeometry(0.07, 2.05, 0.07), M.post);
+arm3ZRail.position.set(0, CUP_UP + 1.025, ARM3_HOME_Z);
+arm3ZRail.castShadow = true;
+arm3Grp.add(arm3ZRail);
+label('X', -8.7, 3.85, 1.7, 0.8);
+labelOn(arm3Grp, 'Y', 0, 4.04, 1.7, 0.7);
+const zLbl3 = labelOn(arm3Grp, 'Z', 0.13, CUP_UP + 1.0, ARM3_HOME_Z, 0.7);
+const pivot3Grp = new THREE.Group();
+pivot3Grp.position.set(0, CUP_UP + 0.015, ARM3_HOME_Z);
+arm3Grp.add(pivot3Grp);
+const piv3Rod = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.3, 0.05), M.rod);
+piv3Rod.position.set(0, 0.06, 0);
+pivot3Grp.add(piv3Rod);
+const piv3Cup = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.05, 16), M.cup);
+piv3Cup.position.set(0, -0.11, 0);
+piv3Cup.castShadow = true;
+pivot3Grp.add(piv3Cup);
+const piv3Tip = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.02, 12), M.disc);
+piv3Tip.position.set(0, -0.15, 0);
+piv3Tip.castShadow = true;
+pivot3Grp.add(piv3Tip);
+const robot3Fallback = scene.children.slice(robot3FallbackStart)
+  .flatMap(o => o === arm3Grp ? [...arm3Grp.children].filter(child => child !== pivot3Grp) : [o]);
+const robotMounts = [
+  { station: 'C2', centerX: -12.85, span: 3.3, tipOffset: 0.309, fallback: robotFallback,
+    pose: () => ({ x: armX, y: cupY, z: armZ }) },
+  // El eje Z termina en la articulación del pistón de C3, no en las ventosas de C2.
+  { station: 'C3', centerX: -10.325, span: 3.15, tipOffset: 0.015, fallback: robot3Fallback,
+    pose: () => ({ x: arm3X, y: cup3Y, z: arm3Z }) }
+];
+
+crearMesaImpresora(XP3);
+crearImpresora(XP3);
+box(0.36, 0.045, 0.025, mat(0x14181e), XP3, LAB_Y, 1.425);
+box(0.38, 0.03, 0.12, M.zebraDark, XP3, LAB_Y - 0.015, 1.375);
+
+const label3Grp = crearLabelGrp();
+label3Grp.position.set(XP3, LAB_Y, LAB_IN_Z);
+scene.add(label3Grp);
+
+box(0.05, 0.5, 0.05, M.post, XP3 + 0.6, 2.23, 1.55);
+box(0.05, 0.05, 0.42, M.post, XP3 + 0.6, 2.42, 1.42);
+box(0.05, 0.16, 0.05, M.post, XP3 + 0.6, 2.31, 1.31);
+const ocrCam3 = new THREE.Group();
+ocrCam3.position.set(XP3 + 0.6, 2.22, LAB_OUT_Z);
+const ocrCam3Body = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.2), M.camBox);
+ocrCam3Body.castShadow = true;
+ocrCam3.add(ocrCam3Body);
+const ocrCam3Lens = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.05, 14), M.lens);
+ocrCam3Lens.rotation.x = Math.PI / 2;
+ocrCam3Lens.position.set(0, 0, 0.11);
+ocrCam3.add(ocrCam3Lens);
+ocrCam3.lookAt(XP3, LAB_Y, LAB_OUT_Z);
+scene.add(ocrCam3);
+const ocr3Cone = new THREE.Mesh(
+  new THREE.ConeGeometry(0.16, 0.68, 20, 1, true),
+  new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false })
+);
+ocr3Cone.position.set(XP3 + 0.3, 2.03, LAB_OUT_Z);
+ocr3Cone.visible = false;
+scene.add(ocr3Cone);
+
+box(0.14, 3.1, 0.14, M.post, -11.9, 1.55, -1.3);
+box(0.14, 3.1, 0.14, M.post, -8.75, 1.55, -1.3);
+box(3.15, 0.16, 0.16, M.post, -10.325, 3.1, -1.3);
+crearNema23(-11.72, 3.26, -1.3, 'x');
+
+const arm2Grp = new THREE.Group();
+scene.add(arm2Grp);
+const arm2Trolley = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.22, 0.3), M.topPlate);
+arm2Trolley.position.set(0, 3.225, -1.3);
+arm2Trolley.castShadow = true;
+arm2Grp.add(arm2Trolley);
+const arm2ZBeam = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 1.15), M.post);
+arm2ZBeam.position.set(0, 3.0, -0.525);
+arm2ZBeam.castShadow = true;
+arm2Grp.add(arm2ZBeam);
+crearNema23(0, 3.12, -1.05, 'z', arm2Grp);
+const arm2Car = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 0.18), M.brace);
+arm2Car.position.set(0, 2.94, ARM2_HOME_Z);
+arm2Car.castShadow = true;
+arm2Grp.add(arm2Car);
+const arm2XBracket = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.05, 0.05), M.rod);
+arm2XBracket.position.set(0.05, 2.92, ARM2_HOME_Z);
+arm2Grp.add(arm2XBracket);
+const arm2Rod = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1, 0.04), M.rod);
+arm2Rod.position.set(0.10, 2.6, ARM2_HOME_Z);
+arm2Rod.castShadow = true;
+arm2Grp.add(arm2Rod);
+const arm2Head = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.06, 0.06), M.brace);
+arm2Head.position.set(0.10, NAIL_UP + 0.11, ARM2_HOME_Z);
+arm2Grp.add(arm2Head);
+const arm2NailL = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.14, 0.02), M.usbBody);
+arm2NailL.position.set(0.10, NAIL_UP + 0.005, ARM2_HOME_Z - 0.025);
+arm2Grp.add(arm2NailL);
+const arm2NailR = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.14, 0.02), M.usbBody);
+arm2NailR.position.set(0.10, NAIL_UP + 0.005, ARM2_HOME_Z + 0.025);
+arm2Grp.add(arm2NailR);
+
+box(1.2, 0.08, 2.3, M.brace, RAMP_X, 1.56, -1.9, true, true);
+for (const x of [-0.5, 0.5]) {
+  for (const z of [-1.05, 1.05]) box(0.1, 1.52, 0.1, M.legs, RAMP_X + x, 0.76, -1.9 + z, true, false);
+}
+const rampLenZ = Math.hypot(RAMP_Z0 - RAMP_Z1, RAMP_Y1 - RAMP_Y0);
+const rampAngX = Math.atan2(RAMP_Y1 - RAMP_Y0, RAMP_Z0 - RAMP_Z1);
+for (const x of [-0.05, 0.05]) {
+  const rail = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.03, rampLenZ), M.frame);
+  rail.position.set(RAMP_X + x, (RAMP_Y0 + RAMP_Y1) / 2, (RAMP_Z0 + RAMP_Z1) / 2);
+  rail.rotation.x = rampAngX;
+  rail.castShadow = true;
+  scene.add(rail);
+}
+box(0.3, 0.24, 0.02, M.bracket, RAMP_X, 1.75, RAMP_Z0 + 0.05);
+
+function crearCaja() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(BOX_WIDTH, BOX_Y, BOX_DEPTH), M.boxCard.clone());
+  body.castShadow = true;
+  g.add(body);
+  const flap = new THREE.Mesh(new THREE.BoxGeometry(BOX_WIDTH, 0.14, 0.012), M.boxCard.clone());
+  flap.position.set(0, FLAP_Y, -BOX_DEPTH / 2);
+  flap.castShadow = true;
+  g.add(flap);
+  g.rotation.y = Math.PI;
+  return g;
+}
+let rampBoxes = [];
+for (let i = 0; i < 6; i++) {
+  const c = crearCaja();
+  c.position.copy(RAMP_SLOTS[i]);
+  scene.add(c);
+  rampBoxes.push(c);
+}
+
+const c3pBody = cylV(0.09, 0.3, M.pusherBody, C3_STOP, 1.05, 0);
+const c3pRod = cylV(0.04, 1, M.rod, C3_STOP, 1.25, 0);
+const c3pGrp = crearBaseRectangular();
+c3pGrp.position.set(C3_STOP, BELT_Y + 0.004 - 0.01, 0);
+scene.add(c3pGrp);
+const c3Claws = agregarUnas(c3pGrp);
+const stopperMounts = [
+  { station: 'C2', parent: scene, x: C2_STOP, yTop: BELT_Y,
+    fallback: [c2pBody, c2pRod, c2pGrp], state: () => ({ lift: lift2, closed: closed2 }) },
+  { station: 'C3', parent: scene, x: C3_STOP, yTop: BELT_Y,
+    fallback: [c3pBody, c3pRod, c3pGrp], state: () => ({ lift: lift3, closed: closed3 }) },
+  // En C1 el módulo viaja con el carro. Las uñas agarran por ±X para dejar
+  // libre el USB en +Z; la placa queda dentro del hueco entre las correas.
+  { station: 'C1', parent: c1.carriage, x: 0, yTop: 0, rotationY: Math.PI / 2, scale: [2.5, 3.2, 5],
+    fallback: c1.pusherFallback, state: () => ({ lift, closed }) }
+];
+function lamp3d(x, y, z, r = 0.06) {
+  const s = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 16), new THREE.MeshBasicMaterial({ color: 0x333333 }));
+  s.position.set(x, y, z);
+  scene.add(s);
+  return s;
+}
+const convs = {
+  ent2: lamp3d(-14.05, BELT_Y - 0.124, -0.45, 0.05), sal2: lamp3d(-11.95, BELT_Y - 0.124, -0.45, 0.05),
+  ent3: lamp3d(-11.45, BELT_Y - 0.124, -0.45, 0.05), sal3: lamp3d(-9.35, BELT_Y - 0.124, -0.45, 0.05),
+  entr: lamp3d(-8.5, BOT_Y - 0.124, -0.45, 0.05), salr: lamp3d(-14.95, BOT_Y - 0.124, -0.45, 0.05)
+};
+
+function lampLocal(grp, x, y, z, r = 0.05) {
+  const s = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 14), new THREE.MeshBasicMaterial({ color: 0xd9534f }));
+  s.position.set(x, y, z);
+  grp.add(s);
+  return s;
+}
+const c2s = {
+  xh: lamp3d(-14.57, 3.40, 1.7, 0.05), xl: lamp3d(-11.13, 3.40, 1.7, 0.05),
+  yh: lampLocal(armGrp, 0, 3.82, 1.7), yl: lampLocal(armGrp, 0, 3.82, -0.15),
+  zh: lampLocal(armGrp, 0, CUP_UP + 2.05, ARM_HOME_Z), zl: lampLocal(armGrp, 0, CUP_UP, ARM_HOME_Z)
+};
+robotFallback.push(...Object.values(c2s));
+const c3s = {
+  xh: lamp3d(-11.9, 3.40, 1.7, 0.05), xl: lamp3d(-8.75, 3.40, 1.7, 0.05),
+  yh: lampLocal(arm3Grp, 0, 3.82, 1.7), yl: lampLocal(arm3Grp, 0, 3.82, -0.15),
+  zh: lampLocal(arm3Grp, 0, CUP_UP + 2.05, ARM3_HOME_Z), zl: lampLocal(arm3Grp, 0, CUP_UP, ARM3_HOME_Z)
+};
+robot3Fallback.push(...Object.values(c3s));
+
+const sensors = {};
+function sensor3d(x, y, nombre, lblX) {
+  const s = {};
+  s.box = box(0.1, 0.14, 0.1, M.sensor, x, y, 0.95);
+  s.lamp = new THREE.Mesh(new THREE.SphereGeometry(0.05, 14, 14), new THREE.MeshBasicMaterial({ color: 0x333333 }));
+  s.lamp.position.set(x, y + 0.18, 0.95);
+  scene.add(s.lamp);
+  return s;
+}
+sensors.home1 = sensor3d(C1_X - 1.17, 0.75, 'HOME', C1_X - 1.6);
+sensors.lim1 = sensor3d(C1_X - 1.17, 1.85, 'LÍMITE', C1_X - 1.6);
+sensors.home5 = sensor3d(C4_X + 1.17, 1.85, 'HOME', C4_X + 1.6);
+sensors.lim5 = sensor3d(C4_X + 1.17, 0.75, 'LÍMITE', C4_X + 1.6);
+
+const phoneMatBody = mat(0x23262b, { roughness: 0.45, metalness: 0.35 });
+const phoneMatScreen = new THREE.MeshStandardMaterial({ color: 0x0a1428, emissive: 0x3b82f6, emissiveIntensity: 0.7, roughness: 0.3, metalness: 0.1 });
+const phoneMatPort = mat(0x0a0a0c, { roughness: 0.4 });
+const phoneMatBump = mat(0x2a2e35, { roughness: 0.5, metalness: 0.3 });
+const phoneMatLens = mat(0x0b0e13, { roughness: 0.15, metalness: 0.8 });
+const tplMatBase = mat(0x3567c9, { roughness: 0.5, metalness: 0.2 });
+const tplMatRail = mat(0x7e8794, { roughness: 0.5, metalness: 0.5 });
+
+function crearPhone() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new RoundedBoxGeometry(0.34, 0.045, 0.68, 3, 0.018), phoneMatBody.clone());
+  body.castShadow = true;
+  g.add(body);
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.6), phoneMatScreen.clone());
+  screen.rotation.x = Math.PI / 2;
+  screen.position.y = -0.0235;
+  g.add(screen);
+  const bump = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.012, 0.1), phoneMatBump.clone());
+  bump.position.set(-0.06, 0.0275, -0.14);
+  bump.castShadow = true;
+  g.add(bump);
+  const camLensPhone = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.012, 16), phoneMatLens.clone());
+  camLensPhone.position.set(-0.06, 0.0335, -0.14);
+  g.add(camLensPhone);
+  const port = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.035, 0.02), phoneMatPort.clone());
+  port.position.set(0, 0, 0.346);
+  port.castShadow = true;
+  g.add(port);
+  return { grp: g, screen };
+}
+function crearTemplate() {
+  const grp = new THREE.Group();
+  const base = new THREE.Mesh(new RoundedBoxGeometry(1.2, 0.12, 0.9, 2, 0.02), tplMatBase.clone());
+  base.castShadow = true;
+  grp.add(base);
+  const cav = (cx, cz, w, d) => {
+    const m = new THREE.MeshStandardMaterial({ color: 0x2c4f9e, roughness: 0.5, metalness: 0.2 });
+    const t = 0.05;
+    for (const s of [-1, 1]) {
+      const fb = new THREE.Mesh(new THREE.BoxGeometry(w, 0.02, t), m);
+      fb.position.set(cx, 0.07, cz + s * (d / 2 + t / 2));
+      fb.castShadow = true;
+      grp.add(fb);
+      const sd = new THREE.Mesh(new THREE.BoxGeometry(t, 0.02, d), m);
+      sd.position.set(cx + s * (w / 2 + t / 2), 0.07, cz);
+      sd.castShadow = true;
+      grp.add(sd);
+    }
+    const piso = new THREE.Mesh(new THREE.BoxGeometry(w, 0.012, d), mat(0x274a91, { roughness: 0.55 }));
+    piso.position.set(cx, 0.054, cz);
+    grp.add(piso);
+  };
+  cav(0, 0, 0.38, 0.72);
+  cav(BOX_X, BOX_Z, BOX_DEPTH + 0.012, BOX_WIDTH + 0.012);
+  cav(SIM_X, 0, 0.15, 0.11);
+  for (const x of [-0.12, 0.12]) {
+    for (const z of [-0.07, 0.07]) {
+      const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.13, 16), mat(0x0a0e14, { roughness: 0.6 }));
+      hole.position.set(x, 0, z);
+      grp.add(hole);
+    }
+  }
+  for (const z of [-0.17, 0.17]) {
+    const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.13, 16), mat(0x0a0e14, { roughness: 0.6 }));
+    hole.position.set(0, 0, z);
+    grp.add(hole);
+  }
+  const railBack = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.035, 0.05), tplMatRail.clone());
+  railBack.position.set(0, 0.0775, -0.41);
+  railBack.castShadow = true;
+  grp.add(railBack);
+  for (const x of [-0.34, 0.34]) {
+    const railSeg = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.035, 0.05), tplMatRail.clone());
+    railSeg.position.set(x, 0.0775, 0.41);
+    railSeg.castShadow = true;
+    grp.add(railSeg);
+  }
+  const fallback = [...grp.children];
+  const phone = crearPhone();
+  phone.grp.position.set(0, 0.0825, 0);
+  phone.grp.visible = false;
+  grp.add(phone.grp);
+  const simTray = crearSimTray();
+  simTray.position.set(SIM_X, 0.0665, 0);
+  simTray.visible = false;
+  grp.add(simTray);
+  return { grp, phone, simTray, fallback };
+}
+
+function crearSimTray() {
+  const simTray = new THREE.Group();
+  const trayPlate = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.012, 0.09), mat(0x8a929c, { roughness: 0.4, metalness: 0.6 }));
+  trayPlate.castShadow = true;
+  simTray.add(trayPlate);
+  const simCard = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.003, 0.022), mat(0xe6b64c, { roughness: 0.35, metalness: 0.8 }));
+  simCard.position.y = 0.0075;
+  simTray.add(simCard);
+  const simRim = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.004, 0.02), mat(0x555c66, { roughness: 0.5 }));
+  simRim.position.set(-0.045, 0.007, 0);
+  simTray.add(simRim);
+  return simTray;
+}
+
+let pausado = false;
+let paso = 0;
+let progreso = 0;
+let contador = 0;
+let tpl = null;
+let carriageY = CAR_HOME;
+let c5Y = CAR_TOP;
+let lift = 0, closed = 0, usbExt = 0;
+let lift2 = 0, closed2 = 0;
+let lift3 = 0, closed3 = 0;
+let armX = ARM_HOME_X, armZ = ARM_HOME_Z, cupY = CUP_UP;
+let labelState = 'slot';
+let arm2X = ARM2_HOME_X, arm2Z = ARM2_HOME_Z, nailY = NAIL_UP, nailsOpen = 0, boxYaw = Math.PI;
+let arm3X = ARM3_HOME_X, arm3Z = ARM3_HOME_Z, cup3Y = CUP_UP, pivot3 = 0;
+let label3State = 'slot3';
+let box3 = null, boxState = 'none', queueShifted = false;
+let tiempoSimulacion = 0;
+
+tpl = crearTemplate();
+tpl.grp.position.set(C1_X, CAR_HOME + 0.06, 0);
+scene.add(tpl.grp);
+
+const el = id => document.getElementById(id);
+const lmpMotor = el('lmp-motor'), lmpHome = el('lmp-home'), lmpLim = el('lmp-lim'),
+  lmpEv1 = el('lmp-ev1'), lmpEv2 = el('lmp-ev2'), lmpEv3 = el('lmp-ev3'),
+  lmpCam = el('lmp-cam'), lmpOk = el('lmp-ok'), lmpBrazo = el('lmp-brazo'),
+  lmpEv1C2 = el('lmp-ev1c2'), lmpEv2C2 = el('lmp-ev2c2'),
+  lmpM5 = el('lmp-m5'), lmpHome5 = el('lmp-home5'), lmpLim5 = el('lmp-lim5'),
+  lmpA3 = el('lmp-a3'), lmpA2 = el('lmp-a2'), lmpZ3 = el('lmp-z3'), lmpBox = el('lmp-box'),
+  lmpOcr2 = el('lmp-ocr2'), lmpOcr3 = el('lmp-ocr3'), lmpTel = el('lmp-tel'),
+  lmpEv1C3 = el('lmp-ev1c3'), lmpEv2C3 = el('lmp-ev2c3');
+const lampArm = {};
+['xh2', 'xl2', 'yh2', 'yl2', 'zh2', 'zl2', 'xh3', 'xl3', 'yh3', 'yl3', 'zh3', 'zl3',
+  'ent2', 'sal2', 'ent3', 'sal3', 'entr', 'salr'].forEach(k => { lampArm[k] = el('lmp-' + k); });
+const elEstado = el('estado'), elProg = el('prog'), elContador = el('contador'),
+  btnPause = el('btn-pause'), btnReset = el('btn-reset');
+
+const ol = document.getElementById('pasos');
+PASOS.forEach((p, i) => {
+  const li = document.createElement('li');
+  li.id = 'p' + i;
+  li.textContent = p.nombre;
+  ol.appendChild(li);
+});
+
+function setLamp(elLamp, state) {
+  elLamp.className = 'lamp' + (state === 'on' ? ' on' : state === 'amber' ? ' amber' : state === 'red' ? ' red' : '');
+}
+function setLamp3d(mesh, state) {
+  mesh.material.color.set(state === 'on' ? 0x4ade80 : state === 'amber' ? 0xfbbf24 : state === 'red' ? 0xd9534f : 0x333333);
+}
+const easeInOut = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const easeIn = t => t * t;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+
+function resetLabel() {
+  labelState = 'slot';
+  labelGrp.visible = false;
+  labelGrp.scale.set(1, 1, 1);
+  labelGrp.position.set(XP, LAB_Y, LAB_IN_Z);
+  labelGrp.rotation.set(0, 0, 0);
+  labelGrp.traverse(o => { if (o.material) { o.material.transparent = false; o.material.opacity = 1; } });
+}
+
+function resetLabel3() {
+  label3State = 'slot3';
+  scene.add(label3Grp);
+  label3Grp.visible = false;
+  label3Grp.scale.set(1, 1, 1);
+  label3Grp.position.set(XP3, LAB_Y, LAB_IN_Z);
+  label3Grp.rotation.set(0, 0, 0);
+  label3Grp.traverse(o => { if (o.material) { o.material.transparent = false; o.material.opacity = 1; } });
+}
+
+function resetRampa() {
+  for (const c of rampBoxes) disposeGroup(c);
+  rampBoxes = [];
+  for (let i = 0; i < 6; i++) {
+    const c = crearCaja();
+    c.position.copy(RAMP_SLOTS[i]);
+    scene.add(c);
+    rampBoxes.push(c);
+  }
+}
+
+function onEnterPaso() {
+  if (paso === 1) {
+    box3 = null;
+    boxState = 'none';
+    boxYaw = Math.PI;
+    nailsOpen = 0;
+  }
+  if (paso === 3) {
+    tpl.phone.grp.visible = true;
+    tpl.simTray.visible = true;
+  }
+  if (paso === 8) labelGrp.visible = true;
+  if (paso === 22) label3Grp.visible = true;
+  if (paso === 6) {
+    cone.visible = true;
+    cone.material.color.set(0xfbbf24);
+  }
+  if (paso === 7) {
+    cone.visible = false;
+  }
+  if (paso === 21) {
+    box3 = rampBoxes[0];
+    boxState = 'ramp';
+    queueShifted = false;
+  }
+  if (paso === 30) {
+    tpl.phone.grp.visible = false;
+    tpl.phone.grp.scale.set(1, 1, 1);
+    tpl.phone.grp.traverse(o => { if (o.material) { o.material.transparent = false; o.material.opacity = 1; } });
+    tpl.simTray.visible = false;
+    tpl.simTray.scale.set(1, 1, 1);
+    tpl.simTray.traverse(o => { if (o.material) { o.material.transparent = false; o.material.opacity = 1; } });
+    resetLabel();
+    contador++;
+    elContador.textContent = 'TELÉFONOS PROCESADOS: ' + contador;
+    resetLabel3();
+    if (box3) {
+      disposeGroup(box3);
+      box3 = null;
+      boxState = 'none';
+    }
+  }
+}
+
+function avanzarPaso() {
+  paso = SIG[paso] !== undefined ? SIG[paso] : paso + 1;
+  progreso = 0;
+  onEnterPaso();
+}
+
+function reiniciar() {
+  // Recuperar la etiqueta antes de liberar una caja que pueda tenerla adherida.
+  resetLabel3();
+  // El pallet GLB comparte recursos con su archivo: reutilizarlo, no disponerlo.
+  for (const instance of modelInstances.pallet) instance.group.removeFromParent();
+  if (box3 && !rampBoxes.includes(box3)) disposeGroup(box3);
+  if (tpl) disposeGroup(tpl.grp);
+  tpl = crearTemplate();
+  tpl.grp.position.set(C1_X, CAR_HOME + 0.06, 0);
+  scene.add(tpl.grp);
+  for (const instance of modelInstances.pallet) {
+    instance.parent = tpl.grp;
+    instance.fallback = tpl.fallback;
+    tpl.grp.add(instance.group);
+    tpl.fallback.forEach(o => { o.visible = false; });
+  }
+  paso = 0; progreso = 0;
+  tiempoSimulacion = 0;
+  carriageY = CAR_HOME; c5Y = CAR_TOP; lift = 0; closed = 0; usbExt = 0;
+  lift2 = 0; closed2 = 0;
+  lift3 = 0; closed3 = 0;
+  armX = ARM_HOME_X; armZ = ARM_HOME_Z; cupY = CUP_UP;
+  arm2X = ARM2_HOME_X; arm2Z = ARM2_HOME_Z; nailY = NAIL_UP; nailsOpen = 0; boxYaw = Math.PI;
+  arm3X = ARM3_HOME_X; arm3Z = ARM3_HOME_Z; cup3Y = CUP_UP; pivot3 = 0;
+  box3 = null; boxState = 'none'; queueShifted = false;
+  loaderGrp.position.z = -1.65;
+  resetLabel();
+  resetLabel3();
+  resetRampa();
+  el('nbox').textContent = rampBoxes.length;
+  cone.visible = false;
+  contador = 0;
+  elContador.textContent = 'TELÉFONOS PROCESADOS: 0';
+  for (const tex of [...topTexs, c2Tex, retTex, c1.miniTex, c5.miniTex, xBeltTex2, xBeltTex3]) tex.offset.set(0, 0);
+  for (const tower of [t1, t5]) {
+    tower.flywheel.rotation.x = 0;
+    for (const pulley of tower.pulleys) pulley.rotation.z = 0;
+  }
+  setPausado(false);
+  onEnterPaso();
+  updateHardware(0, 0);
+  updateHUD();
+  updateCamera(0, true);
+}
+
+// Los grupos dinámicos tienen geometrías y materiales propios.
+function disposeGroup(group) {
+  group.removeFromParent();
+  group.traverse(o => {
+    if (o.geometry) o.geometry.dispose();
+    if (o.material) o.material.dispose();
+  });
+}
+
+function setPausado(value) {
+  pausado = value;
+  renderNeeded = true;
+  btnPause.textContent = pausado ? '▶ Reanudar' : 'Ⅱ Pausa';
+  btnPause.setAttribute('aria-pressed', String(pausado));
+  el('sim-pause').textContent = pausado ? '▶ Reanudar' : 'Ⅱ Pausar';
+  el('sim-pause').setAttribute('aria-pressed', String(pausado));
+  stageElement.classList.toggle('is-paused', pausado);
+  el('hud').classList.toggle('paused', pausado);
+  el('modo').textContent = pausado ? 'EN PAUSA · Cámara libre' : 'EN MARCHA · Seguimiento + mouse';
+  el('hint').textContent = pausado
+    ? 'Arrastrar: rotar · Rueda: zoom · Botón derecho: desplazar · Esc: salir'
+    : 'Arrastrar: rotar · Rueda: zoom · La cámara sigue la estación · Esc: salir';
+}
+btnReset.addEventListener('click', reiniciar);
+btnPause.addEventListener('click', () => setPausado(!pausado));
+
+function updateHardware(dt, t) {
+  c1.carriage.position.y = carriageY;
+  c5.carriage.position.y = c5Y;
+
+  const rl = 0.26 + lift;
+  c1.pusherRod.scale.y = rl;
+  c1.pusherRod.position.y = (lift - 0.30) / 2;
+  c1.pusherPlate.position.y = lift - 0.01;
+  const usbTip = lerp(USB_TIP_OUT_Z, USB_TIP_IN_Z, usbExt);
+  const rodEnd = usbTip + 0.04;
+  usb.rod.scale.y = 0.56 - rodEnd;
+  usb.rod.position.z = (0.56 + rodEnd) / 2;
+  usb.plug.position.z = usbTip + 0.02;
+  usb.cable1.position.z = rodEnd;
+  usb.cable2.scale.y = 0.62 - rodEnd;
+  usb.cable2.position.z = (rodEnd + 0.62) / 2;
+
+  c2pGrp.position.y = BELT_Y + 0.004 + lift2 - 0.01;
+  c2pRod.scale.y = 0.334 + lift2;
+  c2pRod.position.y = (2.834 + lift2) / 2;
+  for (const cl of c1.pusherClaws) cl.piv.rotation.x = cl.sg * (1 - closed) * Math.PI / 2;
+  for (const cl of c2Claws) cl.piv.rotation.x = cl.sg * (1 - closed2) * Math.PI / 2;
+  for (const cl of c3Claws) cl.piv.rotation.x = cl.sg * (1 - closed3) * Math.PI / 2;
+
+  c3pGrp.position.y = BELT_Y + 0.004 + lift3 - 0.01;
+  c3pRod.scale.y = 0.334 + lift3;
+  c3pRod.position.y = (2.834 + lift3) / 2;
+
+  for (const cb of t1.cables) {
+    cb.scale.y = 2.95 - carriageY;
+    cb.position.y = (2.85 + carriageY) / 2;
+  }
+  for (const cb of t5.cables) {
+    cb.scale.y = 2.95 - c5Y;
+    cb.position.y = (2.85 + c5Y) / 2;
+  }
+  const m1On = (paso === 2 || paso === 10);
+  const m5On = (paso === 30 || paso === 32);
+  t1.flywheel.rotation.x += dt * (m1On ? 10 : 0);
+  t5.flywheel.rotation.x += dt * (m5On ? 10 : 0);
+  for (const pu of t1.pulleys) pu.rotation.z += dt * (m1On ? 4 : 0);
+  for (const pu of t5.pulleys) pu.rotation.z += dt * (m5On ? 4 : 0);
+
+  const home1 = Math.abs(carriageY - CAR_HOME) < 0.03;
+  const lim1 = Math.abs(carriageY - CAR_TOP) < 0.03;
+  const home5 = Math.abs(c5Y - CAR_TOP) < 0.03;
+  const lim5 = Math.abs(c5Y - CAR_HOME) < 0.03;
+  setLamp(lmpMotor, m1On ? 'on' : 'off');
+  setLamp(lmpHome, home1 ? 'on' : 'off');
+  setLamp(lmpLim, lim1 ? 'on' : 'off');
+  setLamp(lmpM5, m5On ? 'on' : 'off');
+  setLamp(lmpHome5, home5 ? 'on' : 'off');
+  setLamp(lmpLim5, lim5 ? 'on' : 'off');
+  setLamp3d(sensors.home1.lamp, home1 ? 'on' : 'red');
+  setLamp3d(sensors.lim1.lamp, lim1 ? 'on' : 'red');
+  setLamp3d(sensors.home5.lamp, home5 ? 'on' : 'red');
+  setLamp3d(sensors.lim5.lamp, lim5 ? 'on' : 'red');
+
+  const ev1On = lift > 0.01 || paso === 4;
+  const ev2On = closed > 0.01 || paso === 5;
+  const ev3On = usbExt > 0.01 || paso === 7;
+  setLamp(lmpEv1, ev1On ? 'on' : 'off');
+  setLamp(lmpEv2, ev2On ? 'on' : 'off');
+  setLamp(lmpEv3, ev3On ? 'on' : 'off');
+
+  const ev1c2On = lift2 > 0.01 || paso === 12;
+  const ev2c2On = closed2 > 0.01 || paso === 13;
+  setLamp(lmpEv1C2, ev1c2On ? 'on' : 'off');
+  setLamp(lmpEv2C2, ev2c2On ? 'on' : 'off');
+
+  const ev1c3On = lift3 > 0.01 || paso === 19;
+  const ev2c3On = closed3 > 0.01 || paso === 20;
+  setLamp(lmpEv1C3, ev1c3On ? 'on' : 'off');
+  setLamp(lmpEv2C3, ev2c3On ? 'on' : 'off');
+  setLamp(lmpTel, paso === 3 ? 'amber' : tpl.phone.grp.visible ? 'on' : 'off');
+
+  const iaScan = paso === 6 && progreso < 0.6;
+  const okState = (paso === 6 && progreso >= 0.6) || paso === 7 || paso === 8;
+  setLamp(lmpCam, paso === 6 ? (okState ? 'on' : 'amber') : 'off');
+  setLamp(lmpOk, okState ? 'on' : 'off');
+  setLamp(lmpBrazo, (paso === 14 || paso === 15 || paso === 16) ? 'amber' : 'off');
+
+  if (paso === 6) {
+    cone.material.color.set(okState ? 0x4ade80 : 0xfbbf24);
+    cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), coneDir);
+    cone.rotateZ(Math.sin(t * 2.5) * 0.05);
+    cone.visible = true;
+    if (tpl) tpl.phone.screen.material.emissiveIntensity = okState ? 1.0 : 0.9;
+  } else {
+    cone.visible = false;
+    if (tpl) {
+      let si = 0.7;
+      if (paso === 7) si = 1.2;
+      else if (paso === 8) si = 1.8;
+      tpl.phone.screen.material.emissiveIntensity = si;
+    }
+  }
+
+  armGrp.position.x = armX;
+  armYCar.position.z = armZ;
+  armZRail.position.set(0, cupY + 1.025, armZ);
+  zLbl2.position.set(0.13, cupY + 1.0, armZ);
+  armMount.position.set(0, cupY + 0.06, armZ);
+  armCup.position.set(0, cupY + 0.025, armZ);
+  armTip.position.set(0, cupY - 0.015, armZ);
+
+  if (labelState === 'cup') {
+    labelGrp.position.set(armX, cupY - 0.002, armZ);
+  } else if (labelState === 'phone' && tpl) {
+    labelGrp.position.set(tpl.grp.position.x, tpl.grp.position.y + 0.1055, 0);
+  }
+
+  arm2Grp.position.x = arm2X;
+  arm2Car.position.z = arm2Z;
+  const rod2Len = Math.max(0.06, 2.94 - (nailY + 0.14));
+  arm2Rod.scale.y = rod2Len;
+  arm2Rod.position.y = (2.94 + nailY + 0.14) / 2;
+  arm2Rod.position.z = arm2Z;
+  arm2XBracket.position.z = arm2Z;
+  arm2Head.position.set(0.10, nailY + 0.11, arm2Z);
+  arm2NailL.position.set(0.10, nailY + 0.005, arm2Z - 0.025 - nailsOpen * 0.03);
+  arm2NailR.position.set(0.10, nailY + 0.005, arm2Z + 0.025 + nailsOpen * 0.03);
+
+  arm3Grp.position.x = arm3X;
+  arm3YCar.position.z = arm3Z;
+  arm3ZRail.position.set(0, cup3Y + 1.025, arm3Z);
+  zLbl3.position.set(0.13, cup3Y + 1.0, arm3Z);
+  pivot3Grp.position.set(0, cup3Y + 0.015, arm3Z);
+  pivot3Grp.rotation.x = pivot3 * Math.PI / 2;
+
+  if (label3State === 'cup3') {
+    label3Grp.position.set(arm3X, lerp(cup3Y - 0.122, cup3Y + 0.015, pivot3), lerp(arm3Z, arm3Z - 0.16, pivot3));
+    label3Grp.rotation.set(pivot3 * Math.PI / 2, 0, 0);
+  }
+
+  if (box3 && boxState === 'arm') {
+    const fx = BOX_GRIP_X, fz = BOX_GRIP_Z;
+    box3.position.set(
+      arm2X + 0.10 - fx * Math.cos(boxYaw) - fz * Math.sin(boxYaw),
+      nailY - FLAP_Y,
+      arm2Z + fx * Math.sin(boxYaw) - fz * Math.cos(boxYaw));
+    box3.rotation.y = boxYaw;
+  }
+  for (const instances of Object.values(modelInstances)) {
+    for (const instance of instances) instance.animate?.();
+  }
+
+  setLamp(lmpA3, (paso === 24 || paso === 25) ? 'amber' : 'off');
+  setLamp(lmpA2, (paso === 21 || paso === 22 || paso === 26) ? 'amber' : 'off');
+  setLamp(lmpZ3, (paso === 22 && progreso < 0.4) ? 'amber' : 'off');
+  setLamp(lmpBox, (paso === 21 || paso === 22 || paso === 26) ? 'on' : 'off');
+  el('nbox').textContent = rampBoxes.length;
+
+  const ocr2Scan = paso === 9;
+  const ocr2Ok = paso === 9 && progreso >= 0.6;
+  ocr2Cone.visible = ocr2Scan;
+  if (ocr2Scan) {
+    ocr2Cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.6, LAB_Y - 2.22, 0).normalize());
+    ocr2Cone.rotateZ(Math.sin(t * 2.5) * 0.04);
+    ocr2Cone.material.color.set(ocr2Ok ? 0x4ade80 : 0xfbbf24);
+  }
+  setLamp(lmpOcr2, ocr2Scan ? (ocr2Ok ? 'on' : 'amber') : 'off');
+
+  const ocr3Scan = paso === 23;
+  const ocr3Ok = paso === 23 && progreso >= 0.6;
+  ocr3Cone.visible = ocr3Scan;
+  if (ocr3Scan) {
+    ocr3Cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.6, LAB_Y - 2.22, 0).normalize());
+    ocr3Cone.rotateZ(Math.sin(t * 2.5) * 0.04);
+    ocr3Cone.material.color.set(ocr3Ok ? 0x4ade80 : 0xfbbf24);
+  }
+  setLamp(lmpOcr3, ocr3Scan ? (ocr3Ok ? 'on' : 'amber') : 'off');
+
+  const tpx = tpl ? tpl.grp.position.x : -999;
+  const tpy = tpl ? tpl.grp.position.y : -999;
+  const filaArriba = tpy > 1.2;
+  const nearS = (v, t) => Math.abs(v - t) < 0.06;
+  c2s.zh.position.set(0, cupY + 2.05, armZ);
+  c2s.zl.position.set(0, cupY - 0.02, armZ);
+  c3s.zh.position.set(0, cup3Y + 2.05, arm3Z);
+  c3s.zl.position.set(0, cup3Y - 0.02, arm3Z);
+  if (paso >= 14 && paso <= 16) xBeltTex2.offset.x -= dt * 0.5;
+  if (paso === 24 || paso === 25) xBeltTex3.offset.x -= dt * 0.5;
+  const ejes2 = [
+    ['xh2', c2s.xh, nearS(armX, ARM_HOME_X)], ['xl2', c2s.xl, nearS(armX, XP)],
+    ['yh2', c2s.yh, cupY > CUP_UP - 0.05], ['yl2', c2s.yl, cupY < CUP_PLACE + 0.05],
+    ['zh2', c2s.zh, nearS(armZ, ARM_HOME_Z)], ['zl2', c2s.zl, nearS(armZ, 0)]
+  ];
+  const ejes3 = [
+    ['xh3', c3s.xh, nearS(arm3X, ARM3_HOME_X)], ['xl3', c3s.xl, nearS(arm3X, C3_STOP + BOX_X)],
+    ['yh3', c3s.yh, cup3Y > CUP_UP - 0.05], ['yl3', c3s.yl, cup3Y < CUP3_LABEL + 0.05],
+    ['zh3', c3s.zh, nearS(arm3Z, ARM3_HOME_Z)], ['zl3', c3s.zl, nearS(arm3Z, ARM3_LABEL_Z)]
+  ];
+  for (const [k, m, on] of [...ejes2, ...ejes3]) {
+    setLamp(lampArm[k], on ? 'on' : 'red');
+    setLamp3d(m, on ? 'on' : 'red');
+  }
+  const nearC = v => Math.abs(tpx - v) < 0.5;
+  const convArr = [
+    ['ent2', convs.ent2, filaArriba && nearC(-14.05)], ['sal2', convs.sal2, filaArriba && nearC(-11.95)],
+    ['ent3', convs.ent3, filaArriba && nearC(-11.45)], ['sal3', convs.sal3, filaArriba && nearC(-9.35)],
+    ['entr', convs.entr, !filaArriba && nearC(-8.5)], ['salr', convs.salr, !filaArriba && nearC(-14.95)]
+  ];
+  for (const [k, m, on] of convArr) {
+    setLamp(lampArm[k], on ? 'on' : 'red');
+    setLamp3d(m, on ? 'on' : 'red');
+  }
+}
+
+function update(dt, t) {
+  progreso = Math.min(1, progreso + dt / PASOS[paso].dur);
+  const p = progreso;
+  switch (paso) {
+    case 2:
+      carriageY = lerp(CAR_HOME, CAR_TOP, easeInOut(p));
+      tpl.grp.position.y = carriageY + 0.06;
+      break;
+    case 3: {
+      // El alimentador avanza, entrega por los rieles y se retira.
+      const entrada = easeInOut(clamp(p / 0.25, 0, 1));
+      const entrega = easeInOut(clamp((p - 0.25) / 0.5, 0, 1));
+      const salida = easeInOut(clamp((p - 0.75) / 0.25, 0, 1));
+      loaderGrp.position.z = lerp(-1.65, 0, entrada) - 1.65 * salida;
+      tpl.phone.grp.position.set(0, lerp(0.32, 0.0825, entrega), lerp(-0.8 + loaderGrp.position.z, 0, entrega));
+      tpl.simTray.position.set(SIM_X, lerp(0.30, 0.0665, entrega), lerp(-0.8 + loaderGrp.position.z, 0, entrega));
+      break;
+    }
+    case 4:
+      lift = PUSH_LIFT * easeOut(p);
+      tpl.grp.position.y = CAR_TOP + 0.06 + lift;
+      break;
+    case 5:
+      closed = easeOut(p);
+      break;
+    case 7:
+      usbExt = easeOut(p);
+      break;
+    case 8: {
+      usbExt = p < 0.35 ? 1 - p / 0.35 : 0;
+      closed = p < 0.35 ? 1 : p < 0.65 ? 1 - (p - 0.35) / 0.3 : 0;
+      lift = p < 0.65 ? PUSH_LIFT : PUSH_LIFT * (1 - (p - 0.65) / 0.35);
+      tpl.grp.position.y = CAR_TOP + 0.06 + lift;
+      labelGrp.position.z = lerp(LAB_IN_Z, LAB_OUT_Z, easeOut(clamp(p / 0.4, 0, 1)));
+      break;
+    }
+    case 10:
+      tpl.grp.position.x = lerp(C1_X, -13.6, easeOut(p));
+      tpl.grp.position.y = BELT_Y + 0.06;
+      carriageY = lerp(CAR_TOP, CAR_HOME, easeInOut(clamp((p - 0.27) / 0.73, 0, 1)));
+      c1.miniTex.offset.x += dt * 0.6;
+      break;
+    case 11:
+      tpl.grp.position.x = lerp(-13.6, C2_STOP, easeInOut(p));
+      tpl.grp.position.y = BELT_Y + 0.06;
+      break;
+    case 12:
+      lift2 = PUSH_LIFT * easeOut(p);
+      tpl.grp.position.y = BELT_Y + 0.06 + lift2;
+      break;
+    case 13:
+      closed2 = easeOut(p);
+      break;
+    case 14: {
+      const pa = easeInOut(clamp(p / 0.5, 0, 1));
+      armX = lerp(ARM_HOME_X, XP, pa);
+      armZ = lerp(ARM_HOME_Z, LAB_OUT_Z, pa);
+      if (p >= 0.5 && p < 0.72) {
+        cupY = lerp(CUP_UP, CUP_PICK, easeInOut((p - 0.5) / 0.22));
+      } else if (p >= 0.72 && p < 0.86) {
+        cupY = CUP_PICK;
+        labelState = 'cup';
+      } else if (p >= 0.86) {
+        cupY = lerp(CUP_PICK, CUP_UP, easeInOut((p - 0.86) / 0.14));
+      }
+      break;
+    }
+    case 15: {
+      const pa = easeInOut(clamp(p / 0.45, 0, 1));
+      armZ = lerp(LAB_OUT_Z, 0, pa);
+      if (p >= 0.45 && p < 0.70) {
+        cupY = lerp(CUP_UP, CUP_PLACE, easeInOut((p - 0.45) / 0.25));
+      } else if (p >= 0.70 && p < 0.82) {
+        cupY = CUP_PLACE;
+        const q = easeInOut((p - 0.70) / 0.12);
+        labelState = 'placing';
+        labelGrp.position.lerpVectors(
+          new THREE.Vector3(XP, CUP_PLACE - 0.002, 0),
+          new THREE.Vector3(C2_STOP, tpl.grp.position.y + 0.1055, 0), q);
+      } else if (p >= 0.82) {
+        labelState = 'phone';
+        cupY = lerp(CUP_PLACE, CUP_UP, easeInOut((p - 0.82) / 0.18));
+      }
+      break;
+    }
+    case 16:
+      armX = lerp(C2_STOP, ARM_HOME_X, easeInOut(p));
+      armZ = lerp(0, ARM_HOME_Z, easeInOut(p));
+      break;
+    case 17: {
+      closed2 = p < 0.5 ? 1 - p / 0.5 : 0;
+      lift2 = p < 0.4 ? PUSH_LIFT : PUSH_LIFT * (1 - (p - 0.4) / 0.6);
+      tpl.grp.position.y = BELT_Y + 0.06 + lift2;
+      break;
+    }
+    case 18:
+      tpl.grp.position.x = lerp(C2_STOP, C3_STOP, easeInOut(p));
+      tpl.grp.position.y = BELT_Y + 0.06;
+      break;
+    case 19:
+      lift3 = PUSH_LIFT * easeOut(p);
+      tpl.grp.position.y = BELT_Y + 0.06 + lift3;
+      break;
+    case 20:
+      closed3 = easeOut(p);
+      break;
+    case 21: {
+      const pa = easeInOut(clamp(p / 0.3, 0, 1));
+      arm2X = lerp(ARM2_HOME_X, RAMP_X - BOX_GRIP_X - 0.10, pa);
+      arm2Z = ARM2_HOME_Z;
+      if (p >= 0.3 && p < 0.55) {
+        nailY = lerp(NAIL_UP, NAIL_PICK, easeInOut((p - 0.3) / 0.25));
+        nailsOpen = 1;
+      } else if (p >= 0.55 && p < 0.62) {
+        nailY = NAIL_PICK;
+        nailsOpen = 1 - (p - 0.55) / 0.07;
+      } else if (p >= 0.62 && p < 0.85) {
+        nailsOpen = 0;
+        nailY = lerp(NAIL_PICK, NAIL_UP, easeInOut((p - 0.62) / 0.23));
+        boxState = 'arm';
+      } else if (p >= 0.85) {
+        nailsOpen = 0;
+        nailY = NAIL_UP;
+      }
+      if (p >= 0.62 && !queueShifted) {
+        boxState = 'arm';
+        const qs = easeInOut(clamp((p - 0.62) / 0.23, 0, 1));
+        for (let i = 1; i < 6; i++) {
+          rampBoxes[i].position.lerpVectors(RAMP_SLOTS[i], RAMP_SLOTS[i - 1], qs);
+        }
+        if (qs === 1) {
+          queueShifted = true;
+          const nuevo = crearCaja();
+          nuevo.position.copy(RAMP_SLOTS[5]);
+          scene.add(nuevo);
+          rampBoxes = [...rampBoxes.slice(1), nuevo];
+        }
+      }
+      break;
+    }
+    case 22: {
+      const pa = easeInOut(clamp(p / 0.5, 0, 1));
+      arm2Z = lerp(ARM2_HOME_Z, BOX_ARM_Z, pa);
+      arm2X = lerp(RAMP_X - BOX_GRIP_X - 0.10, BOX_ARM_X, pa);
+      nailY = lerp(NAIL_UP, NAIL_MID, easeInOut(clamp(p / 0.6, 0, 1)));
+      boxYaw = Math.PI - (Math.PI / 2) * easeInOut(clamp(p / 0.55, 0, 1));
+      label3Grp.position.z = lerp(LAB_IN_Z, LAB_OUT_Z, easeOut(clamp(p / 0.4, 0, 1)));
+      break;
+    }
+    case 24: {
+      const pa = easeInOut(clamp(p / 0.5, 0, 1));
+      arm3X = lerp(ARM3_HOME_X, XP3, pa);
+      arm3Z = lerp(ARM3_HOME_Z, LAB_OUT_Z, pa);
+      if (p >= 0.5 && p < 0.72) {
+        cup3Y = lerp(CUP_UP, CUP3_PICK, easeInOut((p - 0.5) / 0.22));
+      } else if (p >= 0.72 && p < 0.86) {
+        cup3Y = CUP3_PICK;
+        label3State = 'cup3';
+      } else if (p >= 0.86) {
+        cup3Y = lerp(CUP3_PICK, CUP_UP, easeInOut((p - 0.86) / 0.14));
+      }
+      break;
+    }
+    case 25: {
+      const pa = easeInOut(clamp(p / 0.3, 0, 1));
+      arm3X = lerp(XP3, C3_STOP + BOX_X, pa);
+      arm3Z = lerp(LAB_OUT_Z, ARM3_LABEL_Z, pa);
+      if (p >= 0.3 && p < 0.45) {
+        cup3Y = lerp(CUP_UP, CUP3_LABEL, easeInOut((p - 0.3) / 0.15));
+      } else if (p >= 0.45 && p < 0.60) {
+        cup3Y = CUP3_LABEL;
+        pivot3 = (p - 0.45) / 0.15;
+      } else if (p >= 0.60 && p < 0.75) {
+        pivot3 = 1;
+        const q = easeInOut((p - 0.60) / 0.15);
+        label3State = 'placing3';
+        label3Grp.position.lerpVectors(
+          new THREE.Vector3(arm3X, cup3Y + 0.015, arm3Z - 0.16),
+          new THREE.Vector3(box3.position.x, box3.position.y, box3.position.z + BOX_WIDTH / 2 + 0.001), q);
+      } else if (p >= 0.75 && p < 0.9) {
+        label3State = 'box3';
+        box3.attach(label3Grp);
+        label3Grp.position.set(-BOX_WIDTH / 2 - 0.001, 0, 0);
+        label3Grp.rotation.set(Math.PI / 2, 0, Math.PI / 2);
+        pivot3 = 1 - (p - 0.75) / 0.15;
+        cup3Y = lerp(CUP3_LABEL, CUP_UP, easeInOut((p - 0.75) / 0.15));
+      } else if (p >= 0.9) {
+        pivot3 = 0;
+        cup3Y = CUP_UP;
+        arm3X = lerp(C3_STOP + BOX_X, ARM3_HOME_X, easeInOut((p - 0.9) / 0.1));
+        arm3Z = lerp(ARM3_LABEL_Z, ARM3_HOME_Z, easeInOut((p - 0.9) / 0.1));
+      }
+      break;
+    }
+    case 26: {
+      const pa = easeInOut(clamp(p / 0.35, 0, 1));
+      nailY = lerp(NAIL_MID, NAIL_PLACE, pa);
+      if (p >= 0.35 && p < 0.45) {
+        nailsOpen = (p - 0.35) / 0.1;
+      } else if (p >= 0.45) {
+        nailsOpen = 1;
+        nailY = lerp(NAIL_PLACE, NAIL_UP, easeInOut(clamp((p - 0.45) / 0.2, 0, 1)));
+        if (boxState === 'arm') {
+          tpl.grp.attach(box3);
+          box3.position.set(BOX_X, BOX_SEAT_Y + BOX_Y / 2, BOX_Z);
+          box3.rotation.y = Math.PI / 2;
+          boxState = 'tpl';
+        }
+        arm2Z = lerp(BOX_ARM_Z, ARM2_HOME_Z, easeInOut(clamp((p - 0.55) / 0.45, 0, 1)));
+        arm2X = lerp(BOX_ARM_X, ARM2_HOME_X, easeInOut(clamp((p - 0.55) / 0.45, 0, 1)));
+      }
+      break;
+    }
+    case 27: {
+      closed3 = p < 0.5 ? 1 - p / 0.5 : 0;
+      lift3 = p < 0.4 ? PUSH_LIFT : PUSH_LIFT * (1 - (p - 0.4) / 0.6);
+      tpl.grp.position.y = BELT_Y + 0.06 + lift3;
+      break;
+    }
+    case 28:
+      tpl.grp.position.x = lerp(C3_STOP, C4_X, easeInOut(p));
+      tpl.grp.position.y = BELT_Y + 0.06;
+      break;
+    case 29: {
+      tpl.grp.position.y = CAR_TOP + 0.06;
+      const op = 1 - p;
+      tpl.phone.grp.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = op; } });
+      tpl.phone.grp.scale.setScalar(1 - 0.2 * p);
+      tpl.simTray.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = op; } });
+      tpl.simTray.scale.setScalar(1 - 0.2 * p);
+      labelGrp.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = op; } });
+      labelGrp.scale.setScalar(1 - 0.2 * p);
+      if (box3) {
+        box3.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = op; } });
+        box3.scale.setScalar(1 - 0.2 * p);
+      }
+      break;
+    }
+    case 30:
+      c5Y = lerp(CAR_TOP, CAR_HOME, easeInOut(p));
+      tpl.grp.position.y = c5Y + 0.06;
+      break;
+    case 31:
+      tpl.grp.position.x = lerp(C4_X, -8.9, easeOut(p));
+      tpl.grp.position.y = BOT_Y + 0.06;
+      c5.miniTex.offset.x -= dt * 0.6;
+      break;
+    case 32:
+      tpl.grp.position.x = lerp(-8.9, C1_X, easeInOut(p));
+      tpl.grp.position.y = BOT_Y + 0.06;
+      c5Y = lerp(CAR_HOME, CAR_TOP, easeInOut(p));
+      if (tpl.grp.position.x < -13.5) c1.miniTex.offset.x -= dt * 0.6;
+      break;
+  }
+
+  for (let i = 0; i < topTexs.length; i++) {
+    if (!(i === 0 && paso >= 19 && paso <= 27)) topTexs[i].offset.x += BELT_SPEED * dt * 0.45;
+  }
+  if (paso < 12 || paso > 17) {
+    c2Tex.offset.x += BELT_SPEED * dt * 0.45;
+  }
+  retTex.offset.x -= BELT_SPEED * dt * 0.45;
+
+  // Aplicar el final exacto de cada movimiento antes de cambiar de paso.
+  updateHardware(dt, t);
+  if (progreso === 1) avanzarPaso();
+  updateHUD();
+}
+
+function estacionActual() {
+  if (paso <= 8) return 'C1';
+  if (paso <= 17) return 'C2';
+  if (paso <= 27) return 'C3';
+  if (paso <= 30) return 'C4';
+  return 'RET';
+}
+
+function updateHUD() {
+  let texto = PASOS[paso].nombre;
+  if (paso === 6) texto += progreso < 0.6 ? ' · ANALIZANDO…' : ' · IA: OK ✓';
+  if (paso === 8) texto += ' · CL4NX IMPRIMIENDO…';
+  if (paso === 9 || paso === 23) texto += progreso < 0.6 ? ' · ESCANEANDO…' : ' · OCR: OK ✓';
+  elEstado.textContent = texto;
+  const stationLabels = { C1: 'C1 · Lectura e inspección', C2: 'C2 · Etiquetado del equipo', C3: 'C3 · Etiquetado de la caja', C4: 'C4 · Retiro del conjunto', RET: 'Retorno · Un nuevo recorrido' };
+  const liveLabel = stationLabels[estacionActual()];
+  if (el('live-station').textContent !== liveLabel) el('live-station').textContent = liveLabel;
+  elProg.style.width = Math.round(progreso * 100) + '%';
+  el('progwrap').setAttribute('aria-valuenow', Math.round(progreso * 100));
+  for (const station of document.querySelectorAll('[data-station]')) {
+    const active = station.dataset.station === estacionActual();
+    station.classList.toggle('act', active);
+    if (active) station.setAttribute('aria-current', 'step');
+    else station.removeAttribute('aria-current');
+  }
+  for (let i = 0; i < PASOS.length; i++) {
+    const li = document.getElementById('p' + i);
+    li.className = i === paso ? 'act' : i < paso ? 'ok' : '';
+  }
+}
+
+// GLB locales: carga automática por HTTP y selección manual al abrir con doble clic.
+// Los recursos de cada archivo se comparten entre todas sus instancias.
+const glbLoader = new GLTFLoader();
+const modelFiles = {
+  conveyor: 'Conveyor.glb', printer: 'CL4NX_Impresora.glb',
+  elevator: 'Elevador.glb', pallet: 'Pallet_celular.glb',
+  robot: 'Robot_Etiquetado_Celulares.glb', suction: 'Ensamblaje_Ventosas.glb',
+  table: 'Mesa_impresora.glb', stopper: 'EnsamSTOPPER.glb', usb: 'EnsambConjUSB-C.glb'
+};
+const modelBuilders = { conveyor: buildConveyors, printer: buildPrinters, elevator: buildElevators,
+  pallet: buildPallet, robot: buildRobot, suction: buildSuction, table: buildTables, stopper: buildStoppers, usb: buildUSB };
+const modelSources = Object.fromEntries(Object.keys(modelFiles).map(kind => [kind, null]));
+const modelInstances = Object.fromEntries(Object.keys(modelFiles).map(kind => [kind, []]));
+const modelVersions = Object.fromEntries(Object.keys(modelFiles).map(kind => [kind, 0]));
+const modelMessages = Object.fromEntries(Object.keys(modelFiles).map(kind => [kind, 'pendiente']));
+
+function updateModelStatus() {
+  const names = { conveyor: 'Conveyor', printer: 'Impresoras CL4NX', elevator: 'Elevadores C1/C4',
+    pallet: 'Pallet', robot: 'Robots C2/C3', suction: 'Ventosas C2', table: 'Mesas C2/C3', stopper: 'STOPPER C1/C2/C3', usb: 'USB-C C1' };
+  el('model-status').textContent = Object.keys(modelFiles).map(kind => `${names[kind]}: ${modelMessages[kind]}.`).join(' ');
+  el('model-count').textContent = `${Object.values(modelSources).filter(Boolean).length} / ${Object.keys(modelFiles).length} MODELOS CAD`;
+  renderNeeded = true;
+}
+
+function releaseModel(source) {
+  const geometries = new Set(), materials = new Set(), textures = new Set();
+  source.traverse(o => {
+    if (o.geometry) geometries.add(o.geometry);
+    for (const material of (Array.isArray(o.material) ? o.material : [o.material])) {
+      if (!material) continue;
+      materials.add(material);
+      for (const value of Object.values(material)) if (value?.isTexture) textures.add(value);
+    }
+  });
+  geometries.forEach(g => g.dispose());
+  materials.forEach(m => m.dispose());
+  textures.forEach(t => t.dispose());
+}
+
+function meshInstance(mesh, transform) {
+  const copy = new THREE.Mesh(mesh.geometry, mesh.material);
+  copy.name = mesh.name;
+  copy.matrixAutoUpdate = false;
+  copy.matrix.multiplyMatrices(transform, mesh.matrixWorld);
+  copy.castShadow = true;
+  copy.receiveShadow = true;
+  return copy;
+}
+
+function buildConveyors(source) {
+  source.updateMatrixWorld(true);
+  const meshes = [], belts = [], motors = [];
+  const bounds = new THREE.Box3(), beltBounds = new THREE.Box3(), motorBounds = new THREE.Box3();
+  source.traverse(o => {
+    if (!o.isMesh) return;
+    let name = '';
+    for (let p = o; p && p !== source; p = p.parent) name += p.name + ' ';
+    // El pequeño accesorio "plantilla" del CAD no es la plantilla móvil del proceso.
+    if (/plantilla/i.test(name)) return;
+    meshes.push(o);
+    bounds.union(new THREE.Box3().setFromObject(o));
+    if (/Correa_v3/i.test(name)) {
+      belts.push(o);
+      beltBounds.union(new THREE.Box3().setFromObject(o));
+    }
+    if (/Motor_Nema_23/i.test(name)) {
+      motors.push(o);
+      motorBounds.union(new THREE.Box3().setFromObject(o));
+    }
+  });
+  if (!meshes.length || belts.length !== 2 || !motors.length) {
+    throw new Error('Seleccioná Conveyor.glb (dos correas y motor NEMA 23)');
+  }
+  const center = beltBounds.getCenter(new THREE.Vector3());
+  const size = bounds.getSize(new THREE.Vector3());
+  const motorCenter = motorBounds.getCenter(new THREE.Vector3());
+  const beltCenters = belts.map(b => new THREE.Box3().setFromObject(b).getCenter(new THREE.Vector3()));
+  const sz = 0.76 / Math.abs(beltCenters[0].z - beltCenters[1].z);
+  const instances = [];
+  for (const mount of conveyorMounts) {
+    const group = new THREE.Group();
+    group.name = 'Conveyor GLB';
+    const sx = (mount.x1 - mount.x0) / size.x;
+    const sy = mount.yTop / (beltBounds.max.y - bounds.min.y);
+    const transform = new THREE.Matrix4().makeScale(sx, sy, sz);
+    transform.setPosition((mount.x0 + mount.x1) / 2 - center.x * sx,
+      mount.yTop - beltBounds.max.y * sy, -center.z * sz);
+    const motorTransform = new THREE.Matrix4().makeTranslation(...motorCenter.clone().applyMatrix4(transform).toArray())
+      .multiply(new THREE.Matrix4().makeScale(2, 2, 2))
+      .multiply(new THREE.Matrix4().makeTranslation(-motorCenter.x, -motorCenter.y, -motorCenter.z));
+    for (const mesh of meshes) {
+      group.add(meshInstance(mesh, motors.includes(mesh) ? motorTransform : transform));
+    }
+    // Capa móvil sobre las correas del CAD, ligada a la misma textura de la simulación.
+    belts.forEach((belt, i) => {
+      const b = new THREE.Box3().setFromObject(belt);
+      const surf = new THREE.Mesh(new THREE.PlaneGeometry((b.max.x - b.min.x) * sx, (b.max.z - b.min.z) * sz),
+        new THREE.MeshStandardMaterial({ map: mount.tex, roughness: 0.85 }));
+      surf.rotation.x = -Math.PI / 2;
+      surf.position.copy(beltCenters[i]).applyMatrix4(transform);
+      surf.position.y = mount.yTop + 0.004;
+      surf.receiveShadow = true;
+      surf.userData.ownedOverlay = true;
+      group.add(surf);
+    });
+    instances.push({ parent: mount.parent, group, fallback: mount.fallback });
+  }
+  // Reutilizar el NEMA 23 del CAD en los elevadores y ejes cartesianos sin deformarlo.
+  const motorTransform = new THREE.Matrix4().makeRotationY(Math.PI)
+    .multiply(new THREE.Matrix4().makeScale(2, 2, 2))
+    .multiply(new THREE.Matrix4().makeTranslation(-motorCenter.x, -motorCenter.y, -motorCenter.z));
+  for (const mount of motorMounts) {
+    const group = new THREE.Group();
+    group.name = 'NEMA 23 GLB';
+    motors.forEach(mesh => group.add(meshInstance(mesh, motorTransform)));
+    instances.push({ parent: mount.parent, group, fallback: [mount.fallback] });
+  }
+  return instances;
+}
+
+function buildPrinters(source) {
+  // El frente del CL4NX está en +Z en el CAD; en la línea debe mirar a -Z.
+  source.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(source);
+  const size = bounds.getSize(new THREE.Vector3());
+  if (![size.x, size.y, size.z].every(n => Number.isFinite(n) && n > 0)) throw new Error('GLB de impresora sin geometría válida');
+  const center = bounds.getCenter(new THREE.Vector3());
+  const scale = 0.55 / size.z;
+  return printerMounts.map(mount => {
+    const group = new THREE.Group();
+    group.name = 'SATO CL4NX GLB';
+    const transform = new THREE.Matrix4().makeTranslation(mount.x, 1.6, 1.7)
+      .multiply(new THREE.Matrix4().makeRotationY(Math.PI))
+      .multiply(new THREE.Matrix4().makeScale(scale, scale, scale))
+      .multiply(new THREE.Matrix4().makeTranslation(-center.x, -bounds.min.y, -center.z));
+    source.traverse(o => { if (o.isMesh) group.add(meshInstance(o, transform)); });
+    return { parent: scene, group, fallback: mount.fallback };
+  });
+}
+
+function buildElevators(source) {
+  source.updateMatrixWorld(true);
+  const reference = source.getObjectByName('Correa_elevador-1');
+  const secondBelt = source.getObjectByName('Correa_elevador-2');
+  if (!reference?.isMesh || !secondBelt?.isMesh || !source.getObjectByName('Elevador_v2')) {
+    throw new Error('Seleccioná Elevador.glb');
+  }
+  // El conjunto CAD está inclinado y trasladado. La correa define sus ejes reales.
+  source.quaternion.setFromRotationMatrix(new THREE.Matrix4().extractRotation(reference.matrixWorld)).invert();
+  source.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(source);
+  const belts = [reference, secondBelt];
+  const beltBounds = new THREE.Box3();
+  const beltBoxes = belts.map(belt => new THREE.Box3().setFromObject(belt));
+  beltBoxes.forEach(b => beltBounds.union(b));
+  const center = beltBounds.getCenter(new THREE.Vector3());
+  const sx = 1.9 / (beltBounds.max.x - beltBounds.min.x);
+  const sz = 0.76 / Math.abs(beltBoxes[0].getCenter(new THREE.Vector3()).z - beltBoxes[1].getCenter(new THREE.Vector3()).z);
+  const sy = CAR_TOP / (beltBounds.max.y - bounds.min.y);
+  const motor = source.getObjectByName('Motor_Nema_23-1');
+  const motorCenter = motor ? new THREE.Box3().setFromObject(motor).getCenter(new THREE.Vector3()) : null;
+  const fixed = [], moving = [];
+  source.traverse(mesh => {
+    if (!mesh.isMesh) return;
+    const partBounds = new THREE.Box3().setFromObject(mesh);
+    // Guías, husillos, base y tapas superiores son fijos. El resto del cabezal
+    // (correas, poleas, motor, soportes y rodamientos) viaja con el carro.
+    const fixedPart = /^(base_elevador|elevador_0[1-5]-)/i.test(mesh.name);
+    const onCarriage = !fixedPart && partBounds.min.y > beltBounds.max.y - 0.19
+      && partBounds.max.y < beltBounds.max.y + 0.025;
+    (onCarriage ? moving : fixed).push(mesh);
+  });
+  const instances = [];
+  for (const mount of elevatorMounts) {
+    const base = new THREE.Group(), carriage = new THREE.Group();
+    base.name = 'Elevador GLB · Bastidor fijo';
+    carriage.name = 'Elevador GLB · Carro móvil';
+    const fixedTransform = new THREE.Matrix4().makeTranslation(mount.x, 0, 0)
+      .multiply(new THREE.Matrix4().makeScale(sx, sy, sz))
+      .multiply(new THREE.Matrix4().makeTranslation(-center.x, -bounds.min.y, -center.z));
+    // El cabezal conserva su altura durante el recorrido; su origen es el apoyo
+    // del pallet. El padre ya sigue CAR_HOME ↔ CAR_TOP en updateHardware().
+    const movingTransform = new THREE.Matrix4().makeScale(sx, 1.3, sz)
+      .multiply(new THREE.Matrix4().makeTranslation(-center.x, -beltBounds.max.y, -center.z));
+    fixed.forEach(mesh => base.add(meshInstance(mesh, fixedTransform)));
+    const motorTransform = motorCenter && new THREE.Matrix4().makeTranslation(...motorCenter.clone().applyMatrix4(movingTransform).toArray())
+      .multiply(new THREE.Matrix4().makeScale(2, 2, 2))
+      .multiply(new THREE.Matrix4().makeTranslation(-motorCenter.x, -motorCenter.y, -motorCenter.z));
+    moving.forEach(mesh => {
+      const isMotor = motor && (mesh === motor || mesh.parent === motor);
+      carriage.add(meshInstance(mesh, isMotor ? motorTransform : movingTransform));
+    });
+    for (const b of beltBoxes) {
+      const surf = new THREE.Mesh(new THREE.PlaneGeometry((b.max.x - b.min.x) * sx, (b.max.z - b.min.z) * sz),
+        new THREE.MeshStandardMaterial({ map: mount.car.miniTex, roughness: 0.85 }));
+      surf.rotation.x = -Math.PI / 2;
+      surf.position.copy(b.getCenter(new THREE.Vector3())).applyMatrix4(movingTransform);
+      surf.position.y = 0.004;
+      surf.receiveShadow = true;
+      surf.userData.ownedOverlay = true;
+      carriage.add(surf);
+    }
+    instances.push({ parent: scene, group: base, fallback: mount.tower.fallback });
+    instances.push({ parent: mount.car.carriage, group: carriage, fallback: mount.car.fallback });
+  }
+  return instances;
+}
+
+function buildPallet(source) {
+  source.updateMatrixWorld(true);
+  const plate = source.getObjectByName('Pieza1_Pallet-1');
+  if (!plate?.isMesh) throw new Error('Seleccioná Pallet_celular.glb');
+  // El pallet fue exportado en XY, con el espesor en Z y un pequeño giro.
+  // Corregir ese giro y dejar el lado largo a lo largo del conveyor.
+  const rotation = new THREE.Matrix4().makeRotationY(-Math.PI / 2)
+    .multiply(new THREE.Matrix4().makeRotationX(-Math.PI / 2))
+    .multiply(new THREE.Matrix4().extractRotation(plate.matrixWorld).invert());
+  source.quaternion.setFromRotationMatrix(rotation);
+  source.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(source);
+  const size = bounds.getSize(new THREE.Vector3()), center = bounds.getCenter(new THREE.Vector3());
+  // Mantener la envolvente de transporte y los puntos de trabajo del ciclo.
+  // La cara inferior queda en -0.06 y el apoyo del teléfono en +0.06.
+  const transform = new THREE.Matrix4().makeScale(1.2 / size.x, 0.12 / size.y, 0.9 / size.z)
+    .multiply(new THREE.Matrix4().makeTranslation(-center.x, -center.y, -center.z));
+  const group = new THREE.Group();
+  group.name = 'Pallet celular GLB';
+  source.traverse(mesh => { if (mesh.isMesh) group.add(meshInstance(mesh, transform)); });
+  return [{ parent: tpl.grp, group, fallback: tpl.fallback }];
+}
+
+function componentName(mesh, source) {
+  let name = mesh.name;
+  for (let p = mesh.parent; p && p !== source; p = p.parent) name += '/' + p.name;
+  return name;
+}
+
+function buildTables(source) {
+  if (!source.getObjectByName('Mesaa-1')) throw new Error('Seleccioná Mesa_impresora.glb');
+  // En el CAD las patas apuntan a +Z. Dejarlas hacia abajo, con el tablero horizontal.
+  source.rotation.x = Math.PI / 2;
+  source.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(source);
+  const table = new THREE.Box3().setFromObject(source.getObjectByName('Mesaa-1'));
+  const center = table.getCenter(new THREE.Vector3()), size = table.getSize(new THREE.Vector3());
+  return tableMounts.map(mount => {
+    const group = new THREE.Group();
+    group.name = 'Mesa impresora GLB';
+    const transform = new THREE.Matrix4().makeTranslation(mount.x, 0, 1.7)
+      .multiply(new THREE.Matrix4().makeScale(0.9 / size.x, 1.6 / (bounds.max.y - bounds.min.y), 0.9 / size.z))
+      .multiply(new THREE.Matrix4().makeTranslation(-center.x, -bounds.min.y, -center.z));
+    source.traverse(mesh => { if (mesh.isMesh) group.add(meshInstance(mesh, transform)); });
+    return { parent: scene, group, fallback: mount.fallback };
+  });
+}
+
+function buildSuction(source) {
+  source.rotation.y = Math.PI / 2; // Lado largo de las cuatro ventosas paralelo a la etiqueta.
+  source.updateMatrixWorld(true);
+  const pads = new THREE.Box3();
+  let count = 0;
+  source.traverse(mesh => {
+    if (mesh.isMesh && /^1_Ventosa7_x_7-/.test(mesh.name)) { pads.union(new THREE.Box3().setFromObject(mesh)); count++; }
+  });
+  if (count !== 4) throw new Error('Seleccioná Ensamblaje_Ventosas.glb (cuatro ventosas)');
+  const center = pads.getCenter(new THREE.Vector3());
+  const group = new THREE.Group();
+  group.name = 'Ventosas C2 GLB';
+  const transform = new THREE.Matrix4().makeScale(2, 2, 2)
+    .multiply(new THREE.Matrix4().makeTranslation(-center.x, -pads.min.y, -center.z));
+  source.traverse(mesh => { if (mesh.isMesh) group.add(meshInstance(mesh, transform)); });
+  return [{ parent: scene, group, fallback: suctionFallback,
+    animate: () => group.position.set(armX, cupY, armZ) }];
+}
+
+function buildRobot(source) {
+  if (!source.getObjectByName('Perfil_Eje_Y_4590_500mm-1') || !source.getObjectByName('Perfil_2040_460mm-1')) {
+    throw new Error('Seleccioná Robot_Etiquetado_Celulares.glb');
+  }
+  // Eje X del CAD en Z; el transversal en X; el vertical ya está en Y.
+  source.rotation.y = Math.PI / 2;
+  source.updateMatrixWorld(true);
+  return robotMounts.map(mount => buildRobotInstance(source, mount));
+}
+
+function buildRobotInstance(source, mount) {
+  const group = new THREE.Group();
+  group.name = `Robot etiquetado ${mount.station} GLB`;
+  const fixed = new THREE.Group(), xAxis = new THREE.Group(), yAxis = new THREE.Group(), zAxis = new THREE.Group();
+  fixed.name = `Robot ${mount.station} · Bastidor`; xAxis.name = `Robot ${mount.station} · Carro X`;
+  yAxis.name = `Robot ${mount.station} · Carro Y`; zAxis.name = `Robot ${mount.station} · Eje Z`;
+  group.add(fixed, xAxis, yAxis, zAxis);
+  const sx = mount.span / 0.8, sz = 5;
+  const fixedTransform = new THREE.Matrix4().makeTranslation(mount.centerX, 3.4, 1.7)
+    .multiply(new THREE.Matrix4().makeScale(sx, 2, sz)).multiply(new THREE.Matrix4().makeTranslation(-0.6, 0, 0));
+  const legScale = 3.31 / 0.52;
+  const legTransform = new THREE.Matrix4().makeTranslation(mount.centerX, 3.31 + 0.045 * legScale, 1.7)
+    .multiply(new THREE.Matrix4().makeScale(sx, legScale, sz)).multiply(new THREE.Matrix4().makeTranslation(-0.6, 0, 0));
+  const xTransform = new THREE.Matrix4().makeTranslation(0, 3.4, 1.7)
+    .multiply(new THREE.Matrix4().makeScale(sx, 2.5, sz)).multiply(new THREE.Matrix4().makeTranslation(-0.60487, 0, 0));
+  const yTransform = new THREE.Matrix4().makeTranslation(0, 3.4, 0)
+    .multiply(new THREE.Matrix4().makeScale(sx, 2.5, sz)).multiply(new THREE.Matrix4().makeTranslation(-0.60487, 0, 0.30283));
+  // C2: compensador de ventosas. C3: articulación del pistón que pivota 90°.
+  const zTransform = new THREE.Matrix4().makeTranslation(0, mount.tipOffset, 0)
+    .multiply(new THREE.Matrix4().makeScale(sx, 5, sz)).multiply(new THREE.Matrix4().makeTranslation(-0.60487, 0.01703, 0.30283));
+  const robotPart = (mesh, transform) => {
+    for (let p = mesh; p && p !== source; p = p.parent) {
+      if (!/^Motor_EJE_[XYZ]_/.test(p.name)) continue;
+      const center = new THREE.Box3().setFromObject(p).getCenter(new THREE.Vector3());
+      // Adaptar las vigas no debe deformar los motores NEMA 23 del ensamblaje.
+      const motorTransform = new THREE.Matrix4().makeTranslation(...center.clone().applyMatrix4(transform).toArray())
+        .multiply(new THREE.Matrix4().makeScale(2, 2, 2))
+        .multiply(new THREE.Matrix4().makeTranslation(-center.x, -center.y, -center.z));
+      return meshInstance(mesh, motorTransform);
+    }
+    return meshInstance(mesh, transform);
+  };
+  source.traverse(mesh => {
+    if (!mesh.isMesh) return;
+    const name = componentName(mesh, source);
+    if (/Escuadra_soporte_Ventosas/.test(name)) return; // Cada estación conserva su cabezal específico.
+    const isLeg = /^Pata_/.test(name);
+    const isFixed = isLeg || /Perfil_4590_|Platina_Rieles_Eje_X|AR_HR15|Motor_EJE_X|Soporte_motor_Eje_X|EscuadraAjuste_Sop_Motor_X|Escuadra1polea_guia_EjeX/.test(name)
+      || /^Polea_GT2_Z30_B16_D8_ILDE-10\//.test(name) || /^Polea_GT2_Z20_B15_D5-9\//.test(name);
+    const isZ = /Perfil_2040|Rail-mgn12h_400|Cabezal_EjeZ|SopCabezal_Up/.test(name)
+      || /^Polea_GT2_Z20_B15_D5-[1-4]\//.test(name);
+    const isY = /BASE_PATINE_EJE__Y|BASE_PATINE_EJE__Z|Escuadra[LR]_Base_Y|Escuadra_R_Base_Y|Patin-mgn12h_02|Suplemento_PatinZ|Soporte_TEE|Polea_Lisa_/.test(name)
+      || /Prensa_Correa[12]-_X\^/.test(name) || /^EARC_15_FN-B-Z-C-VC-N-G-Block-3\//.test(name);
+    if (isFixed) fixed.add(robotPart(mesh, isLeg ? legTransform : fixedTransform));
+    else if (isZ) zAxis.add(robotPart(mesh, zTransform));
+    else if (isY) yAxis.add(robotPart(mesh, yTransform));
+    else xAxis.add(robotPart(mesh, xTransform));
+  });
+  return { parent: scene, group, fallback: mount.fallback, animate: () => {
+    const pose = mount.pose();
+    xAxis.position.x = pose.x;
+    yAxis.position.set(pose.x, 0, pose.z);
+    zAxis.position.set(pose.x, pose.y, pose.z);
+  } };
+}
+
+function buildStoppers(source) {
+  if (!source.getObjectByName('StopperPlatina1-1') || !source.getObjectByName('PinoStopper-4')) {
+    throw new Error('Seleccioná EnsamSTOPPER.glb');
+  }
+  // El cilindro principal actúa sobre -X en el CAD: convertirlo en elevación +Y.
+  source.rotation.z = -Math.PI / 2;
+  source.updateMatrixWorld(true);
+  return stopperMounts.map(mount => {
+    const [sx, sy, sz] = mount.scale || [3.72, 3.2, 3.75];
+    const transform = new THREE.Matrix4().makeTranslation(0, mount.yTop - 0.0525 * sy - 0.004, 0)
+      .multiply(new THREE.Matrix4().makeScale(sx, sy, sz));
+    const group = new THREE.Group(), head = new THREE.Group();
+    group.name = 'STOPPER GLB'; group.position.x = mount.x;
+    group.rotation.y = mount.rotationY || 0;
+    group.userData.station = mount.station;
+    head.name = 'STOPPER · Placa y cuatro pernos'; group.add(head);
+    const claws = [-1, 1].map(sign => {
+      const pivot = new THREE.Group();
+      pivot.name = `STOPPER · Uña ${sign}`;
+      pivot.position.set(0, 0.034, sign * 0.09).applyMatrix4(transform);
+      head.add(pivot);
+      return { sign, pivot };
+    });
+    const rods = [];
+    source.traverse(mesh => {
+      if (!mesh.isMesh) return;
+      const name = componentName(mesh, source);
+      const b = new THREE.Box3().setFromObject(mesh), sign = b.getCenter(new THREE.Vector3()).z < 0 ? -1 : 1;
+      if (/Gatillo|Palanca|B1834M_/.test(name)) {
+        const { pivot } = claws.find(claw => claw.sign === sign);
+        const relative = new THREE.Matrix4().makeTranslation(...pivot.position.clone().negate().toArray()).multiply(transform);
+        pivot.add(meshInstance(mesh, relative));
+      } else if (/TACQ12X20_rod|Cabezal1_TACQ12X20/.test(name)) {
+        const rod = new THREE.Group(); rod.add(meshInstance(mesh, transform)); head.add(rod); rods.push({ rod, sign });
+      } else if (/CDQMA32-20\(0\)_BODY/.test(name)) group.add(meshInstance(mesh, transform));
+      else head.add(meshInstance(mesh, transform));
+    });
+    return { parent: mount.parent, group, fallback: mount.fallback, animate: () => {
+      const state = mount.state();
+      head.position.y = state.lift;
+      claws.forEach(({ pivot, sign }) => { pivot.rotation.x = sign * (1 - state.closed) * Math.PI / 3; });
+      rods.forEach(({ rod, sign }) => { rod.position.z = -sign * (1 - state.closed) * 0.035; });
+    } };
+  });
+}
+
+function buildUSB(source) {
+  source.updateMatrixWorld(true);
+  const connector = source.getObjectByName('Conector_USB-C1-1');
+  const base = source.getObjectByName('Base_usbC-1');
+  if (!connector?.isMesh || !base?.isMesh || !source.getObjectByName('TACQ12X20_body1-1')) {
+    throw new Error('Seleccioná EnsambConjUSB-C.glb');
+  }
+  // El CAD ya inserta hacia -Z. Usar la punta y el eje del conector, no el centro
+  // del ensamblaje, para alinearlo con el puerto del teléfono levantado por EV1.
+  const plugBounds = new THREE.Box3().setFromObject(connector);
+  const plugCenter = plugBounds.getCenter(new THREE.Vector3());
+  const transform = new THREE.Matrix4().makeTranslation(0, USB_AXIS_Y, USB_TIP_OUT_Z)
+    .multiply(new THREE.Matrix4().makeScale(2, 2, 2))
+    .multiply(new THREE.Matrix4().makeTranslation(-plugCenter.x, -plugCenter.y, -plugBounds.min.z));
+  const group = new THREE.Group(), slide = new THREE.Group();
+  group.name = 'Conjunto USB-C GLB'; slide.name = 'USB-C · Corredera de inserción';
+  group.add(slide);
+  source.traverse(mesh => {
+    if (!mesh.isMesh) return;
+    const name = componentName(mesh, source);
+    const fixed = /^(Base_usbC|BaseP0002_TACQ|RielPatinB00011|TACQ12X20_body1)/.test(name)
+      || /^B1831M_-_4_x_07_x_12_Hex_SHCS_--_12NHX2-(8|9|10|12|13)\//.test(name);
+    (fixed ? group : slide).add(meshInstance(mesh, transform));
+  });
+  // Una ménsula corta apoya la placa del GLB sobre el perfil lateral del carro.
+  // No se monta sobre las correas ni sobre el pallet, y tampoco sobre la torre fija.
+  const plateBounds = base.geometry.boundingBox.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(transform, base.matrixWorld));
+  const spacer = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), M.bracket.clone());
+  spacer.name = 'USB-C · Ménsula sobre perfil del elevador';
+  spacer.castShadow = true; spacer.receiveShadow = true;
+  spacer.userData.ownedResources = true;
+  group.add(spacer);
+  const alignMount = () => {
+    const elevator = modelInstances.elevator.find(instance => instance.parent === c1.carriage);
+    const profile = elevator?.group.getObjectByName('elevador_09-1');
+    // Coordenadas locales al carro; esta referencia sigue siendo válida al bajar.
+    const support = profile
+      ? profile.geometry.boundingBox.clone().applyMatrix4(profile.matrix)
+      : new THREE.Box3(new THREE.Vector3(-0.95, -0.10, 0.40), new THREE.Vector3(0.95, 0, 0.60));
+    const minX = Math.max(plateBounds.min.x, support.min.x), maxX = Math.min(plateBounds.max.x, support.max.x);
+    const minZ = Math.max(plateBounds.min.z, support.min.z), maxZ = Math.min(plateBounds.max.z, support.max.z);
+    spacer.scale.set(maxX - minX, plateBounds.min.y - support.max.y, maxZ - minZ);
+    spacer.position.set((minX + maxX) / 2, (support.max.y + plateBounds.min.y) / 2, (minZ + maxZ) / 2);
+  };
+  alignMount();
+  return [{ parent: usbMount, group, fallback: [usbFallback], alignMount,
+    animate: () => { slide.position.z = -USB_STROKE * usbExt; } }];
+}
+
+async function loadModel(kind, file = null) {
+  const version = ++modelVersions[kind];
+  modelMessages[kind] = 'cargando…';
+  updateModelStatus();
+  let source;
+  try {
+    const gltf = file
+      ? await glbLoader.parseAsync(await file.arrayBuffer(), '')
+      : await glbLoader.loadAsync(`./models/${modelFiles[kind]}`);
+    source = gltf.scene;
+    if (version !== modelVersions[kind]) { releaseModel(source); return; }
+    const instances = modelBuilders[kind](source);
+    for (const old of modelInstances[kind]) {
+      old.group.removeFromParent();
+      old.group.traverse(o => {
+        if (o.userData.ownedOverlay || o.userData.ownedResources) { o.geometry.dispose(); o.material.dispose(); }
+      });
+    }
+    if (modelSources[kind]) releaseModel(modelSources[kind]);
+    modelSources[kind] = source;
+    modelInstances[kind] = instances;
+    for (const instance of instances) {
+      instance.parent.add(instance.group);
+      instance.fallback.forEach(o => { o.visible = false; });
+      instance.animate?.();
+    }
+    if (kind === 'elevator') {
+      inspectionSupport.visible = true;
+      for (const instance of modelInstances.usb) instance.alignMount();
+      // Montar los detectores en las columnas traseras del elevador importado.
+      for (const [sensor, x] of [[sensors.home1, C1_X - 1.04], [sensors.lim1, C1_X - 1.04],
+        [sensors.home5, C4_X + 1.04], [sensors.lim5, C4_X + 1.04]]) {
+        sensor.box.position.x = x;
+        sensor.box.position.z = -0.90;
+        sensor.lamp.position.set(x, sensor.box.position.y, -0.82);
+      }
+    }
+    modelMessages[kind] = kind === 'stopper' ? `${instances.length} × GLB cargado`
+      : kind === 'conveyor' ? 'GLB cargado · NEMA 23'
+      : ['pallet', 'suction', 'usb'].includes(kind) ? 'GLB cargado' : '2 × GLB cargado';
+  } catch (error) {
+    if (source) releaseModel(source);
+    if (version !== modelVersions[kind]) return;
+    modelMessages[kind] = modelSources[kind]
+      ? 'se conserva el GLB anterior; no se pudo cargar el nuevo archivo'
+      : 'modelo simplificado; seleccioná el GLB o recargá la página';
+    console.warn(`No se pudo importar ${kind}:`, error);
+  }
+  updateModelStatus();
+}
+
+for (const kind of Object.keys(modelFiles)) {
+  el(`file-${kind}`).addEventListener('change', event => {
+    const file = event.target.files[0];
+    if (file) loadModel(kind, file);
+    event.target.value = '';
+  });
+}
+
+const clock = new THREE.Clock();
+// Las texturas dibujadas representan colores sRGB; los mapas de relieve son lineales.
+scene.traverse(object => {
+  const materials = Array.isArray(object.material) ? object.material : [object.material];
+  for (const material of materials) {
+    if (material && material.map) {
+      material.map.colorSpace = THREE.SRGBColorSpace;
+      material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    }
+  }
+});
+const cameraTarget = new THREE.Vector3();
+const cameraPosition = new THREE.Vector3();
+const cameraOffset = new THREE.Vector3();
+const autoTarget = new THREE.Vector3(), autoPosition = new THREE.Vector3();
+const viewPan = new THREE.Vector3();
+const autoOrbit = new THREE.Spherical(), viewOrbit = new THREE.Spherical();
+const viewOffset = new THREE.Vector3();
+let viewTheta = 0, viewPhi = 0, viewZoom = 1, applyingCamera = false;
+let frameScale = 1;
+
+controls.addEventListener('change', () => {
+  renderNeeded = true;
+  if (applyingCamera) return;
+  viewPan.copy(controls.target).sub(autoTarget);
+  viewOrbit.setFromVector3(viewOffset.copy(camera.position).sub(controls.target));
+  viewTheta = viewOrbit.theta - autoOrbit.theta;
+  viewPhi = viewOrbit.phi - autoOrbit.phi;
+  viewZoom = viewOrbit.radius / autoOrbit.radius;
+});
+
+function applyCameraView() {
+  autoOrbit.setFromVector3(viewOffset.copy(autoPosition).sub(autoTarget));
+  viewOrbit.set(
+    THREE.MathUtils.clamp(autoOrbit.radius * viewZoom, controls.minDistance, controls.maxDistance),
+    THREE.MathUtils.clamp(autoOrbit.phi + viewPhi, 0.01, controls.maxPolarAngle),
+    autoOrbit.theta + viewTheta
+  );
+  controls.target.copy(autoTarget).add(viewPan);
+  camera.position.copy(controls.target).add(viewOffset.setFromSpherical(viewOrbit));
+  applyingCamera = true;
+  controls.update();
+  applyingCamera = false;
+}
+
+function resetCameraView() {
+  viewPan.set(0, 0, 0);
+  viewTheta = 0; viewPhi = 0; viewZoom = 1;
+  applyCameraView();
+}
+el('btn-camera').addEventListener('click', resetCameraView);
+
+function updateCamera(dt, immediate = false) {
+  const station = estacionActual();
+  const x = station === 'C1' ? C1_X : station === 'C2' ? C2_STOP : station === 'C3' ? C3_STOP : C4_X;
+  cameraTarget.set(x, station === 'C1' || station === 'C4' ? 1.8 : 2.15, 0);
+  cameraOffset.set(1.8, 2.8, 7.2);
+  if (station === 'C1') cameraOffset.set(-3.2, 2.4, 6.8);
+  if (station === 'C3') {
+    cameraTarget.z = -0.25;
+    cameraOffset.set(2.0, 3.2, 7.8);
+  }
+  if ([10, 11, 18, 28, 31, 32].includes(paso)) {
+    cameraTarget.x = tpl.grp.position.x;
+  }
+  if (station === 'RET') {
+    cameraTarget.set(tpl.grp.position.x, 0.9, 0);
+    cameraOffset.set(3.2, 2.6, 7.5);
+  }
+  if (!stageElement.classList.contains('is-exploring')) {
+    // Plano general cinematográfico; el proceso sigue siendo la simulación real.
+    const drift = motionReduced() ? 0 : Math.sin(tiempoSimulacion * 0.045) * 0.65;
+    cameraTarget.set(-11.8, 1.65, 0);
+    cameraOffset.set(4.8 + drift, 4.2, 11.7);
+  }
+  cameraPosition.copy(cameraTarget).addScaledVector(cameraOffset, frameScale);
+  const blend = immediate ? 1 : 1 - Math.exp(-2.8 * dt);
+  autoPosition.lerp(cameraPosition, blend);
+  autoTarget.lerp(cameraTarget, blend);
+  if (immediate) resetCameraView();
+  else applyCameraView();
+}
+
+function resizeView() {
+  const width = Math.max(1, stageElement.clientWidth), height = Math.max(1, stageElement.clientHeight);
+  const hud = el('hud').getBoundingClientRect();
+  const stageRect = stageElement.getBoundingClientRect();
+  const mobile = width <= 600;
+  const exploring = stageElement.classList.contains('is-exploring');
+  const occupiedX = exploring ? (mobile ? 0 : hud.width + 45) : (mobile ? 0 : width * 0.18);
+  const occupiedTop = exploring ? (mobile ? hud.bottom - stageRect.top + 10 : 75) : 0;
+  const occupiedBottom = exploring ? 130 : height * (mobile ? 0.40 : 0.20);
+  camera.aspect = width / height;
+  camera.setViewOffset(width, height, -occupiedX / 2, (occupiedBottom - occupiedTop) / 2, width, height);
+  frameScale = exploring
+    ? Math.max(1, height / Math.max(260, height - occupiedTop - occupiedBottom), 0.8 * height / Math.max(280, width - occupiedX))
+    : Math.max(1, 0.7 * height / Math.max(280, width));
+  camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setSize(width, height, false);
+  renderNeeded = true;
+}
+
+function syncSimulatorView() {
+  const exploring = stageElement.classList.contains('is-exploring');
+  // La rueda recorre la página en presentación; en exploración hace zoom.
+  controls.enabled = exploring || finePointer.matches;
+  controls.enableZoom = exploring;
+  canvas.style.touchAction = exploring ? 'none' : 'pan-y';
+  resizeView();
+  if (pausado) updateCamera(1);
+}
+
+function loop() {
+  requestAnimationFrame(loop);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (stageVisible && !document.hidden) {
+    if (!pausado) {
+      tiempoSimulacion += dt;
+      update(dt, tiempoSimulacion);
+      updateCamera(dt);
+      renderNeeded = true;
+    }
+    if (renderNeeded) {
+      renderer.render(scene, camera);
+      renderNeeded = false;
+    }
+  }
+}
+resizeView();
+reiniciar();
+syncSimulatorView();
+if (motionReduced()) setPausado(true);
+loop();
+stageElement.classList.add('is-ready');
+el('sim-pause').disabled = false;
+document.dispatchEvent(new Event('simulatorready'));
+if (location.protocol === 'file:') {
+  for (const kind of Object.keys(modelFiles)) modelMessages[kind] = 'seleccioná el GLB; la carga automática funciona al abrir el sitio por HTTP';
+  updateModelStatus();
+} else {
+  for (const kind of Object.keys(modelFiles)) loadModel(kind);
+}
+
+window.addEventListener('resize', resizeView);
+const sceneResize = new ResizeObserver(resizeView);
+sceneResize.observe(el('hud'));
+sceneResize.observe(stageElement);
+new IntersectionObserver(entries => {
+  stageVisible = entries[0].isIntersecting;
+  if (stageVisible) { clock.getDelta(); renderNeeded = true; }
+}, { threshold: 0 }).observe(stageElement);
+document.addEventListener('simulatorviewchange', syncSimulatorView);
+finePointer.addEventListener('change', syncSimulatorView);
+document.addEventListener('pagemotionchange', () => { if (motionReduced()) setPausado(true); renderNeeded = true; });
+document.addEventListener('visibilitychange', () => { clock.getDelta(); renderNeeded = true; });
+</script>
+</body>
+</html>
