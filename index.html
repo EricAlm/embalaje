@@ -6,10 +6,17 @@
 <title>Embalaje · Más control para tu producción</title>
 <meta name="description" content="Conectá identificación, etiquetado y verificación en una línea automatizada. Descubrí cómo EMBALAJE integra el equipo y su caja en un mismo flujo de producción."/>
 <meta name="theme-color" content="#101512"/>
-<link rel="stylesheet" href="site.css?v=20260915-05"/>
+<link rel="stylesheet" href="site.css?v=20260916-01"/>
 <script src="site.js?v=20260915-07" defer></script>
 </head>
 <body>
+<div id="page-loader" role="status" aria-live="polite" aria-label="Cargando la experiencia">
+  <div class="loader-inner">
+    <span class="loader-mark"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</span>
+    <span class="loader-track"><i id="loader-bar"></i></span>
+    <span class="loader-note" id="loader-note">PREPARANDO LA EXPERIENCIA 3D…</span>
+  </div>
+</div>
 <a class="skip-link" href="#vision">Saltar al contenido</a>
 <header class="site-header" id="site-header">
   <a class="wordmark" href="#inicio" aria-label="Embalaje · Inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a>
@@ -227,13 +234,14 @@
 
 <section class="section team-section" id="equipo" aria-labelledby="team-heading">
   <div class="section-index reveal"><span>07 / EL EQUIPO</span><span>LAS PERSONAS DETRÁS DE LA LÍNEA</span></div>
-  <div class="team-intro"><h2 class="display-heading reveal" id="team-heading">Conociendo al equipo.<br/><em>Quienes hacen posible el sistema.</em></h2><p class="reveal">Cinco momentos para conocer a las personas que diseñan, ensamblan y operan la línea. Los videos avanzan rápido y se reproducen solos al llegar a ellos.</p></div>
+  <div class="team-intro"><h2 class="display-heading reveal" id="team-heading">Conociendo al equipo.<br/><em>Quienes hacen posible el sistema.</em></h2><p class="reveal">Seis momentos para conocer a las personas que diseñan, ensamblan y operan la línea. Los videos avanzan rápido y se reproducen solos al llegar a ellos.</p></div>
   <div class="team-grid">
     <figure class="team-card reveal" data-parallax="-12"><video class="team-video" src="assets/team-01.mp4" muted loop playsinline preload="metadata" aria-label="Video de Eric Almendras"></video><figcaption><span>ERIC ALMENDRAS</span><span>×1.5</span></figcaption></figure>
     <figure class="team-card reveal" data-parallax="10"><video class="team-video" src="assets/team-02.mp4" muted loop playsinline preload="metadata" aria-label="Video de Solange Cardozo"></video><figcaption><span>SOLANGE CARDOZO</span><span>×1.5</span></figcaption></figure>
     <figure class="team-card reveal" data-parallax="-14"><video class="team-video" src="assets/team-03.mp4" muted loop playsinline preload="metadata" aria-label="Video de Matias Herrera"></video><figcaption><span>MATIAS HERRERA</span><span>×1.5</span></figcaption></figure>
     <figure class="team-card reveal" data-parallax="12"><video class="team-video" src="assets/team-04.mp4" muted loop playsinline preload="metadata" aria-label="Video de Luis Villalobos"></video><figcaption><span>LUIS VILLALOBOS</span><span>×1.5</span></figcaption></figure>
     <figure class="team-card reveal" data-parallax="-10"><video class="team-video" src="assets/team-05.mp4" muted loop playsinline preload="metadata" aria-label="Video de Felipe Isoba"></video><figcaption><span>FELIPE ISOBA</span><span>×1.5</span></figcaption></figure>
+    <figure class="team-card reveal" data-parallax="12"><video class="team-video" src="assets/team-06.mp4" muted loop playsinline preload="metadata" aria-label="Video de Fabian Liendo"></video><figcaption><span>FABIAN LIENDO</span><span>×1.5</span></figcaption></figure>
   </div>
 </section>
 </main>
@@ -2195,8 +2203,31 @@ function updateModelStatus() {
     pallet: 'Pallet', robot: 'Robots C2/C3', suction: 'Ventosas C2', table: 'Mesas C2/C3', stopper: 'STOPPER C1/C2/C3', usb: 'USB-C C1' };
   el('model-status').textContent = Object.keys(modelFiles).map(kind => `${names[kind]}: ${modelMessages[kind]}.`).join(' ');
   el('model-count').textContent = `${Object.values(modelSources).filter(Boolean).length} / ${Object.keys(modelFiles).length} MODELOS CAD`;
+  const loaded = Object.values(modelSources).filter(Boolean).length;
+  const total = Object.keys(modelFiles).length;
+  const loaderBar = document.getElementById('loader-bar');
+  const loaderNote = document.getElementById('loader-note');
+  if (loaderBar) loaderBar.style.width = `${Math.round((loaded / total) * 100)}%`;
+  if (loaderNote) loaderNote.textContent = loaded === total ? 'LÍNEA LISTA · EXPERIENCIA EN MARCHA'
+    : location.protocol === 'file:' ? 'MODO ARCHIVO · CARGA MANUAL DE LOS GLB'
+    : `CARGANDO MODELOS CAD · ${loaded} / ${total}`;
+  maybeCloseLoader();
   renderNeeded = true;
 }
+
+const pageLoader = document.getElementById('page-loader');
+let loaderSimReady = false;
+document.body.classList.add('loading');
+function maybeCloseLoader(force = false) {
+  if (!pageLoader || pageLoader.classList.contains('is-done')) return;
+  const pending = Object.values(modelMessages).some(m => m === 'pendiente' || m === 'cargando…');
+  if (!(force || (loaderSimReady && !pending))) return;
+  pageLoader.classList.add('is-done');
+  document.body.classList.remove('loading');
+  setTimeout(() => pageLoader.remove(), 850);
+}
+document.addEventListener('simulatorready', () => { loaderSimReady = true; maybeCloseLoader(); });
+setTimeout(() => maybeCloseLoader(true), 15000);
 
 function releaseModel(source) {
   const geometries = new Set(), materials = new Set(), textures = new Set();

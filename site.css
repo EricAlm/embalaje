@@ -13,6 +13,14 @@
 html { margin: 0; height: auto; overflow: visible; scroll-behavior: smooth; scroll-padding-top: 110px; }
 body { margin: 0; height: auto; overflow: visible; background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; line-height: 1.65; }
 body.dialog-open { overflow: hidden; }
+body.loading { overflow: hidden; }
+#page-loader { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; background: var(--bg); transition: opacity .8s var(--ease), visibility .8s; }
+#page-loader.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-inner { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.loader-mark { display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 650; letter-spacing: .14em; color: var(--text); }
+.loader-track { width: min(320px, 70vw); height: 2px; background: var(--line); overflow: hidden; }
+#loader-bar { display: block; height: 100%; width: 0; background: var(--accent); transition: width .5s var(--ease); }
+.loader-note { display: block; font-family: Consolas, monospace; font-size: 9px; letter-spacing: .14em; color: var(--muted); }
 ::selection { background: var(--accent); color: var(--bg); }
 ::-webkit-scrollbar { width: 7px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
