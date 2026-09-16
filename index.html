@@ -21,7 +21,7 @@
 <a class="skip-link" href="#vision">Saltar al contenido</a>
 <header class="site-header" id="site-header">
   <a class="wordmark" href="#inicio" aria-label="Embalaje · Inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a>
-  <nav class="site-nav" aria-label="Navegación principal"><a href="#sistema">El sistema</a><a href="#recorrido">El recorrido</a><a href="#precision">La precisión</a><a href="#detalles">El detalle</a></nav>
+  <nav class="site-nav" aria-label="Navegación principal"><a href="#sistema">El sistema</a><a href="#recorrido">El recorrido</a><a href="#precision">La precisión</a><a href="#control">El control</a><a href="#detalles">El detalle</a></nav>
   <button class="nav-action" type="button" data-open-simulator>Explorar 3D <span aria-hidden="true">↗</span></button>
 </header>
 <div class="reading-progress" aria-hidden="true"><span id="reading-progress"></span></div>
@@ -205,15 +205,97 @@
   <div class="tolerance-grid"><div class="reveal"><span class="micro-label">IDENTIFICACIÓN DIRECTA</span><strong>USB</strong><p>El dato parte del dispositivo y se integra al etiquetado.</p></div><div class="reveal"><span class="micro-label">INSPECCIÓN ÓPTICA</span><strong>OCR</strong><p>La lectura de las etiquetas acompaña el control del proceso.</p></div><div class="reveal"><span class="micro-label">MOVIMIENTO COORDINADO</span><strong>XYZ</strong><p>Los ejes cartesianos llevan cada aplicación a su posición.</p></div></div>
 </section>
 
+<section class="section control-section" id="control" aria-labelledby="control-heading">
+  <div class="section-index reveal">
+    <span>05 / EL CONTROL</span>
+    <span>SUPERVISIÓN Y CONFIGURACIÓN DE LA LÍNEA</span>
+  </div>
+  <div class="control-intro">
+    <h2 class="display-heading reveal" id="control-heading">Toda la línea.<br/><em>Un mismo control.</em></h2>
+    <div class="reveal">
+      <p>El movimiento de cada pieza forma parte de un proceso conectado. El panel SCADA reúne la supervisión de sensores, motores e impresoras y la configuración de las estaciones en una misma interfaz.</p>
+      <p>Está pensado para vincular la carga, el transporte, el posicionamiento y el etiquetado: desde la visión general de producción hasta el ajuste de un eje.</p>
+    </div>
+  </div>
+
+  <div class="control-overview">
+    <figure class="panel-shot reveal">
+      <a class="diagram-link" href="assets/panel-produccion.webp" data-lightbox data-caption="Panel SCADA · Vista de producción y estados por estación" aria-label="Ampliar la captura del panel de producción">
+        <img src="assets/panel-produccion.webp" width="1440" height="1168" loading="lazy" decoding="async" alt="Captura del panel SCADA con cinco estaciones conectadas, sensores de elevadores y conveyors, motores, ejes cartesianos y estados de impresoras."/>
+        <span class="image-expand" aria-hidden="true">↗</span>
+      </a>
+      <figcaption><span>PRODUCCIÓN · VISIÓN DEL PROCESO</span><span>CAPTURA DEL PANEL</span></figcaption>
+    </figure>
+    <ol class="control-connections">
+      <li class="reveal">
+        <span class="micro-label">01 / OBSERVAR</span>
+        <h3>El estado de cada estación.</h3>
+        <p>Entradas y salidas de pallet, límites, referencias Home y estados de impresora. La vista de producción organiza las señales siguiendo el recorrido de la línea.</p>
+      </li>
+      <li class="reveal">
+        <span class="micro-label">02 / AJUSTAR</span>
+        <h3>Los parámetros, en su lugar.</h3>
+        <p>Velocidad, aceleración, pulsos y referencias de origen se agrupan por módulo. Elevadores y conveyors tienen su configuración dentro de la misma estación.</p>
+      </li>
+      <li class="reveal">
+        <span class="micro-label">03 / COORDINAR</span>
+        <h3>Del transporte al etiquetado.</h3>
+        <p>Los módulos cartesianos reúnen selección de eje, movimientos, ajustes finos y succión. Son las operaciones que posicionan el cabezal para tomar y colocar la etiqueta.</p>
+      </li>
+    </ol>
+  </div>
+
+  <div class="control-gallery">
+    <figure class="panel-shot reveal">
+      <a class="diagram-link" href="assets/panel-estacion.webp" data-lightbox data-caption="Estación 01 · Configuración del elevador, movimiento relativo y Home" aria-label="Ampliar la configuración de la estación">
+        <img src="assets/panel-estacion.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla de la estación 01 con velocidad, aceleración, pulsos, AutoHome y botones de movimiento del elevador."/>
+        <span class="image-expand" aria-hidden="true">↗</span>
+      </a>
+      <figcaption><span>ESTACIÓN · ELEVADOR Y CONVEYOR</span><span>AMPLIAR ↗</span></figcaption>
+    </figure>
+    <figure class="panel-shot reveal">
+      <a class="diagram-link" href="assets/panel-ejes.webp" data-lightbox data-caption="Cartesiano del teléfono · Parámetros compartidos y selección de ejes X, Y, Z" aria-label="Ampliar la configuración del cartesiano">
+        <img src="assets/panel-ejes.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla del cartesiano del teléfono con parámetros compartidos, AutoHome y selección de ejes X, Y y Z."/>
+        <span class="image-expand" aria-hidden="true">↗</span>
+      </a>
+      <figcaption><span>CARTESIANO · CONFIGURACIÓN XYZ</span><span>AMPLIAR ↗</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="control-demo-heading reveal">
+    <h3>Así se usa el panel.</h3>
+    <p>Dos recorridos breves, con explicaciones en pantalla. Reproducilos o abrilos a pantalla completa para ver cada ajuste.</p>
+  </div>
+  <div class="control-demos">
+    <article class="control-demo reveal">
+      <div class="control-demo-meta"><span>RECORRIDO 01</span><span>27 S · SIN AUDIO</span></div>
+      <h4>Configurar una estación.</h4>
+      <video class="panel-demo-video" src="assets/panel-demo-estacion.mp4" poster="assets/panel-estacion.webp" width="1440" height="900" controls muted playsinline preload="none" aria-label="Demostración de configuración de una estación" aria-describedby="demo-estacion-description">
+        <a href="assets/panel-demo-estacion.mp4">Ver el video de configuración de una estación.</a>
+      </video>
+      <p id="demo-estacion-description">De Producción a la estación 01: cambiar velocidad y aceleración del elevador, aplicar parámetros, probar un desplazamiento y ajustar el conveyor y el agarre.</p>
+    </article>
+    <article class="control-demo reveal">
+      <div class="control-demo-meta"><span>RECORRIDO 02</span><span>27 S · SIN AUDIO</span></div>
+      <h4>Preparar el cartesiano.</h4>
+      <video class="panel-demo-video" src="assets/panel-demo-cartesiano.mp4" poster="assets/panel-ejes.webp" width="1440" height="900" controls muted playsinline preload="none" aria-label="Demostración de configuración del cartesiano" aria-describedby="demo-cartesiano-description">
+        <a href="assets/panel-demo-cartesiano.mp4">Ver el video de configuración del cartesiano.</a>
+      </video>
+      <p id="demo-cartesiano-description">Ajustar velocidad y AutoHome, seleccionar el eje Y, realizar un movimiento relativo y un ajuste Jog, volver a Home y probar la toma y liberación de la etiqueta.</p>
+    </article>
+  </div>
+  <p class="control-demo-note">Capturas y recorridos grabados sobre la interfaz de demostración. Los valores y las acciones mostrados son ejemplos de uso del panel.</p>
+</section>
+
 <section class="section people-section" id="ingenieria" aria-labelledby="people-heading">
-  <div class="section-index reveal"><span>05 / INGENIERÍA PARA OPERAR</span><span>EL SISTEMA COMPLETO IMPORTA</span></div>
+  <div class="section-index reveal"><span>06 / INGENIERÍA PARA OPERAR</span><span>EL SISTEMA COMPLETO IMPORTA</span></div>
   <div class="people-heading"><h2 class="display-heading reveal" id="people-heading" data-parallax="-18">Automatizar el proceso.</h2><p class="reveal">La carga, el abastecimiento y la descarga se organizan alrededor de una línea que conecta las operaciones repetitivas. Más claridad en el flujo y acceso directo a cada zona de trabajo.</p></div>
   <figure class="diagram-card wide-diagram reveal"><a class="diagram-link" href="assets/sim-conjunto.webp" data-lightbox data-caption="Distribución general y puestos de operación · Captura del simulador 3D" aria-label="Ampliar la distribución general"><img src="assets/sim-conjunto.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Vista general del simulador 3D sin operarios, con elevadores, conveyors, robots cartesianos y puestos de impresión." data-parallax="18"/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>FIG. 03 — VISIÓN DE CONJUNTO</span><span>SIMULADOR 3D</span></figcaption></figure>
   <div class="principles"><article class="reveal"><span>01</span><h3>Acceso simple</h3><p>Impresoras y consumibles al alcance para facilitar el cambio de rollos y la asistencia.</p></article><article class="reveal"><span>02</span><h3>Operaciones conectadas</h3><p>Transporte, etiquetado y manipulación coordinados dentro del mismo recorrido.</p></article><article class="reveal"><span>03</span><h3>Control a la vista</h3><p>Sensores, actuadores y estados de estación que permiten seguir el funcionamiento de la línea.</p></article></div>
 </section>
 
 <section class="section gallery-section" id="detalles" aria-labelledby="gallery-heading">
-  <div class="section-index reveal"><span>06 / EL DETALLE</span><span>INGENIERÍA QUE SE VE DE CERCA</span></div>
+  <div class="section-index reveal"><span>07 / EL DETALLE</span><span>INGENIERÍA QUE SE VE DE CERCA</span></div>
   <div class="gallery-intro"><h2 class="display-heading reveal" id="gallery-heading">Acercate al sistema.<br/><em>Descubrí sus detalles.</em></h2><p class="reveal">Desde la entrada del equipo hasta la entrega del conjunto: una distribución que une las operaciones y hace visible el recorrido.</p></div>
   <div class="gallery-grid">
     <figure class="diagram-card gallery-card reveal" data-parallax="-16"><a class="diagram-link" href="assets/sim-identificacion.webp" data-lightbox data-caption="Estación de identificación · Captura del simulador 3D" aria-label="Ampliar la estación de identificación"><img src="assets/sim-identificacion.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Captura del simulador: elevador C1, pallet, cámara de inspección y módulo de lectura USB."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>IDENTIFICACIÓN</span><span>LECTURA USB</span></figcaption></figure>
@@ -233,18 +315,6 @@
 
 <section class="closing section" aria-labelledby="closing-heading"><p class="kicker reveal">EL VALOR ESTÁ EN CÓMO SE CONECTA TODO</p><h2 class="display-heading reveal" id="closing-heading">Conocé el sistema.<br/><em>Imaginá el próximo paso.</em></h2><a class="pill-button large-button reveal" href="#inicio">Explorar EMBALAJE en 3D <span aria-hidden="true">↑</span></a></section>
 
-<section class="section team-section" id="equipo" aria-labelledby="team-heading">
-  <div class="section-index reveal"><span>07 / EL EQUIPO</span><span>LAS PERSONAS DETRÁS DE LA LÍNEA</span></div>
-  <div class="team-intro"><h2 class="display-heading reveal" id="team-heading">Conociendo al equipo.<br/><em>Quienes hacen posible el sistema.</em></h2><p class="reveal">Seis momentos para conocer a las personas que diseñan, ensamblan y operan la línea. Los videos avanzan rápido y se reproducen solos al llegar a ellos.</p></div>
-  <div class="team-grid">
-    <figure class="team-card reveal" data-parallax="-12"><video class="team-video" src="assets/team-01.mp4" muted loop playsinline preload="metadata" aria-label="Video de Eric Almendras"></video><figcaption><span>ERIC ALMENDRAS</span><span>×1.5</span></figcaption></figure>
-    <figure class="team-card reveal" data-parallax="10"><video class="team-video" src="assets/team-02.mp4" muted loop playsinline preload="metadata" aria-label="Video de Solange Cardozo"></video><figcaption><span>SOLANGE CARDOZO</span><span>×1.5</span></figcaption></figure>
-    <figure class="team-card reveal" data-parallax="-14"><video class="team-video" src="assets/team-03.mp4" muted loop playsinline preload="metadata" aria-label="Video de Matias Herrera"></video><figcaption><span>MATIAS HERRERA</span><span>×1.5</span></figcaption></figure>
-    <figure class="team-card reveal" data-parallax="12"><video class="team-video" src="assets/team-04.mp4" muted loop playsinline preload="metadata" aria-label="Video de Luis Villalobos"></video><figcaption><span>LUIS VILLALOBOS</span><span>×1.5</span></figcaption></figure>
-    <figure class="team-card reveal" data-parallax="-10"><video class="team-video" src="assets/team-05.mp4" muted loop playsinline preload="metadata" aria-label="Video de Felipe Isoba"></video><figcaption><span>FELIPE ISOBA</span><span>×1.5</span></figcaption></figure>
-    <figure class="team-card reveal" data-parallax="12"><video class="team-video" src="assets/team-06.mp4" muted loop playsinline preload="metadata" aria-label="Video de Fabian Liendo"></video><figcaption><span>FABIAN LIENDO</span><span>×1.5</span></figcaption></figure>
-  </div>
-</section>
 </main>
 <footer class="site-footer"><a class="wordmark" href="#inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a><p>Automatización y trazabilidad.<br/>Presentación del sistema y simulación en vivo.</p></footer>
 <dialog id="diagram-dialog" class="diagram-dialog" aria-labelledby="dialog-caption"><button class="dialog-close" type="button" aria-label="Cerrar imagen">×</button><img id="dialog-image" alt=""/><p id="dialog-caption"></p></dialog>

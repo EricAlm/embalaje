@@ -132,25 +132,20 @@
   }, { once: true });
   if (stage.classList.contains('is-ready')) document.getElementById('sim-pause').disabled = false;
 
-  // Videos del equipo: en miniatura, a velocidad ×1.3 y con reproducción al entrar en pantalla.
-  const teamVideos = [...document.querySelectorAll('.team-video')];
-  teamVideos.forEach(video => {
-    video.defaultPlaybackRate = 1.3;
-    video.playbackRate = 1.3;
-    video.addEventListener('loadedmetadata', () => { video.playbackRate = 1.3; });
+  // Las demostraciones se reproducen a pedido y de a una para facilitar su lectura.
+  const panelDemos = [...document.querySelectorAll('.panel-demo-video')];
+  panelDemos.forEach(video => {
+    video.addEventListener('play', () => {
+      panelDemos.forEach(other => { if (other !== video) other.pause(); });
+    });
   });
-  const playTeamVideo = video => {
-    if (root.classList.contains('reduce-motion')) return;
-    video.playbackRate = 1.3;
-    if (video.paused) { const attempt = video.play(); if (attempt) attempt.catch(() => {}); }
-  };
-  const teamObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (entry.isIntersecting) playTeamVideo(entry.target);
-    else entry.target.pause();
-  }), { threshold: .05 });
-  teamVideos.forEach(video => teamObserver.observe(video));
-  document.addEventListener('visibilitychange', () => { if (document.hidden) teamVideos.forEach(video => video.pause()); });
-  document.addEventListener('pagemotionchange', () => { if (root.classList.contains('reduce-motion')) teamVideos.forEach(video => video.pause()); });
+  const panelDemoObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (!entry.isIntersecting) entry.target.pause(); });
+  });
+  panelDemos.forEach(video => panelDemoObserver.observe(video));
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) panelDemos.forEach(video => video.pause());
+  });
 
   setMotion();
 })();
