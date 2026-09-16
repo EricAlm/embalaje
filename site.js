@@ -89,7 +89,7 @@
       document.getElementById('step-progress').style.width = `${(activeStep + 1) * 20}%`;
       const enlarge = document.getElementById('process-enlarge');
       enlarge.href = processImages[activeStep].src;
-      enlarge.dataset.caption = `${captions[activeStep]} · Esquema del sistema`;
+      enlarge.dataset.caption = `${captions[activeStep]} · Captura del simulador 3D`;
     }
     let navIndex = -1;
     navSections.forEach((section, index) => { if (section.getBoundingClientRect().top < height * .4) navIndex = index; });
