@@ -60,7 +60,7 @@
   <button class="btn" id="btn-camera" type="button">◎ Restablecer vista</button>
   <div id="modo" role="status">EN MARCHA · Seguimiento + mouse</div>
   <div id="estaciones" aria-label="Estación actual">
-    <span data-station="C1">C1 · IA/USB</span><span data-station="C2">C2 · Etiqueta</span><span data-station="C3">C3 · Caja</span><span data-station="C4">C4 · Retiro</span><span data-station="RET">Retorno</span>
+    <span data-station="C1">C1 · IA/USB</span><span data-station="C2">C2 · Etiqueta / Láser</span><span data-station="C3">C3 · Caja</span><span data-station="C4">C4 · Retiro</span><span data-station="RET">Retorno</span>
   </div>
   <div id="estado">INICIANDO CICLO AUTOMÁTICO…</div>
   <div id="progwrap" role="progressbar" aria-label="Progreso del paso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="prog"></div></div>
@@ -82,6 +82,7 @@
     <span class="item"><span class="lamp" id="lmp-brazo"></span>BRAZO C2</span>
     <span class="item"><span class="lamp" id="lmp-ev1c2"></span>EV1 C2</span>
     <span class="item"><span class="lamp" id="lmp-ev2c2"></span>EV2 C2</span>
+    <span class="item"><span class="lamp" id="lmp-laser"></span>LÁSER SIM</span>
     <span class="item"><span class="lamp" id="lmp-m5"></span>MOTOR C4</span>
     <span class="item"><span class="lamp" id="lmp-home5"></span>HOME C4</span>
     <span class="item"><span class="lamp" id="lmp-lim5"></span>LÍMITE C4</span>
@@ -130,6 +131,8 @@
     <label class="model-input">Robot_Etiquetado_Celulares.glb · C2 y C3<input id="file-robot" type="file" accept=".glb"/></label>
     <label class="model-input">Ensamblaje_Ventosas.glb · Punta Z de C2<input id="file-suction" type="file" accept=".glb"/></label>
     <label class="model-input">Mesa_impresora.glb · C2 y C3<input id="file-table" type="file" accept=".glb"/></label>
+    <label class="model-input">Mesa_laser.glb · C2<input id="file-laserTable" type="file" accept=".glb"/></label>
+    <label class="model-input">Zeigen_Galvo_Laser.glb · Marcado de SIM en C2<input id="file-laser" type="file" accept=".glb"/></label>
     <label class="model-input">EnsamSTOPPER.glb · C1, C2 y C3<input id="file-stopper" type="file" accept=".glb"/></label>
     <label class="model-input">EnsambConjUSB-C.glb · USB móvil de C1<input id="file-usb" type="file" accept=".glb"/></label>
   </details>
@@ -329,35 +332,60 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const BELT_Y = 1.6, BOT_Y = 0.55, BELT_W = 1.5;
-const C1_X = -16, C4_X = -7.3, C2_STOP = -13.0;
+const C4_X = -7.3, C2_STOP = -13.0;
+// PALLET.jpg y ubicacion.png: giro de 90°, caja atrás y teléfono/SIM hacia los equipos.
+const PALLET_WIDTH = 0.9, PALLET_DEPTH = 1.2;
+// Apoyos medidos en el CAD, después del giro (coordenadas locales al pallet).
+const PHONE_X = -0.217, PHONE_Z = 0.326, PHONE_WIDTH = 0.278, PHONE_LENGTH = 0.490;
+const PHONE_SEAT_Y = 0.02870, PHONE_Y = PHONE_SEAT_Y + 0.0225;
+const PHONE_LABEL_Y = PHONE_Y + 0.023;
+const SIM_X = 0.2025, SIM_Z = 0.302, SIM_SEAT_Y = 0.04435, SIM_Y = SIM_SEAT_Y + 0.0065;
+const SIM_WIDTH = 0.112, SIM_DEPTH = 0.054, SIM_MARK_X = 0.031;
+const LASER_SCALE = 2.0, LASER_TABLE_Y = 1.6;
+const LASER_TABLE_W = 1.08, PRINTER_TABLE_W = 0.9, TABLE_DEPTH = 0.9;
+// Desplazamiento de la salida óptica respecto del centro de la base del CAD,
+// una vez vertical: X=-0.07625, Z=-0.44566417. La salida queda sobre la SIM.
+const LASER_X = C2_STOP + SIM_X + SIM_MARK_X + 0.07625 * LASER_SCALE;
+const LASER_BASE_Z = SIM_Z + 0.44566417 * LASER_SCALE;
+// Tableros junto al borde del pallet; la base del láser queda apoyada hacia atrás.
+const LASER_Z = PALLET_DEPTH / 2 + 0.05 + TABLE_DEPTH / 2, PRINTER_Z = LASER_Z;
+// Sentido C1→C2: primero impresora y cartesiano, después láser.
+const XP = LASER_X - (LASER_TABLE_W + PRINTER_TABLE_W) / 2;
+// C2 ocupa exactamente el frente de las dos mesas. C1 entrega directamente.
+const C2_START = XP - PRINTER_TABLE_W / 2, C2_END = LASER_X + LASER_TABLE_W / 2;
+// Holgura para la columna y los pies de C1; el pallet puentea la junta entre cintas.
+const C1_X = C2_START - 1.15, C2_ENTRY_X = C2_START + PALLET_WIDTH / 2 + 0.02;
 const CAR_HOME = 0.55, CAR_TOP = 1.6, TOP_Y = 3.0;
 const BELT_SPEED = 2.0;
 const PUSH_LIFT = 0.05;
 // Altura del puerto respecto del carro cuando EV1 posiciona el pallet.
-const USB_AXIS_Y = 0.06 + 0.0825 + PUSH_LIFT;
+const USB_AXIS_Y = 0.06 + PHONE_Y + PUSH_LIFT;
+const USB_MOUNT_Z = PHONE_Z + PHONE_LENGTH / 2 - 0.34;
 const USB_TIP_IN_Z = 0.338, USB_STROKE = 0.040, USB_TIP_OUT_Z = USB_TIP_IN_Z + USB_STROKE;
 const TOP_CINTAS = [[-11.4, -9.4]];
-const RET = [-15.0, -8.4];
-const XP = -13.0;
-const LAB_Y = 1.84, LAB_IN_Z = 1.50, LAB_OUT_Z = 1.31;
-const ARM_HOME_X = -14.2, ARM_HOME_Z = 1.6, CUP_UP = 2.5;
-const CUP_PICK = LAB_Y + 0.002, CUP_PLACE = BELT_Y + 0.06 + PUSH_LIFT + 0.1055 + 0.002;
+const RET = [C1_X + 1.0, -8.4];
+const LAB_Y = 1.84, LAB_IN_Z = PRINTER_Z - 0.20, LAB_OUT_Z = PRINTER_Z - 0.39;
+// Home sobre la impresora: el brazo no cruza la columna ni el cabezal láser.
+const PHONE_C2_X = C2_STOP + PHONE_X;
+const ARM_HOME_X = XP - 0.10, ARM_HOME_Z = PRINTER_Z, CUP_UP = 2.5;
+const ROBOT_C2_X = (XP + PHONE_C2_X) / 2, ROBOT_C2_SPAN = 1.5;
+const ROBOT_C2_LEFT = ROBOT_C2_X - ROBOT_C2_SPAN / 2, ROBOT_C2_RIGHT = ROBOT_C2_X + ROBOT_C2_SPAN / 2;
+const CUP_PICK = LAB_Y + 0.002, CUP_PLACE = BELT_Y + 0.06 + PUSH_LIFT + PHONE_LABEL_Y + 0.002;
 
 const C3_STOP = -10.4, XP3 = -10.0;
 const ARM3_HOME_X = -11.4, ARM3_HOME_Z = 1.6, CUP3_PICK = 1.96, CUP3_LABEL = 2.06;
 const ARM2_HOME_X = -11.4, ARM2_HOME_Z = -0.95;
-// Alojamiento medido en Pallet_celular.glb tras buildPallet():
-// X [0.30514, 0.58286], Z [-0.240, 0.390], fondo Y=0.01826.
+// Alojamiento de caja tras girar el CAD: X [-0.240, 0.390], Z [-0.58286, -0.30514].
 // La solapa y la etiqueta también deben caber: 5 mm de holgura en Z y ~4 mm en X.
-const BOX_X = 0.444, BOX_Z = 0.075, BOX_Y = 0.12;
+const BOX_X = 0.075, BOX_Z = -0.444, BOX_Y = 0.12;
 const BOX_WIDTH = 0.620, BOX_DEPTH = 0.264, BOX_SEAT_Y = 0.01826;
 const FLAP_Y = 0.13, BOX_GRIP_X = BOX_WIDTH / 2, BOX_GRIP_Z = -BOX_DEPTH / 2;
 const BOX_ARM_X = C3_STOP + BOX_X - 0.10 - BOX_DEPTH / 2;
 const BOX_ARM_Z = BOX_Z - BOX_WIDTH / 2;
+const BOX_SEAT_ARM_X = C3_STOP + BOX_X + BOX_GRIP_X - 0.10, BOX_SEAT_ARM_Z = BOX_Z + BOX_GRIP_Z;
 const ARM3_LABEL_Z = BOX_Z + BOX_WIDTH / 2 + 0.16;
 const NAIL_UP = 2.75, NAIL_MID = 2.205;
 const NAIL_PLACE = BELT_Y + 0.06 + PUSH_LIFT + BOX_SEAT_Y + BOX_Y / 2 + FLAP_Y;
-const SIM_X = -0.42;
 const RAMP_X = -9.5, RAMP_Z0 = -0.95, RAMP_Z1 = -2.85, RAMP_Y0 = 1.62, RAMP_Y1 = 1.95;
 const RAMP_SLOTS = [];
 for (let i = 0; i < 6; i++) {
@@ -378,11 +406,11 @@ const PASOS = [
   { nombre: '7 · EV3: PISTÓN USB INSERTA EL CABLE', dur: 1.0 },
   { nombre: '8 · USB OK ✓ → DESACTIVAN EV1/EV2/EV3 · CL4NX C2 IMPRIME ETIQUETA', dur: 2.4 },
   { nombre: '9 · OCR C2: VERIFICA LA ETIQUETA IMPRESA', dur: 2.0 },
-  { nombre: '10 · SALE DE C1 → CINTA 2 (C1 BAJA)', dur: 1.4 },
+  { nombre: '10 · SALE DE C1 → CINTA 2 (C1 BAJA)', dur: 2.0 },
   { nombre: '11 · VIAJA HASTA LA ESTACIÓN C2', dur: 0.6 },
   { nombre: '12 · EV1 C2: POSICIONA LA PLANTILLA HACIA ARRIBA', dur: 0.8 },
   { nombre: '13 · EV2 C2: UÑAS AGARRAN LA PLANTILLA', dur: 0.8 },
-  { nombre: '14 · BRAZO C2: VA A LA CL4NX Y ABSORBE LA ETIQUETA', dur: 2.4 },
+  { nombre: '14 · C2: RECOGE LA ETIQUETA · ZEIGEN GRABA LA BANDEJA SIM', dur: 2.4 },
   { nombre: '15 · BRAZO C2: PEGA LA ETIQUETA EN EL TELÉFONO', dur: 2.6 },
   { nombre: '16 · BRAZO C2: RETORNA A HOME', dur: 1.0 },
   { nombre: '17 · DESACTIVAN EV1/EV2 DE C2', dur: 1.5 },
@@ -394,7 +422,7 @@ const PASOS = [
   { nombre: '23 · OCR C3: VERIFICA LA ETIQUETA IMPRESA', dur: 2.0 },
   { nombre: '24 · C3: BRAZO 3 EJES TOMA LA ETIQUETA DE LA CL4NX', dur: 2.4 },
   { nombre: '25 · C3: PEGA LA ETIQUETA EN LA CAJA (EN EL AIRE)', dur: 3.0 },
-  { nombre: '26 · C3: LA CAJA SE POSICIONA EN LA PLANTILLA', dur: 1.8 },
+  { nombre: '26 · C3: ORIENTA LA CAJA Y LA APOYA EN SU ALOJAMIENTO', dur: 2.4 },
   { nombre: '27 · DESACTIVAN EV1/EV2 DE C3', dur: 1.5 },
   { nombre: '28 · VIAJA DE C3 A C4', dur: 3.5 },
   { nombre: '29 · C4: SE RETIRAN EL TELÉFONO Y LA CAJA', dur: 1.0 },
@@ -774,13 +802,13 @@ function texPantallaMonitor(titulo) {
   return t;
 }
 for (const [sx, titulo] of [[XP, 'SATO CL4NX · C2'], [XP3, 'SATO CL4NX · C3']]) {
-  box(0.05, 2.05, 0.05, M.post, sx, 1.075, 2.3);
+  box(0.05, 2.05, 0.05, M.post, sx, 1.075, PRINTER_Z + 0.6);
   const mon = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.32, 0.03), mat(0x14181e, { roughness: 0.5 }));
-  mon.position.set(sx, 2.25, 2.3);
+  mon.position.set(sx, 2.25, PRINTER_Z + 0.6);
   mon.castShadow = true;
   scene.add(mon);
   const pant = new THREE.Mesh(new THREE.PlaneGeometry(0.46, 0.28), new THREE.MeshBasicMaterial({ map: texPantallaMonitor(titulo) }));
-  pant.position.set(sx, 2.25, 2.317);
+  pant.position.set(sx, 2.25, PRINTER_Z + 0.617);
   scene.add(pant);
 }
 
@@ -848,9 +876,9 @@ function crearCinta(x0, x1, yTop, w, nombre) {
 }
 
 const topTexs = TOP_CINTAS.map((c, i) => crearCinta(c[0], c[1], BELT_Y, BELT_W, 'C' + (i + 3)));
-const c2Tex = crearCinta(-14.0, -12.0, BELT_Y, BELT_W, null);
-// Tramos de enlace: la plantilla siempre tiene apoyo entre estaciones.
-for (const [a, b] of [[-15, -14], [-12, -11.4], [-9.4, -8.3]]) {
+const c2Tex = crearCinta(C2_START, C2_END, BELT_Y, BELT_W, null);
+// C1 ya está junto a C2: sólo quedan los enlaces C2→C3 y C3→C4.
+for (const [a, b] of [[C2_END, -11.4], [-9.4, -8.3]]) {
   topTexs.push(crearCinta(a, b, BELT_Y, BELT_W, null));
 }
 label('C2', -13.0, BELT_Y + 0.65, -BELT_W / 2 - 0.7, 1.2);
@@ -996,7 +1024,7 @@ const c5 = crearCarro(C4_X, false);
 c1.carriage.position.y = CAR_HOME;
 c5.carriage.position.y = CAR_TOP;
 const elevatorMounts = [
-  { x: C1_X, tower: t1, car: c1 },
+  { x: C1_X, tower: t1, car: c1, rotationY: Math.PI },
   { x: C4_X, tower: t5, car: c5 }
 ];
 
@@ -1004,7 +1032,7 @@ label('C1', C1_X, TOP_Y + 0.75, 0, 1.4);
 label('C4', C4_X, TOP_Y + 0.75, 0, 1.4);
 
 const loaderGrp = new THREE.Group();
-loaderGrp.position.set(C1_X, 0, -1.65);
+loaderGrp.position.set(C1_X + PHONE_X, 0, -1.65);
 scene.add(loaderGrp);
 const mag = box(0.5, 0.3, 0.75, M.magazine, 0, 2.12, -0.85);
 loaderGrp.add(mag);
@@ -1023,6 +1051,7 @@ for (const px of [-0.22, 0.22]) {
 const usb = {};
 const usbMount = new THREE.Group();
 usbMount.name = 'Montaje USB · Perfil móvil C1';
+usbMount.position.set(PHONE_X, 0, USB_MOUNT_Z);
 c1.carriage.add(usbMount);
 const usbFallback = new THREE.Group();
 usbFallback.name = 'USB simplificado';
@@ -1037,7 +1066,7 @@ usb.cable2 = cylZ(0.01, M.cable, 0, USB_AXIS_Y + 0.12, 0.53);
 usbFallback.add(...Object.values(usb));
 
 const camGrp = new THREE.Group();
-camGrp.position.set(C1_X, 2.4, 0);
+camGrp.position.set(C1_X + PHONE_X, 2.4, PHONE_Z);
 const camBody = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.16, 0.24), M.camBox);
 camBody.castShadow = true;
 camGrp.add(camBody);
@@ -1045,9 +1074,9 @@ const camLens = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.04, 16),
 camLens.rotation.x = Math.PI / 2;
 camLens.position.set(0, 0, -0.14);
 camGrp.add(camLens);
-camGrp.lookAt(C1_X, 1.7925, 0);
+camGrp.lookAt(C1_X + PHONE_X, BELT_Y + 0.06 + PUSH_LIFT + PHONE_Y, PHONE_Z);
 scene.add(camGrp);
-box(0.07, 0.525, 0.07, M.brace, C1_X, 2.6625, 0);
+box(0.07, 0.525, 0.07, M.brace, C1_X + PHONE_X, 2.6625, PHONE_Z);
 
 // Soporte de inspección independiente del elevador CAD (que no tiene el techo
 // de la representación anterior). Sostiene la cámara y los rieles del cargador.
@@ -1061,13 +1090,14 @@ for (const dx of [-0.25, 0.25]) {
   inspectionSupport.add(box(0.07, 0.07, 2.6, M.post, C1_X + dx, 2.925, -1.25));
 }
 inspectionSupport.add(box(0.57, 0.07, 0.07, M.post, C1_X, 2.925, 0));
+inspectionSupport.add(box(0.07, 0.07, PHONE_Z + 0.07, M.post, C1_X + PHONE_X, 2.925, PHONE_Z / 2));
 
 const coneDir = new THREE.Vector3(0, -1, 0);
 const cone = new THREE.Mesh(
   new THREE.ConeGeometry(0.24, 0.6075, 24, 1, true),
   new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false })
 );
-cone.position.set(C1_X, 2.096, 0);
+cone.position.set(C1_X + PHONE_X, 2.096, PHONE_Z);
 cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), coneDir);
 cone.visible = false;
 scene.add(cone);
@@ -1086,15 +1116,15 @@ scene.add(c2pGrp);
 const c2Claws = agregarUnas(c2pGrp);
 
 const robotFallbackStart = scene.children.length;
-box(0.14, 3.4, 0.14, M.post, -14.5, 1.7, 1.7);
-box(0.14, 3.4, 0.14, M.post, -11.2, 1.7, 1.7);
-box(3.44, 0.18, 0.18, M.post, -12.85, 3.4, 1.7);
-crearNema23(-14.32, 3.56, 1.7, 'x');
+box(0.14, 3.4, 0.14, M.post, ROBOT_C2_LEFT, 1.7, 1.7);
+box(0.14, 3.4, 0.14, M.post, ROBOT_C2_RIGHT, 1.7, 1.7);
+box(ROBOT_C2_SPAN + 0.14, 0.18, 0.18, M.post, ROBOT_C2_X, 3.4, 1.7);
+crearNema23(ROBOT_C2_LEFT + 0.18, 3.56, 1.7, 'x');
 const xBeltTex2 = makeBeltTexture();
-xBeltTex2.repeat.set(3.2, 1);
-const xBelt2 = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 0.1), new THREE.MeshStandardMaterial({ map: xBeltTex2, roughness: 0.85 }));
+xBeltTex2.repeat.set(ROBOT_C2_SPAN, 1);
+const xBelt2 = new THREE.Mesh(new THREE.PlaneGeometry(ROBOT_C2_SPAN, 0.1), new THREE.MeshStandardMaterial({ map: xBeltTex2, roughness: 0.85 }));
 xBelt2.rotation.x = -Math.PI / 2;
-xBelt2.position.set(-12.85, 3.496, 1.7);
+xBelt2.position.set(ROBOT_C2_X, 3.496, 1.7);
 scene.add(xBelt2);
 
 const armGrp = new THREE.Group();
@@ -1124,7 +1154,7 @@ const armMount = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.26, 0.07), M.rod);
 armMount.position.set(0, CUP_UP + 0.06, ARM_HOME_Z);
 armMount.castShadow = true;
 armGrp.add(armMount);
-label('X', -11.05, 3.85, 1.7, 0.8);
+label('X', ROBOT_C2_RIGHT + 0.15, 3.85, 1.7, 0.8);
 labelOn(armGrp, 'Y', 0, 4.04, 1.7, 0.7);
 const zLbl2 = labelOn(armGrp, 'Z', 0.13, CUP_UP + 1.0, ARM_HOME_Z, 0.7);
 const armCup = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.05, 18), M.cup);
@@ -1141,25 +1171,54 @@ const robotFallback = scene.children.slice(robotFallbackStart)
   .flatMap(o => o === armGrp ? [...armGrp.children].filter(child => !suctionFallback.includes(child)) : [o]);
 
 function crearMesaImpresora(x) {
-  const fallback = [box(0.9, 0.08, 0.9, M.brace, x, 1.56, 1.7, true, true)];
-  for (const dx of [-0.4, 0.4]) {
-    for (const z of [1.3, 2.1]) fallback.push(box(0.1, 1.56, 0.1, M.legs, x + dx, 0.78, z, true, false));
+  const fallback = [box(PRINTER_TABLE_W, 0.08, TABLE_DEPTH, M.brace, x, 1.56, PRINTER_Z, true, true)];
+  for (const dx of [-PRINTER_TABLE_W / 2 + 0.05, PRINTER_TABLE_W / 2 - 0.05]) {
+    for (const dz of [-TABLE_DEPTH / 2 + 0.05, TABLE_DEPTH / 2 - 0.05]) {
+      fallback.push(box(0.1, 1.56, 0.1, M.legs, x + dx, 0.78, PRINTER_Z + dz, true, false));
+    }
   }
   tableMounts.push({ x, fallback });
 }
 crearMesaImpresora(XP);
 function crearImpresora(x) {
   const fallback = [
-    box(0.5, 0.4, 0.55, M.zebra, x, 1.8, 1.7),
-    box(0.46, 0.3, 0.02, M.zebraDark, x, 1.78, 1.44),
-    box(0.16, 0.1, 0.012, M.zebraScreen, x, 1.82, 1.44),
-    box(0.44, 0.05, 0.05, M.zebraDark, x, 2.01, 1.44)
+    box(0.5, 0.4, 0.55, M.zebra, x, 1.8, PRINTER_Z),
+    box(0.46, 0.3, 0.02, M.zebraDark, x, 1.78, PRINTER_Z - 0.26),
+    box(0.16, 0.1, 0.012, M.zebraScreen, x, 1.82, PRINTER_Z - 0.26),
+    box(0.44, 0.05, 0.05, M.zebraDark, x, 2.01, PRINTER_Z - 0.26)
   ];
   printerMounts.push({ x, fallback });
 }
 crearImpresora(XP);
-box(0.36, 0.045, 0.025, mat(0x14181e), XP, LAB_Y, 1.425);
-box(0.38, 0.03, 0.12, M.zebraDark, XP, LAB_Y - 0.015, 1.375);
+// Respaldo para apertura local o mientras se cargan los CAD del puesto láser.
+const laserTableFallback = [box(LASER_TABLE_W, 0.045, TABLE_DEPTH, M.brace, LASER_X, LASER_TABLE_Y - 0.0225, LASER_Z)];
+for (const dx of [-LASER_TABLE_W / 2 + 0.06, LASER_TABLE_W / 2 - 0.06]) for (const dz of [-TABLE_DEPTH / 2 + 0.06, TABLE_DEPTH / 2 - 0.06]) {
+  laserTableFallback.push(box(0.07, LASER_TABLE_Y - 0.045, 0.07, M.legs,
+    LASER_X + dx, (LASER_TABLE_Y - 0.045) / 2, LASER_Z + dz));
+}
+function laserBox(w, h, d, material, x, y, z) {
+  return box(w * LASER_SCALE, h * LASER_SCALE, d * LASER_SCALE, material,
+    LASER_X + x * LASER_SCALE, LASER_TABLE_Y + y * LASER_SCALE, LASER_BASE_Z + z * LASER_SCALE);
+}
+const laserFallback = [
+  laserBox(0.465, 0.145, 0.335, M.zebra, 0, 0.0725, 0),
+  laserBox(0.1, 0.56, 0.1, M.post, -0.1575, 0.425, -0.101867),
+  laserBox(0.1075, 0.12, 0.455, M.zebraDark, -0.07625, 0.395, -0.31816417)
+];
+label('ZEIGEN · SIM', LASER_X, 1.12, LASER_Z + 0.48, 0.35);
+const laserOrigin = new THREE.Vector3(C2_STOP + SIM_X + SIM_MARK_X, LASER_TABLE_Y + 0.335 * LASER_SCALE, SIM_Z);
+const laserTarget = new THREE.Vector3();
+const laserBeam = new THREE.Line(new THREE.BufferGeometry().setFromPoints([laserOrigin, laserOrigin]),
+  new THREE.LineBasicMaterial({ color: 0xff4141, transparent: true, opacity: 0.8 }));
+laserBeam.name = 'Marcado láser · Bandeja SIM C2';
+laserBeam.visible = false;
+laserBeam.frustumCulled = false;
+scene.add(laserBeam);
+const laserSpot = new THREE.Mesh(new THREE.SphereGeometry(0.006, 10, 8), new THREE.MeshBasicMaterial({ color: 0xff6655 }));
+laserSpot.visible = false;
+scene.add(laserSpot);
+box(0.36, 0.045, 0.025, mat(0x14181e), XP, LAB_Y, PRINTER_Z - 0.275);
+box(0.38, 0.03, 0.12, M.zebraDark, XP, LAB_Y - 0.015, PRINTER_Z - 0.325);
 
 function crearLabelGrp() {
   const grp = new THREE.Group();
@@ -1177,9 +1236,9 @@ const labelGrp = crearLabelGrp();
 labelGrp.position.set(XP, LAB_Y, LAB_IN_Z);
 scene.add(labelGrp);
 
-box(0.05, 0.5, 0.05, M.post, XP + 0.6, 2.23, 1.55);
-box(0.05, 0.05, 0.42, M.post, XP + 0.6, 2.42, 1.42);
-box(0.05, 0.16, 0.05, M.post, XP + 0.6, 2.31, 1.31);
+box(0.05, 0.5, 0.05, M.post, XP + 0.6, 2.23, PRINTER_Z - 0.15);
+box(0.05, 0.05, 0.42, M.post, XP + 0.6, 2.42, PRINTER_Z - 0.28);
+box(0.05, 0.16, 0.05, M.post, XP + 0.6, 2.31, LAB_OUT_Z);
 const ocrCam2 = new THREE.Group();
 ocrCam2.position.set(XP + 0.6, 2.22, LAB_OUT_Z);
 const ocrCam2Body = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.2), M.camBox);
@@ -1255,7 +1314,7 @@ pivot3Grp.add(piv3Tip);
 const robot3Fallback = scene.children.slice(robot3FallbackStart)
   .flatMap(o => o === arm3Grp ? [...arm3Grp.children].filter(child => child !== pivot3Grp) : [o]);
 const robotMounts = [
-  { station: 'C2', centerX: -12.85, span: 3.3, tipOffset: 0.309, fallback: robotFallback,
+  { station: 'C2', centerX: ROBOT_C2_X, span: ROBOT_C2_SPAN, tipOffset: 0.309, fallback: robotFallback,
     pose: () => ({ x: armX, y: cupY, z: armZ }) },
   // El eje Z termina en la articulación del pistón de C3, no en las ventosas de C2.
   { station: 'C3', centerX: -10.325, span: 3.15, tipOffset: 0.015, fallback: robot3Fallback,
@@ -1264,16 +1323,16 @@ const robotMounts = [
 
 crearMesaImpresora(XP3);
 crearImpresora(XP3);
-box(0.36, 0.045, 0.025, mat(0x14181e), XP3, LAB_Y, 1.425);
-box(0.38, 0.03, 0.12, M.zebraDark, XP3, LAB_Y - 0.015, 1.375);
+box(0.36, 0.045, 0.025, mat(0x14181e), XP3, LAB_Y, PRINTER_Z - 0.275);
+box(0.38, 0.03, 0.12, M.zebraDark, XP3, LAB_Y - 0.015, PRINTER_Z - 0.325);
 
 const label3Grp = crearLabelGrp();
 label3Grp.position.set(XP3, LAB_Y, LAB_IN_Z);
 scene.add(label3Grp);
 
-box(0.05, 0.5, 0.05, M.post, XP3 + 0.6, 2.23, 1.55);
-box(0.05, 0.05, 0.42, M.post, XP3 + 0.6, 2.42, 1.42);
-box(0.05, 0.16, 0.05, M.post, XP3 + 0.6, 2.31, 1.31);
+box(0.05, 0.5, 0.05, M.post, XP3 + 0.6, 2.23, PRINTER_Z - 0.15);
+box(0.05, 0.05, 0.42, M.post, XP3 + 0.6, 2.42, PRINTER_Z - 0.28);
+box(0.05, 0.16, 0.05, M.post, XP3 + 0.6, 2.31, LAB_OUT_Z);
 const ocrCam3 = new THREE.Group();
 ocrCam3.position.set(XP3 + 0.6, 2.22, LAB_OUT_Z);
 const ocrCam3Body = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.2), M.camBox);
@@ -1388,9 +1447,9 @@ function lamp3d(x, y, z, r = 0.06) {
   return s;
 }
 const convs = {
-  ent2: lamp3d(-14.05, BELT_Y - 0.124, -0.45, 0.05), sal2: lamp3d(-11.95, BELT_Y - 0.124, -0.45, 0.05),
+  ent2: lamp3d(C2_START - 0.05, BELT_Y - 0.124, -0.45, 0.05), sal2: lamp3d(C2_END + 0.05, BELT_Y - 0.124, -0.45, 0.05),
   ent3: lamp3d(-11.45, BELT_Y - 0.124, -0.45, 0.05), sal3: lamp3d(-9.35, BELT_Y - 0.124, -0.45, 0.05),
-  entr: lamp3d(-8.5, BOT_Y - 0.124, -0.45, 0.05), salr: lamp3d(-14.95, BOT_Y - 0.124, -0.45, 0.05)
+  entr: lamp3d(RET[1] - 0.1, BOT_Y - 0.124, -0.45, 0.05), salr: lamp3d(RET[0] + 0.05, BOT_Y - 0.124, -0.45, 0.05)
 };
 
 function lampLocal(grp, x, y, z, r = 0.05) {
@@ -1400,7 +1459,7 @@ function lampLocal(grp, x, y, z, r = 0.05) {
   return s;
 }
 const c2s = {
-  xh: lamp3d(-14.57, 3.40, 1.7, 0.05), xl: lamp3d(-11.13, 3.40, 1.7, 0.05),
+  xh: lamp3d(ROBOT_C2_LEFT - 0.07, 3.40, 1.7, 0.05), xl: lamp3d(ROBOT_C2_RIGHT + 0.07, 3.40, 1.7, 0.05),
   yh: lampLocal(armGrp, 0, 3.82, 1.7), yl: lampLocal(armGrp, 0, 3.82, -0.15),
   zh: lampLocal(armGrp, 0, CUP_UP + 2.05, ARM_HOME_Z), zl: lampLocal(armGrp, 0, CUP_UP, ARM_HOME_Z)
 };
@@ -1436,10 +1495,10 @@ const tplMatRail = mat(0x7e8794, { roughness: 0.5, metalness: 0.5 });
 
 function crearPhone() {
   const g = new THREE.Group();
-  const body = new THREE.Mesh(new RoundedBoxGeometry(0.34, 0.045, 0.68, 3, 0.018), phoneMatBody.clone());
+  const body = new THREE.Mesh(new RoundedBoxGeometry(PHONE_WIDTH, 0.045, PHONE_LENGTH, 3, 0.018), phoneMatBody.clone());
   body.castShadow = true;
   g.add(body);
-  const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.6), phoneMatScreen.clone());
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(PHONE_WIDTH - 0.04, PHONE_LENGTH - 0.06), phoneMatScreen.clone());
   screen.rotation.x = Math.PI / 2;
   screen.position.y = -0.0235;
   g.add(screen);
@@ -1451,36 +1510,38 @@ function crearPhone() {
   camLensPhone.position.set(-0.06, 0.0335, -0.14);
   g.add(camLensPhone);
   const port = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.035, 0.02), phoneMatPort.clone());
-  port.position.set(0, 0, 0.346);
+  port.position.set(0, 0, PHONE_LENGTH / 2 + 0.006);
   port.castShadow = true;
   g.add(port);
   return { grp: g, screen };
 }
 function crearTemplate() {
   const grp = new THREE.Group();
-  const base = new THREE.Mesh(new RoundedBoxGeometry(1.2, 0.12, 0.9, 2, 0.02), tplMatBase.clone());
+  // Una base baja y apoyos separados permiten ver los alojamientos también sin GLB.
+  const base = new THREE.Mesh(new RoundedBoxGeometry(PALLET_WIDTH, 0.04174, PALLET_DEPTH, 2, 0.01), tplMatBase.clone());
+  base.position.y = -0.03913;
   base.castShadow = true;
   grp.add(base);
-  const cav = (cx, cz, w, d) => {
+  const cav = (cx, cz, w, d, seatY) => {
     const m = new THREE.MeshStandardMaterial({ color: 0x2c4f9e, roughness: 0.5, metalness: 0.2 });
     const t = 0.05;
     for (const s of [-1, 1]) {
-      const fb = new THREE.Mesh(new THREE.BoxGeometry(w, 0.02, t), m);
-      fb.position.set(cx, 0.07, cz + s * (d / 2 + t / 2));
+      const fb = new THREE.Mesh(new THREE.BoxGeometry(w, 0.07826, t), m);
+      fb.position.set(cx, 0.02087, cz + s * (d / 2 + t / 2));
       fb.castShadow = true;
       grp.add(fb);
-      const sd = new THREE.Mesh(new THREE.BoxGeometry(t, 0.02, d), m);
-      sd.position.set(cx + s * (w / 2 + t / 2), 0.07, cz);
+      const sd = new THREE.Mesh(new THREE.BoxGeometry(t, 0.07826, d), m);
+      sd.position.set(cx + s * (w / 2 + t / 2), 0.02087, cz);
       sd.castShadow = true;
       grp.add(sd);
     }
     const piso = new THREE.Mesh(new THREE.BoxGeometry(w, 0.012, d), mat(0x274a91, { roughness: 0.55 }));
-    piso.position.set(cx, 0.054, cz);
+    piso.position.set(cx, seatY - 0.006, cz);
     grp.add(piso);
   };
-  cav(0, 0, 0.38, 0.72);
-  cav(BOX_X, BOX_Z, BOX_DEPTH + 0.012, BOX_WIDTH + 0.012);
-  cav(SIM_X, 0, 0.15, 0.11);
+  cav(PHONE_X, PHONE_Z, PHONE_WIDTH + 0.012, PHONE_LENGTH + 0.012, PHONE_SEAT_Y);
+  cav(BOX_X, BOX_Z, BOX_WIDTH + 0.012, BOX_DEPTH + 0.012, BOX_SEAT_Y);
+  cav(SIM_X, SIM_Z, SIM_WIDTH + 0.008, SIM_DEPTH + 0.008, SIM_SEAT_Y);
   for (const x of [-0.12, 0.12]) {
     for (const z of [-0.07, 0.07]) {
       const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.13, 16), mat(0x0a0e14, { roughness: 0.6 }));
@@ -1493,39 +1554,50 @@ function crearTemplate() {
     hole.position.set(0, 0, z);
     grp.add(hole);
   }
-  const railBack = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.035, 0.05), tplMatRail.clone());
-  railBack.position.set(0, 0.0775, -0.41);
+  const railBack = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.035, PALLET_DEPTH), tplMatRail.clone());
+  railBack.position.set(PALLET_WIDTH / 2 - 0.04, 0.0775, 0);
   railBack.castShadow = true;
   grp.add(railBack);
   for (const x of [-0.34, 0.34]) {
-    const railSeg = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.035, 0.05), tplMatRail.clone());
-    railSeg.position.set(x, 0.0775, 0.41);
+    const railSeg = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.035, 0.52), tplMatRail.clone());
+    railSeg.position.set(-PALLET_WIDTH / 2 + 0.04, 0.0775, x);
     railSeg.castShadow = true;
     grp.add(railSeg);
   }
   const fallback = [...grp.children];
   const phone = crearPhone();
-  phone.grp.position.set(0, 0.0825, 0);
+  phone.grp.position.set(PHONE_X, PHONE_Y, PHONE_Z);
   phone.grp.visible = false;
   grp.add(phone.grp);
   const simTray = crearSimTray();
-  simTray.position.set(SIM_X, 0.0665, 0);
+  simTray.position.set(SIM_X, SIM_Y, SIM_Z);
   simTray.visible = false;
   grp.add(simTray);
-  return { grp, phone, simTray, fallback };
+  return { grp, phone, simTray, laserMark: simTray.getObjectByName('Grabado SIM'), fallback };
 }
 
 function crearSimTray() {
   const simTray = new THREE.Group();
-  const trayPlate = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.012, 0.09), mat(0x8a929c, { roughness: 0.4, metalness: 0.6 }));
+  const trayPlate = new THREE.Mesh(new THREE.BoxGeometry(SIM_WIDTH, 0.012, SIM_DEPTH), mat(0x8a929c, { roughness: 0.4, metalness: 0.6 }));
   trayPlate.castShadow = true;
   simTray.add(trayPlate);
   const simCard = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.003, 0.022), mat(0xe6b64c, { roughness: 0.35, metalness: 0.8 }));
   simCard.position.y = 0.0075;
   simTray.add(simCard);
-  const simRim = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.004, 0.02), mat(0x555c66, { roughness: 0.5 }));
-  simRim.position.set(-0.045, 0.007, 0);
+  const simRim = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.004, 0.02), mat(0x555c66, { roughness: 0.5 }));
+  simRim.position.set(-0.043, 0.007, 0);
   simTray.add(simRim);
+  const laserMark = new THREE.Group();
+  laserMark.name = 'Grabado SIM';
+  laserMark.visible = false;
+  // Marca sobre el metal libre de la bandeja, junto a la tarjeta dorada.
+  for (let i = 0; i < 7; i++) {
+    const bar = new THREE.Mesh(new THREE.PlaneGeometry(0.022, 0.002), mat(0x20252a, { roughness: 0.8 }));
+    bar.rotation.x = -Math.PI / 2;
+    bar.position.set(SIM_MARK_X, 0.0065, -0.018 + i * 0.006);
+    laserMark.add(bar);
+  }
+  simTray.add(laserMark);
   return simTray;
 }
 
@@ -1846,7 +1918,7 @@ function updateHardware(dt, t) {
   if (labelState === 'cup') {
     labelGrp.position.set(armX, cupY - 0.002, armZ);
   } else if (labelState === 'phone' && tpl) {
-    labelGrp.position.set(tpl.grp.position.x, tpl.grp.position.y + 0.1055, 0);
+    labelGrp.position.set(tpl.grp.position.x + PHONE_X, tpl.grp.position.y + PHONE_LABEL_Y, PHONE_Z);
   }
 
   arm2Grp.position.x = arm2X;
@@ -1882,6 +1954,25 @@ function updateHardware(dt, t) {
   }
   for (const instances of Object.values(modelInstances)) {
     for (const instance of instances) instance.animate?.();
+  }
+
+  // El marcado se realiza con EV1/EV2 sujetos, durante la recogida de la etiqueta.
+  const marking = paso === 14 && progreso >= 0.15 && progreso < 0.85 && tpl.simTray.visible;
+  const markProgress = paso === 14 ? clamp((progreso - 0.15) / 0.7, 0, 1) : 1;
+  tpl.laserMark.visible = paso >= 14 && paso < 30 && markProgress > 0;
+  tpl.laserMark.children.forEach((bar, i) => { bar.visible = i < Math.floor(markProgress * 7); });
+  laserBeam.visible = laserSpot.visible = marking;
+  setLamp(el('lmp-laser'), marking ? 'amber' : paso >= 15 && paso < 30 ? 'on' : 'off');
+  if (marking) {
+    laserTarget.set(SIM_MARK_X + Math.sin(markProgress * Math.PI * 28) * 0.010,
+      0.007, -0.018 + markProgress * 0.036);
+    tpl.simTray.localToWorld(laserTarget);
+    const positions = laserBeam.geometry.attributes.position;
+    // Barrido dentro de la abertura óptica: rayo perpendicular a la bandeja.
+    positions.setXYZ(0, laserTarget.x, laserOrigin.y, laserTarget.z);
+    positions.setXYZ(1, laserTarget.x, laserTarget.y, laserTarget.z);
+    positions.needsUpdate = true;
+    laserSpot.position.copy(laserTarget);
   }
 
   setLamp(lmpA3, (paso === 24 || paso === 25) ? 'amber' : 'off');
@@ -1921,9 +2012,9 @@ function updateHardware(dt, t) {
   if (paso >= 14 && paso <= 16) xBeltTex2.offset.x -= dt * 0.5;
   if (paso === 24 || paso === 25) xBeltTex3.offset.x -= dt * 0.5;
   const ejes2 = [
-    ['xh2', c2s.xh, nearS(armX, ARM_HOME_X)], ['xl2', c2s.xl, nearS(armX, XP)],
+    ['xh2', c2s.xh, nearS(armX, ARM_HOME_X)], ['xl2', c2s.xl, nearS(armX, PHONE_C2_X)],
     ['yh2', c2s.yh, cupY > CUP_UP - 0.05], ['yl2', c2s.yl, cupY < CUP_PLACE + 0.05],
-    ['zh2', c2s.zh, nearS(armZ, ARM_HOME_Z)], ['zl2', c2s.zl, nearS(armZ, 0)]
+    ['zh2', c2s.zh, nearS(armZ, ARM_HOME_Z)], ['zl2', c2s.zl, nearS(armZ, PHONE_Z)]
   ];
   const ejes3 = [
     ['xh3', c3s.xh, nearS(arm3X, ARM3_HOME_X)], ['xl3', c3s.xl, nearS(arm3X, C3_STOP + BOX_X)],
@@ -1936,9 +2027,9 @@ function updateHardware(dt, t) {
   }
   const nearC = v => Math.abs(tpx - v) < 0.5;
   const convArr = [
-    ['ent2', convs.ent2, filaArriba && nearC(-14.05)], ['sal2', convs.sal2, filaArriba && nearC(-11.95)],
+    ['ent2', convs.ent2, filaArriba && nearC(convs.ent2.position.x)], ['sal2', convs.sal2, filaArriba && nearC(convs.sal2.position.x)],
     ['ent3', convs.ent3, filaArriba && nearC(-11.45)], ['sal3', convs.sal3, filaArriba && nearC(-9.35)],
-    ['entr', convs.entr, !filaArriba && nearC(-8.5)], ['salr', convs.salr, !filaArriba && nearC(-14.95)]
+    ['entr', convs.entr, !filaArriba && nearC(convs.entr.position.x)], ['salr', convs.salr, !filaArriba && nearC(convs.salr.position.x)]
   ];
   for (const [k, m, on] of convArr) {
     setLamp(lampArm[k], on ? 'on' : 'red');
@@ -1960,8 +2051,8 @@ function update(dt, t) {
       const entrega = easeInOut(clamp((p - 0.25) / 0.5, 0, 1));
       const salida = easeInOut(clamp((p - 0.75) / 0.25, 0, 1));
       loaderGrp.position.z = lerp(-1.65, 0, entrada) - 1.65 * salida;
-      tpl.phone.grp.position.set(0, lerp(0.32, 0.0825, entrega), lerp(-0.8 + loaderGrp.position.z, 0, entrega));
-      tpl.simTray.position.set(SIM_X, lerp(0.30, 0.0665, entrega), lerp(-0.8 + loaderGrp.position.z, 0, entrega));
+      tpl.phone.grp.position.set(PHONE_X, lerp(0.32, PHONE_Y, entrega), lerp(-0.8 + loaderGrp.position.z, PHONE_Z, entrega));
+      tpl.simTray.position.set(SIM_X, lerp(0.30, SIM_Y, entrega), lerp(-0.8 + loaderGrp.position.z, SIM_Z, entrega));
       break;
     }
     case 4:
@@ -1983,13 +2074,14 @@ function update(dt, t) {
       break;
     }
     case 10:
-      tpl.grp.position.x = lerp(C1_X, -13.6, easeOut(p));
+      // Terminar la transferencia antes de bajar C1: todo el pallet apoya en C2.
+      tpl.grp.position.x = lerp(C1_X, C2_ENTRY_X, easeInOut(clamp(p / 0.6, 0, 1)));
       tpl.grp.position.y = BELT_Y + 0.06;
-      carriageY = lerp(CAR_TOP, CAR_HOME, easeInOut(clamp((p - 0.27) / 0.73, 0, 1)));
+      carriageY = lerp(CAR_TOP, CAR_HOME, easeInOut(clamp((p - 0.6) / 0.4, 0, 1)));
       c1.miniTex.offset.x += dt * 0.6;
       break;
     case 11:
-      tpl.grp.position.x = lerp(-13.6, C2_STOP, easeInOut(p));
+      tpl.grp.position.x = lerp(C2_ENTRY_X, C2_STOP, easeInOut(p));
       tpl.grp.position.y = BELT_Y + 0.06;
       break;
     case 12:
@@ -2015,7 +2107,8 @@ function update(dt, t) {
     }
     case 15: {
       const pa = easeInOut(clamp(p / 0.45, 0, 1));
-      armZ = lerp(LAB_OUT_Z, 0, pa);
+      armX = lerp(XP, PHONE_C2_X, pa);
+      armZ = lerp(LAB_OUT_Z, PHONE_Z, pa);
       if (p >= 0.45 && p < 0.70) {
         cupY = lerp(CUP_UP, CUP_PLACE, easeInOut((p - 0.45) / 0.25));
       } else if (p >= 0.70 && p < 0.82) {
@@ -2023,8 +2116,8 @@ function update(dt, t) {
         const q = easeInOut((p - 0.70) / 0.12);
         labelState = 'placing';
         labelGrp.position.lerpVectors(
-          new THREE.Vector3(XP, CUP_PLACE - 0.002, 0),
-          new THREE.Vector3(C2_STOP, tpl.grp.position.y + 0.1055, 0), q);
+          new THREE.Vector3(PHONE_C2_X, CUP_PLACE - 0.002, PHONE_Z),
+          new THREE.Vector3(PHONE_C2_X, tpl.grp.position.y + PHONE_LABEL_Y, PHONE_Z), q);
       } else if (p >= 0.82) {
         labelState = 'phone';
         cupY = lerp(CUP_PLACE, CUP_UP, easeInOut((p - 0.82) / 0.18));
@@ -2032,8 +2125,8 @@ function update(dt, t) {
       break;
     }
     case 16:
-      armX = lerp(C2_STOP, ARM_HOME_X, easeInOut(p));
-      armZ = lerp(0, ARM_HOME_Z, easeInOut(p));
+      armX = lerp(PHONE_C2_X, ARM_HOME_X, easeInOut(p));
+      armZ = lerp(PHONE_Z, ARM_HOME_Z, easeInOut(p));
       break;
     case 17: {
       closed2 = p < 0.5 ? 1 - p / 0.5 : 0;
@@ -2141,21 +2234,24 @@ function update(dt, t) {
       break;
     }
     case 26: {
-      const pa = easeInOut(clamp(p / 0.35, 0, 1));
-      nailY = lerp(NAIL_MID, NAIL_PLACE, pa);
-      if (p >= 0.35 && p < 0.45) {
-        nailsOpen = (p - 0.35) / 0.1;
-      } else if (p >= 0.45) {
+      // Girar en el aire manteniendo el centro de la caja, antes de entrar al hueco.
+      boxYaw = Math.PI / 2 * (1 - easeInOut(clamp(p / 0.25, 0, 1)));
+      arm2X = C3_STOP + BOX_X - 0.10 + BOX_GRIP_X * Math.cos(boxYaw) + BOX_GRIP_Z * Math.sin(boxYaw);
+      arm2Z = BOX_Z - BOX_GRIP_X * Math.sin(boxYaw) + BOX_GRIP_Z * Math.cos(boxYaw);
+      nailY = lerp(NAIL_MID, NAIL_PLACE, easeInOut(clamp((p - 0.25) / 0.4, 0, 1)));
+      if (p >= 0.65 && p < 0.75) {
+        nailsOpen = (p - 0.65) / 0.1;
+      } else if (p >= 0.75) {
         nailsOpen = 1;
-        nailY = lerp(NAIL_PLACE, NAIL_UP, easeInOut(clamp((p - 0.45) / 0.2, 0, 1)));
+        nailY = lerp(NAIL_PLACE, NAIL_UP, easeInOut(clamp((p - 0.75) / 0.15, 0, 1)));
         if (boxState === 'arm') {
           tpl.grp.attach(box3);
           box3.position.set(BOX_X, BOX_SEAT_Y + BOX_Y / 2, BOX_Z);
-          box3.rotation.y = Math.PI / 2;
+          box3.rotation.y = 0;
           boxState = 'tpl';
         }
-        arm2Z = lerp(BOX_ARM_Z, ARM2_HOME_Z, easeInOut(clamp((p - 0.55) / 0.45, 0, 1)));
-        arm2X = lerp(BOX_ARM_X, ARM2_HOME_X, easeInOut(clamp((p - 0.55) / 0.45, 0, 1)));
+        arm2Z = lerp(BOX_SEAT_ARM_Z, ARM2_HOME_Z, easeInOut(clamp((p - 0.90) / 0.10, 0, 1)));
+        arm2X = lerp(BOX_SEAT_ARM_X, ARM2_HOME_X, easeInOut(clamp((p - 0.90) / 0.10, 0, 1)));
       }
       break;
     }
@@ -2197,7 +2293,7 @@ function update(dt, t) {
       tpl.grp.position.x = lerp(-8.9, C1_X, easeInOut(p));
       tpl.grp.position.y = BOT_Y + 0.06;
       c5Y = lerp(CAR_HOME, CAR_TOP, easeInOut(p));
-      if (tpl.grp.position.x < -13.5) c1.miniTex.offset.x -= dt * 0.6;
+      if (tpl.grp.position.x < RET[0] + 0.6) c1.miniTex.offset.x -= dt * 0.6;
       break;
   }
 
@@ -2229,7 +2325,7 @@ function updateHUD() {
   if (paso === 8) texto += ' · CL4NX IMPRIMIENDO…';
   if (paso === 9 || paso === 23) texto += progreso < 0.6 ? ' · ESCANEANDO…' : ' · OCR: OK ✓';
   elEstado.textContent = texto;
-  const stationLabels = { C1: 'C1 · Lectura e inspección', C2: 'C2 · Etiquetado del equipo', C3: 'C3 · Etiquetado de la caja', C4: 'C4 · Retiro del conjunto', RET: 'Retorno · Un nuevo recorrido' };
+  const stationLabels = { C1: 'C1 · Lectura e inspección', C2: 'C2 · Etiquetado y marcado láser de SIM', C3: 'C3 · Etiquetado de la caja', C4: 'C4 · Retiro del conjunto', RET: 'Retorno · Un nuevo recorrido' };
   const liveLabel = stationLabels[estacionActual()];
   if (el('live-station').textContent !== liveLabel) el('live-station').textContent = liveLabel;
   elProg.style.width = Math.round(progreso * 100) + '%';
@@ -2253,10 +2349,12 @@ const modelFiles = {
   conveyor: 'Conveyor.glb', printer: 'CL4NX_Impresora.glb',
   elevator: 'Elevador.glb', pallet: 'Pallet_celular.glb',
   robot: 'Robot_Etiquetado_Celulares.glb', suction: 'Ensamblaje_Ventosas.glb',
-  table: 'Mesa_impresora.glb', stopper: 'EnsamSTOPPER.glb', usb: 'EnsambConjUSB-C.glb'
+  table: 'Mesa_impresora.glb', laserTable: 'Mesa_laser.glb', laser: 'Zeigen_Galvo_Laser.glb',
+  stopper: 'EnsamSTOPPER.glb', usb: 'EnsambConjUSB-C.glb'
 };
 const modelBuilders = { conveyor: buildConveyors, printer: buildPrinters, elevator: buildElevators,
-  pallet: buildPallet, robot: buildRobot, suction: buildSuction, table: buildTables, stopper: buildStoppers, usb: buildUSB };
+  pallet: buildPallet, robot: buildRobot, suction: buildSuction, table: buildTables,
+  laserTable: buildLaserTable, laser: buildLaser, stopper: buildStoppers, usb: buildUSB };
 const modelSources = Object.fromEntries(Object.keys(modelFiles).map(kind => [kind, null]));
 const modelInstances = Object.fromEntries(Object.keys(modelFiles).map(kind => [kind, []]));
 const modelVersions = Object.fromEntries(Object.keys(modelFiles).map(kind => [kind, 0]));
@@ -2264,7 +2362,8 @@ const modelMessages = Object.fromEntries(Object.keys(modelFiles).map(kind => [ki
 
 function updateModelStatus() {
   const names = { conveyor: 'Conveyor', printer: 'Impresoras CL4NX', elevator: 'Elevadores C1/C4',
-    pallet: 'Pallet', robot: 'Robots C2/C3', suction: 'Ventosas C2', table: 'Mesas C2/C3', stopper: 'STOPPER C1/C2/C3', usb: 'USB-C C1' };
+    pallet: 'Pallet', robot: 'Robots C2/C3', suction: 'Ventosas C2', table: 'Mesas C2/C3',
+    laserTable: 'Mesa láser C2', laser: 'Zeigen Galvo Laser C2', stopper: 'STOPPER C1/C2/C3', usb: 'USB-C C1' };
   el('model-status').textContent = Object.keys(modelFiles).map(kind => `${names[kind]}: ${modelMessages[kind]}.`).join(' ');
   el('model-count').textContent = `${Object.values(modelSources).filter(Boolean).length} / ${Object.keys(modelFiles).length} MODELOS CAD`;
   const loaded = Object.values(modelSources).filter(Boolean).length;
@@ -2400,7 +2499,7 @@ function buildPrinters(source) {
   return printerMounts.map(mount => {
     const group = new THREE.Group();
     group.name = 'SATO CL4NX GLB';
-    const transform = new THREE.Matrix4().makeTranslation(mount.x, 1.6, 1.7)
+    const transform = new THREE.Matrix4().makeTranslation(mount.x, 1.6, PRINTER_Z)
       .multiply(new THREE.Matrix4().makeRotationY(Math.PI))
       .multiply(new THREE.Matrix4().makeScale(scale, scale, scale))
       .multiply(new THREE.Matrix4().makeTranslation(-center.x, -bounds.min.y, -center.z));
@@ -2443,18 +2542,23 @@ function buildElevators(source) {
   });
   const instances = [];
   for (const mount of elevatorMounts) {
+    // En C1 las guías verticales van al frente (+Z), del lado del pistón USB.
+    // Girar también el carro mantiene sus patines alineados con las guías.
+    const orientation = new THREE.Matrix4().makeRotationY(mount.rotationY || 0);
     const base = new THREE.Group(), carriage = new THREE.Group();
     base.name = 'Elevador GLB · Bastidor fijo';
     carriage.name = 'Elevador GLB · Carro móvil';
     const fixedTransform = new THREE.Matrix4().makeTranslation(mount.x, 0, 0)
+      .multiply(orientation)
       .multiply(new THREE.Matrix4().makeScale(sx, sy, sz))
       .multiply(new THREE.Matrix4().makeTranslation(-center.x, -bounds.min.y, -center.z));
     // El cabezal conserva su altura durante el recorrido; su origen es el apoyo
     // del pallet. El padre ya sigue CAR_HOME ↔ CAR_TOP en updateHardware().
-    const movingTransform = new THREE.Matrix4().makeScale(sx, 1.3, sz)
+    const movingTransform = orientation.clone().multiply(new THREE.Matrix4().makeScale(sx, 1.3, sz))
       .multiply(new THREE.Matrix4().makeTranslation(-center.x, -beltBounds.max.y, -center.z));
     fixed.forEach(mesh => base.add(meshInstance(mesh, fixedTransform)));
     const motorTransform = motorCenter && new THREE.Matrix4().makeTranslation(...motorCenter.clone().applyMatrix4(movingTransform).toArray())
+      .multiply(orientation)
       .multiply(new THREE.Matrix4().makeScale(2, 2, 2))
       .multiply(new THREE.Matrix4().makeTranslation(-motorCenter.x, -motorCenter.y, -motorCenter.z));
     moving.forEach(mesh => {
@@ -2482,7 +2586,7 @@ function buildPallet(source) {
   const plate = source.getObjectByName('Pieza1_Pallet-1');
   if (!plate?.isMesh) throw new Error('Seleccioná Pallet_celular.glb');
   // El pallet fue exportado en XY, con el espesor en Z y un pequeño giro.
-  // Corregir ese giro y dejar el lado largo a lo largo del conveyor.
+  // Corregir el giro del CAD; luego girar 90° la envolvente normalizada de transporte.
   const rotation = new THREE.Matrix4().makeRotationY(-Math.PI / 2)
     .multiply(new THREE.Matrix4().makeRotationX(-Math.PI / 2))
     .multiply(new THREE.Matrix4().extractRotation(plate.matrixWorld).invert());
@@ -2490,9 +2594,10 @@ function buildPallet(source) {
   source.updateMatrixWorld(true);
   const bounds = new THREE.Box3().setFromObject(source);
   const size = bounds.getSize(new THREE.Vector3()), center = bounds.getCenter(new THREE.Vector3());
-  // Mantener la envolvente de transporte y los puntos de trabajo del ciclo.
-  // La cara inferior queda en -0.06 y el apoyo del teléfono en +0.06.
-  const transform = new THREE.Matrix4().makeScale(1.2 / size.x, 0.12 / size.y, 0.9 / size.z)
+  // Lado largo transversal a la cinta, como ubicacion.png. Conservar las cotas
+  // de los alojamientos y girar todo el CAD, incluidos topes y tornillos.
+  const transform = new THREE.Matrix4().makeRotationY(Math.PI / 2)
+    .multiply(new THREE.Matrix4().makeScale(PALLET_DEPTH / size.x, 0.12 / size.y, PALLET_WIDTH / size.z))
     .multiply(new THREE.Matrix4().makeTranslation(-center.x, -center.y, -center.z));
   const group = new THREE.Group();
   group.name = 'Pallet celular GLB';
@@ -2512,17 +2617,55 @@ function buildTables(source) {
   source.rotation.x = Math.PI / 2;
   source.updateMatrixWorld(true);
   const bounds = new THREE.Box3().setFromObject(source);
-  const table = new THREE.Box3().setFromObject(source.getObjectByName('Mesaa-1'));
-  const center = table.getCenter(new THREE.Vector3()), size = table.getSize(new THREE.Vector3());
+  // Incluir los pies en la envolvente para que las mesas contiguas no se solapen.
+  const center = bounds.getCenter(new THREE.Vector3()), size = bounds.getSize(new THREE.Vector3());
   return tableMounts.map(mount => {
     const group = new THREE.Group();
     group.name = 'Mesa impresora GLB';
-    const transform = new THREE.Matrix4().makeTranslation(mount.x, 0, 1.7)
-      .multiply(new THREE.Matrix4().makeScale(0.9 / size.x, 1.6 / (bounds.max.y - bounds.min.y), 0.9 / size.z))
+    const transform = new THREE.Matrix4().makeTranslation(mount.x, 0, PRINTER_Z)
+      .multiply(new THREE.Matrix4().makeScale(PRINTER_TABLE_W / size.x, 1.6 / (bounds.max.y - bounds.min.y), TABLE_DEPTH / size.z))
       .multiply(new THREE.Matrix4().makeTranslation(-center.x, -bounds.min.y, -center.z));
     source.traverse(mesh => { if (mesh.isMesh) group.add(meshInstance(mesh, transform)); });
     return { parent: scene, group, fallback: mount.fallback };
   });
+}
+
+function buildLaserTable(source) {
+  const table = source.getObjectByName('mesa_2-1');
+  if (!table) throw new Error('Seleccioná Mesa_laser.glb');
+  // El tablero está en XY y las patas apuntan a +Z en este CAD.
+  source.rotation.x = Math.PI / 2;
+  source.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(source);
+  const center = bounds.getCenter(new THREE.Vector3());
+  const size = bounds.getSize(new THREE.Vector3());
+  const transform = new THREE.Matrix4().makeTranslation(LASER_X, 0, LASER_Z)
+    .multiply(new THREE.Matrix4().makeScale(LASER_TABLE_W / size.x, LASER_TABLE_Y / size.y, TABLE_DEPTH / size.z))
+    .multiply(new THREE.Matrix4().makeTranslation(-center.x, -bounds.min.y, -center.z));
+  const group = new THREE.Group();
+  group.name = 'Mesa láser C2 GLB';
+  source.traverse(mesh => { if (mesh.isMesh) group.add(meshInstance(mesh, transform)); });
+  return [{ parent: scene, group, fallback: laserTableFallback }];
+}
+
+function buildLaser(source) {
+  const base = source.getObjectByName('Laser-1'), head = source.getObjectByName('cabezal_laser-1');
+  if (!base || !head) throw new Error('Seleccioná Zeigen_Galvo_Laser.glb');
+  // Columna CAD en +Z: llevarla a +Y y orientar el cabezal hacia el conveyor (-Z).
+  source.rotation.set(-Math.PI / 2, 0, Math.PI);
+  source.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(base);
+  const headBounds = new THREE.Box3().setFromObject(head);
+  const nozzle = new THREE.Vector3((headBounds.min.x + headBounds.max.x) / 2, headBounds.min.y, headBounds.min.z + 0.05);
+  // Alinear la salida óptica real, no apuntar en diagonal desde la base de la mesa.
+  const transform = new THREE.Matrix4().makeTranslation(C2_STOP + SIM_X + SIM_MARK_X, LASER_TABLE_Y, SIM_Z)
+    .multiply(new THREE.Matrix4().makeScale(LASER_SCALE, LASER_SCALE, LASER_SCALE))
+    .multiply(new THREE.Matrix4().makeTranslation(-nozzle.x, -bounds.min.y, -nozzle.z));
+  const group = new THREE.Group();
+  group.name = 'Zeigen Galvo Laser C2 GLB';
+  source.traverse(mesh => { if (mesh.isMesh) group.add(meshInstance(mesh, transform)); });
+  laserOrigin.copy(nozzle).applyMatrix4(transform);
+  return [{ parent: scene, group, fallback: laserFallback }];
 }
 
 function buildSuction(source) {
@@ -2690,13 +2833,16 @@ function buildUSB(source) {
   group.add(spacer);
   const alignMount = () => {
     const elevator = modelInstances.elevator.find(instance => instance.parent === c1.carriage);
-    const profile = elevator?.group.getObjectByName('elevador_09-1');
+    // Tras girar C1, el travesaño 09-2 es el que queda al frente, bajo el USB.
+    const profile = elevator?.group.getObjectByName('elevador_09-2');
     // Coordenadas locales al carro; esta referencia sigue siendo válida al bajar.
     const support = profile
       ? profile.geometry.boundingBox.clone().applyMatrix4(profile.matrix)
       : new THREE.Box3(new THREE.Vector3(-0.95, -0.10, 0.40), new THREE.Vector3(0.95, 0, 0.60));
+    support.translate(new THREE.Vector3(-PHONE_X, 0, -USB_MOUNT_Z));
     const minX = Math.max(plateBounds.min.x, support.min.x), maxX = Math.min(plateBounds.max.x, support.max.x);
-    const minZ = Math.max(plateBounds.min.z, support.min.z), maxZ = Math.min(plateBounds.max.z, support.max.z);
+    // La ménsula prolonga el perfil hasta la base USB, junto al nuevo puerto.
+    const minZ = Math.min(plateBounds.min.z, support.max.z - 0.02), maxZ = Math.max(plateBounds.max.z, support.max.z);
     spacer.scale.set(maxX - minX, plateBounds.min.y - support.max.y, maxZ - minZ);
     spacer.position.set((minX + maxX) / 2, (support.max.y + plateBounds.min.y) / 2, (minZ + maxZ) / 2);
   };
@@ -2734,17 +2880,17 @@ async function loadModel(kind, file = null) {
     if (kind === 'elevator') {
       inspectionSupport.visible = true;
       for (const instance of modelInstances.usb) instance.alignMount();
-      // Montar los detectores en las columnas traseras del elevador importado.
-      for (const [sensor, x] of [[sensors.home1, C1_X - 1.04], [sensors.lim1, C1_X - 1.04],
-        [sensors.home5, C4_X + 1.04], [sensors.lim5, C4_X + 1.04]]) {
+      // Los detectores acompañan la orientación de las columnas de cada elevador.
+      for (const [sensor, x, side] of [[sensors.home1, C1_X + 1.04, 1], [sensors.lim1, C1_X + 1.04, 1],
+        [sensors.home5, C4_X + 1.04, -1], [sensors.lim5, C4_X + 1.04, -1]]) {
         sensor.box.position.x = x;
-        sensor.box.position.z = -0.90;
-        sensor.lamp.position.set(x, sensor.box.position.y, -0.82);
+        sensor.box.position.z = side * 0.90;
+        sensor.lamp.position.set(x, sensor.box.position.y, side * 0.82);
       }
     }
     modelMessages[kind] = kind === 'stopper' ? `${instances.length} × GLB cargado`
       : kind === 'conveyor' ? 'GLB cargado · NEMA 23'
-      : ['pallet', 'suction', 'usb'].includes(kind) ? 'GLB cargado' : '2 × GLB cargado';
+      : ['pallet', 'suction', 'usb', 'laserTable', 'laser'].includes(kind) ? 'GLB cargado' : '2 × GLB cargado';
   } catch (error) {
     if (source) releaseModel(source);
     if (version !== modelVersions[kind]) return;
