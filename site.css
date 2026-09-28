@@ -945,6 +945,253 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
   white-space: nowrap;
 }
 
+/* 7b. Puestos (carrusel) -------------------------------------------------- */
+.puestos-section { padding-top: 85px; }
+
+.puestos-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 60px;
+  margin-bottom: 55px;
+}
+
+.puestos-intro-copy {
+  max-width: 430px;
+  display: grid;
+  gap: 14px;
+}
+
+.puestos-intro-copy p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.puestos-key-specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 45px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 55px;
+}
+
+.puestos-key-specs > div { padding: 26px 0 30px; }
+
+.puestos-key-specs strong {
+  display: block;
+  margin-top: 15px;
+  font-size: clamp(34px, 3.6vw, 54px);
+  font-weight: 350;
+  letter-spacing: -.06em;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.puestos-key-specs p {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 260px;
+}
+
+.puestos-carousel {
+  position: relative;
+  padding: clamp(14px, 2vw, 24px);
+  border: 1px solid #ceddaf2e;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #233024 0%, #19221a 55%, #141a15 100%);
+  box-shadow: 0 24px 60px #070a0873;
+}
+
+.puestos-track {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.puestos-track::-webkit-scrollbar { display: none; }
+
+.puestos-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+
+.puesto-slide {
+  flex: 0 0 90%;
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(26px, 3.4vw, 58px);
+  padding: clamp(20px, 2.6vw, 32px);
+  border: 1px solid #e9ede41f;
+  border-radius: 16px;
+  background: #0f1512e3;
+  box-shadow: 0 20px 50px #070a0859;
+  opacity: .45;
+  scale: .965;
+  transition: opacity .5s var(--ease), scale .7s var(--ease), border-color .5s;
+}
+
+.puesto-slide.is-current {
+  opacity: 1;
+  scale: 1;
+  border-color: #ceddaf3d;
+}
+
+.puesto-media {
+  margin: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #212a23;
+}
+
+.puesto-media .diagram-link {
+  position: relative;
+  flex: 1;
+  min-height: 240px;
+}
+
+.puesto-media .diagram-link img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.puesto-media figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 15px;
+  border-top: 1px solid var(--line);
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: .05em;
+  color: var(--muted);
+}
+
+.puesto-media figcaption span:first-child { color: var(--accent); }
+
+.puesto-body { min-width: 0; }
+
+.puesto-body h3 {
+  margin-top: 16px;
+  font-size: clamp(26px, 2.5vw, 37px);
+  font-weight: 400;
+  letter-spacing: -.045em;
+  line-height: 1.14;
+}
+
+.puesto-body > p {
+  margin-top: 19px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 640px;
+}
+
+.puesto-specs {
+  margin: 26px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.puesto-specs > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+}
+
+.puesto-specs dt { color: var(--muted); }
+
+.puesto-specs dd {
+  margin: 0;
+  text-align: right;
+  color: #d6dfce;
+  letter-spacing: -.01em;
+}
+
+.puestos-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.carousel-arrow {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e9ede426;
+  border-radius: 50%;
+  background: #ffffff0a;
+  color: var(--accent);
+  font-size: 17px;
+  transition: color .3s, background .3s, border-color .3s, opacity .3s;
+}
+
+.carousel-arrow:hover:not(:disabled) {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.carousel-arrow:disabled { opacity: .3; cursor: default; }
+
+.carousel-progress {
+  flex: 1;
+  display: flex;
+  gap: 7px;
+}
+
+.carousel-progress button {
+  flex: 1;
+  display: grid;
+  align-items: center;
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+}
+
+.carousel-progress button i {
+  display: block;
+  height: 4px;
+  border-radius: 99px;
+  background: #e9ede41f;
+  transition: background .4s;
+}
+
+.carousel-progress button[aria-current="true"] i { background: var(--accent); }
+
+.carousel-counter {
+  flex: 0 0 auto;
+  min-width: 62px;
+  text-align: center;
+  font-family: Consolas, monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: var(--accent);
+}
+
+.carousel-hint {
+  margin-top: 14px;
+  font-size: 12.5px;
+  letter-spacing: .02em;
+  color: #8d998b;
+}
+
 /* 8. Recorrido (proceso) ----------------------------------------------------- */
 .process-section { padding-top: 80px; }
 
@@ -1638,6 +1885,8 @@ html.reduce-motion { scroll-behavior: auto; }
 .reduce-motion [data-drift],
 .reduce-motion .hero-copy { translate: none !important; }
 
+.reduce-motion .puesto-slide { opacity: 1 !important; scale: 1 !important; }
+
 .reduce-motion .reveal {
   opacity: 1 !important;
   transform: none !important;
@@ -1664,6 +1913,8 @@ html.reduce-motion { scroll-behavior: auto; }
   .hero-controls { gap: 14px; }
   .metric { gap: 15px; }
   .project-metrics { gap: 25px; }
+  .puestos-key-specs { gap: 25px; }
+  .puesto-slide { gap: 32px; }
   .process-layout { gap: 6vw; }
   .people-heading { display: block; }
   .people-heading p { max-width: 490px; margin-top: 25px; }
@@ -1715,6 +1966,13 @@ html.reduce-motion { scroll-behavior: auto; }
   .intro-copy { max-width: 540px; padding-top: 0; }
   .project-metrics { margin-top: 60px; gap: 20px; }
   .metric { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .puestos-intro { display: block; margin-bottom: 40px; }
+  .puestos-intro-copy { margin-top: 25px; max-width: none; }
+  .puestos-key-specs { margin-bottom: 45px; }
+  .puestos-carousel { padding: 16px; border-radius: 18px; }
+  .puesto-slide { flex-basis: 100%; grid-template-columns: 1fr; gap: 26px; opacity: 1; scale: 1; }
+  .puesto-media .diagram-link { flex: none; min-height: 0; aspect-ratio: 1.6; }
+  .puesto-media .diagram-link img { height: 100%; }
   .system-diagram { order: 2; margin-top: 10px; }
   .editorial-copy { max-width: 600px; }
   .drift-type { margin-top: 70px; }
@@ -1780,6 +2038,20 @@ html.reduce-motion { scroll-behavior: auto; }
   .metric { flex-direction: row; align-items: center; gap: 30px; padding: 24px 0; }
   .metric + .metric { border-top: 1px solid var(--line); }
   .metric-number { font-size: 58px; min-width: 90px; }
+  .puestos-key-specs { grid-template-columns: 1fr; gap: 0; margin-bottom: 40px; }
+  .puestos-key-specs > div { padding: 22px 0; }
+  .puestos-key-specs > div + div { border-top: 1px solid var(--line); }
+  .puestos-key-specs strong { font-size: 44px; }
+  .puestos-track { gap: 16px; }
+  .puestos-carousel { padding: 12px; border-radius: 16px; }
+  .puesto-slide { padding: 17px; border-radius: 12px; }
+  .puesto-body h3 { font-size: 27px; }
+  .puesto-specs > div { flex-direction: column; align-items: flex-start; gap: 3px; }
+  .puesto-specs dd { text-align: left; }
+  .puestos-controls { gap: 13px; }
+  .carousel-arrow { width: 40px; height: 40px; }
+  .carousel-counter { min-width: 52px; font-size: 12px; }
+  .carousel-hint { display: none; }
   .source-note { font-size: 13px; }
   .section-heading { font-size: 35px; }
   .editorial-copy p:not(.kicker), .precision-grid p, .intro-copy p { font-size: 15px; }
@@ -1816,6 +2088,8 @@ html.reduce-motion { scroll-behavior: auto; }
 /* 17. Reduced motion ---------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .puestos-track { scroll-behavior: auto; }
+  .puesto-slide { opacity: 1; scale: 1; }
   [data-parallax], [data-drift], .hero-copy { translate: none !important; }
   .motion-ready .reveal { opacity: 1; transform: none; transition: none; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }

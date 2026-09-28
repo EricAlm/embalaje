@@ -147,5 +147,47 @@
     if (document.hidden) panelDemos.forEach(video => video.pause());
   });
 
+  // Carrusel de puestos: navegación por flechas, controles y deslizamiento.
+  const puestosCarousel = document.querySelector('[data-puestos-carousel]');
+  if (puestosCarousel) {
+    const track = puestosCarousel.querySelector('[data-carousel-track]');
+    const slides = [...puestosCarousel.querySelectorAll('[data-carousel-slide]')];
+    const prevButton = puestosCarousel.querySelector('[data-carousel-prev]');
+    const nextButton = puestosCarousel.querySelector('[data-carousel-next]');
+    const dots = [...puestosCarousel.querySelectorAll('[data-carousel-dot]')];
+    const counter = puestosCarousel.querySelector('[data-carousel-counter]');
+    let puestoIndex = 0;
+    let carouselFrame = false;
+    const slideStart = slide => slide.offsetLeft - slides[0].offsetLeft;
+    function syncCarousel() {
+      carouselFrame = false;
+      const x = track.scrollLeft;
+      let index = 0;
+      for (let i = 1; i < slides.length; i++) if (Math.abs(slideStart(slides[i]) - x) < Math.abs(slideStart(slides[index]) - x)) index = i;
+      puestoIndex = index;
+      slides.forEach((slide, i) => slide.classList.toggle('is-current', i === index));
+      dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
+      counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      prevButton.disabled = index === 0;
+      nextButton.disabled = index === slides.length - 1;
+    }
+    function goToPuesto(index) {
+      const target = slides[clamp(index, 0, slides.length - 1)];
+      track.scrollTo({ left: slideStart(target), behavior: root.classList.contains('reduce-motion') ? 'auto' : 'smooth' });
+    }
+    track.addEventListener('scroll', () => {
+      if (!carouselFrame) { carouselFrame = true; requestAnimationFrame(syncCarousel); }
+    }, { passive: true });
+    track.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight') { event.preventDefault(); goToPuesto(puestoIndex + 1); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); goToPuesto(puestoIndex - 1); }
+    });
+    prevButton.addEventListener('click', () => goToPuesto(puestoIndex - 1));
+    nextButton.addEventListener('click', () => goToPuesto(puestoIndex + 1));
+    dots.forEach((dot, index) => dot.addEventListener('click', () => goToPuesto(index)));
+    window.addEventListener('resize', () => { track.scrollLeft = slideStart(slides[puestoIndex]); }, { passive: true });
+    syncCarousel();
+  }
+
   setMotion();
 })();
