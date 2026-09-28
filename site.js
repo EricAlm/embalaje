@@ -43,15 +43,10 @@
   root.classList.add('motion-ready');
 
   const parallaxItems = [...document.querySelectorAll('[data-parallax]')];
-  const drift = document.querySelector('[data-drift]');
-  const steps = [...document.querySelectorAll('[data-process-step]')];
-  const processImages = [...document.querySelectorAll('[data-process-image]')];
-  const captions = ['Identificación del equipo', 'Impresión y aplicación de etiquetas', 'Control óptico de etiquetas', 'Manipulación y etiquetado de caja', 'Descarga y retorno'];
   const navLinks = [...document.querySelectorAll('.site-nav a')];
   const navSections = navLinks.map(link => document.querySelector(link.hash));
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   let framePending = false;
-  let activeStep = -1;
   function schedule() {
     if (!framePending) { framePending = true; requestAnimationFrame(updateScroll); }
   }
@@ -71,25 +66,6 @@
       const amount = reduced || innerWidth <= 600 ? 0 : Number(element.dataset.parallax);
       const position = clamp((rect.top + rect.height / 2 - height / 2) / height, -1, 1);
       element.style.setProperty('--parallax-y', `${position * amount}px`);
-    }
-    if (drift) {
-      // La frase siempre cabe completa. El parallax solo añade un leve movimiento vertical.
-      const rect = drift.parentElement.getBoundingClientRect();
-      const offset = reduced ? 0 : clamp((rect.top + rect.height / 2 - height / 2) / height, -1, 1) * 8;
-      drift.style.setProperty('--drift-y', `${offset}px`);
-    }
-    let nextStep = 0;
-    for (let index = 0; index < steps.length; index++) if (steps[index].getBoundingClientRect().top < height * .53) nextStep = index;
-    if (nextStep !== activeStep) {
-      activeStep = nextStep;
-      steps.forEach((step, index) => step.classList.toggle('is-active', index === activeStep));
-      processImages.forEach((image, index) => image.classList.toggle('is-active', index === activeStep));
-      document.getElementById('process-counter').textContent = `${String(activeStep + 1).padStart(2, '0')} / 05`;
-      document.getElementById('process-caption').textContent = captions[activeStep];
-      document.getElementById('step-progress').style.width = `${(activeStep + 1) * 20}%`;
-      const enlarge = document.getElementById('process-enlarge');
-      enlarge.href = processImages[activeStep].src;
-      enlarge.dataset.caption = `${captions[activeStep]} · Captura del simulador 3D`;
     }
     let navIndex = -1;
     navSections.forEach((section, index) => { if (section.getBoundingClientRect().top < height * .4) navIndex = index; });
