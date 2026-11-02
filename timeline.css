@@ -1274,3 +1274,22 @@ body { background: var(--bg); }
 @media (min-width: 901px) {
   .tl-image-grid.is-4 .tl-image-cell:nth-child(n+3) { aspect-ratio: 2 / 3; }
 }
+/* Las cuatro celdas de 2025 comparten la misma proporción 4:3.
+   Las fotos verticales se muestran completas dentro de esa caja. */
+@media (min-width: 901px) {
+  .tl-image-grid.is-4 .tl-image-cell:nth-child(n+3) { aspect-ratio: 4 / 3; }
+}
+/* Relleno ambiental para fotos verticales dentro de cajas 4:3:
+   la foto completa va nítida y los laterales se cubren con su propia imagen difuminada. */
+.tl-image-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px) saturate(.7);
+  opacity: .3;
+  transform: scale(1.08);
+  pointer-events: none;
+}
+.tl-image-cell img { position: relative; z-index: 1; }
+.tl-image-cell figcaption { z-index: 2; }

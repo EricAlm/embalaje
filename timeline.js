@@ -269,6 +269,7 @@ function renderYear(index) {
   imageGrid.className = `tl-image-grid is-${images.length}`;
   imageGrid.innerHTML = images.map(image => `
     <figure class="tl-image-cell">
+      <span class="tl-image-backdrop" style="background-image:url('${image.src}')" aria-hidden="true"></span>
       <img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async"/>
       <figcaption>${image.label}</figcaption>
     </figure>
