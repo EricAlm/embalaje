@@ -1260,3 +1260,7 @@ body { background: var(--bg); }
   background: var(--bg);
   box-shadow: none;
 }
+/* La ficha de 2025 tiene cuatro imágenes: ocupar el ancho disponible */
+.tl-image-grid.is-4 { padding: 14px; gap: 10px; }
+.tl-image-grid.is-4 .tl-image-cell { width: 100%; }
+.tl-image-grid.is-4 .tl-image-cell img { object-fit: cover; }
