@@ -14,7 +14,7 @@ const years = [
         tags: "Hardware · Firmware · Educación",
         images: [
           {
-            src: "assets/timeline/tl-archi.jpg",
+            src: "assets/timeline/archi.jpeg",
             alt: "Placa Archi Kids de color verde sobre una base negra y una superficie dorada.",
             label: "Archi"
           }
@@ -40,7 +40,7 @@ const years = [
         tags: "Sensores · Control",
         images: [
           {
-            src: "assets/timeline/tl-indoor.jpg",
+            src: "assets/timeline/Indoor.jpg",
             alt: "Gabinete de cultivo indoor con dos cámaras iluminadas y plantas.",
             label: "Indoor"
           }
@@ -66,7 +66,7 @@ const years = [
         tags: "Mecánica · BLE · App",
         images: [
           {
-            src: "assets/timeline/tl-k9.jpg",
+            src: "assets/timeline/k9.png",
             alt: "Vista de corte del lanzador K9 Trainner con mecanismo de resorte y motor.",
             label: "K9 Trainner"
           }
@@ -87,7 +87,7 @@ const years = [
         tags: "Software · 3D · Instrumentos",
         images: [
           {
-            src: "assets/timeline/tl-simulador.jpg",
+            src: "assets/timeline/simulador.jpeg",
             alt: "Puente de mando del simulador de navegación con tres pantallas y rueda de timón.",
             label: "Simulador de Navegación"
           }
@@ -113,7 +113,7 @@ const years = [
         tags: "Simulación · Integración",
         images: [
           {
-            src: "assets/timeline/tl-simulador.jpg",
+            src: "assets/timeline/simulador.jpeg",
             alt: "Puente de mando del simulador de navegación con tres pantallas y rueda de timón.",
             label: "Simulador · Puerto Belgrano"
           }
@@ -186,7 +186,7 @@ const years = [
         tags: "Matricial · Producción",
         images: [
           {
-            src: "assets/timeline/tl-jig-2.jpg",
+            src: "assets/timeline/jig-2.jpeg",
             alt: "Jig matricial con pantalla azul y luces de estación.",
             label: "JIGs x5"
           }
@@ -218,6 +218,10 @@ const cardYear = $("#tl-card-title");
 const cardCount = $("#tl-year-count");
 const yearProjects = $("#tl-year-projects");
 const imageGrid = $("#tl-image-grid");
+const lightbox = $("#tl-lightbox");
+const lightboxImg = $("#tl-lightbox-img");
+const lightboxCaption = $("#tl-lightbox-caption");
+const lightboxClose = $("#tl-lightbox-close");
 const backgroundLayers = [
   $(".tl-skip"),
   $(".tl-header"),
@@ -233,7 +237,9 @@ let maxShift = 0;
 let currentIndex = -1;
 let activeIndex = -1;
 let isOpen = false;
+let lightboxOpen = false;
 let lastNode = null;
+let lastImageCell = null;
 let frame = 0;
 
 function renderYear(index) {
@@ -268,9 +274,10 @@ function renderYear(index) {
   const images = data.projects.flatMap(project => project.images);
   imageGrid.className = `tl-image-grid is-${images.length}`;
   imageGrid.innerHTML = images.map(image => `
-    <figure class="tl-image-cell">
+    <figure class="tl-image-cell" tabindex="0" role="button" aria-label="Ampliar imagen: ${image.label}">
       <span class="tl-image-backdrop" style="background-image:url('${image.src}')" aria-hidden="true"></span>
       <img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async"/>
+      <span class="tl-image-expand" aria-hidden="true">+</span>
       <figcaption>${image.label}</figcaption>
     </figure>
   `).join("");
@@ -337,6 +344,59 @@ function closeCard() {
   lastNode = null;
 }
 
+function openLightbox(cell) {
+  const image = cell.querySelector("img");
+  if (!image) return;
+  lastImageCell = cell;
+  lightboxImg.src = image.currentSrc || image.src;
+  lightboxImg.alt = image.alt || "";
+  lightboxCaption.textContent = cell.querySelector("figcaption")?.textContent || image.alt || "";
+  lightbox.hidden = false;
+  lightboxOpen = true;
+  lightboxClose.focus({ preventScroll: true });
+}
+
+function closeLightbox() {
+  if (!lightboxOpen) return;
+  lightboxOpen = false;
+  lightbox.hidden = true;
+  lightboxImg.removeAttribute("src");
+  lightboxCaption.textContent = "";
+  if (lastImageCell) lastImageCell.focus({ preventScroll: true });
+  lastImageCell = null;
+}
+
+imageGrid.addEventListener("click", event => {
+  const cell = event.target.closest(".tl-image-cell");
+  if (cell) openLightbox(cell);
+});
+
+imageGrid.addEventListener("keydown", event => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  const cell = event.target.closest(".tl-image-cell");
+  if (!cell) return;
+  event.preventDefault();
+  openLightbox(cell);
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+
+lightbox.addEventListener("click", event => {
+  if (event.target === lightbox) closeLightbox();
+});
+
+document.addEventListener("keydown", event => {
+  if (!lightboxOpen) return;
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeLightbox();
+  }
+  if (event.key === "Tab") {
+    event.preventDefault();
+    lightboxClose.focus();
+  }
+});
+
 function measure() {
   maxShift = Math.max(0, track.scrollWidth - timeline.clientWidth);
 }
@@ -377,7 +437,7 @@ nodes.forEach((node, index) => {
 cardClose.addEventListener("click", closeCard);
 
 document.addEventListener("keydown", event => {
-  if (!isOpen || event.key !== "Tab") return;
+  if (!isOpen || lightboxOpen || event.key !== "Tab") return;
 
   const focusable = $$(
     'button, [href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])',
