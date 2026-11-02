@@ -7,7 +7,7 @@
 <meta name="description" content="Cinco años de investigación y desarrollo en hardware, software, simulación y testing. Los proyectos de EMBALAJE entre 2022 y 2026."/>
 <meta name="theme-color" content="#E9E6DE"/>
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=2"/>
-<link rel="stylesheet" href="timeline.css?v=9"/>
+<link rel="stylesheet" href="timeline.css?v=12"/>
 </head>
 <body>
 <a class="tl-skip" href="#tl-main">Saltar a la trayectoria</a>
@@ -37,19 +37,36 @@
     </div>
   </section>
 
-  <section class="tl-timeline" aria-label="Proyectos por año">
-    <article class="tl-year" id="anio-2022">
-      <div class="tl-year-head">
-        <h2 class="tl-year-number">2022</h2>
-        <p class="tl-year-count">1 proyecto</p>
+  <section class="tl-work" aria-labelledby="tl-work-title">
+    <div class="tl-work-head">
+      <div>
+        <p class="tl-eyebrow">Línea de proyectos</p>
+        <h2 id="tl-work-title">Ocho proyectos, en orden.</h2>
       </div>
-      <div class="tl-projects">
-        <article class="tl-project">
-          <figure class="tl-project-media">
-            <img src="assets/timeline/tl-archi.jpg" alt="Placa Archi Kids de color verde sobre una base negra y una superficie dorada." loading="lazy" decoding="async"/>
+      <div class="tl-controls">
+        <div class="tl-year-nav" role="group" aria-label="Ir a un año">
+          <button type="button" data-year="2022" class="is-active">2022</button>
+          <button type="button" data-year="2023">2023</button>
+          <button type="button" data-year="2024">2024</button>
+          <button type="button" data-year="2025">2025</button>
+          <button type="button" data-year="2026">2026</button>
+        </div>
+        <div class="tl-arrows">
+          <button type="button" id="tl-prev" aria-label="Proyecto anterior">←</button>
+          <button type="button" id="tl-next" aria-label="Proyecto siguiente">→</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-rail-wrap">
+      <div class="tl-rail" id="tl-rail" tabindex="0" aria-label="Trayectoria horizontal de proyectos. Usá las flechas para recorrer.">
+        <article class="tl-card" data-year="2022">
+          <div class="tl-card-year"><span>2022</span><small>1 de 1</small></div>
+          <figure class="tl-card-media">
+            <img src="assets/timeline/tl-archi.jpg" alt="Placa Archi Kids de color verde sobre una base negra y una superficie dorada." decoding="async"/>
             <figcaption>Archi</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Hardware educativo</p>
             <h3>Archi</h3>
             <p class="tl-description">La placa educativa que lleva programación y electrónica a las aulas. Combina hardware, proyectos STEM y una plataforma para aprender haciendo.</p>
@@ -62,21 +79,14 @@
             <a class="tl-link" href="https://archikids.com.ar/" target="_blank" rel="noopener">archikids.com.ar</a>
           </div>
         </article>
-      </div>
-    </article>
 
-    <article class="tl-year" id="anio-2023">
-      <div class="tl-year-head">
-        <h2 class="tl-year-number">2023</h2>
-        <p class="tl-year-count">1 proyecto</p>
-      </div>
-      <div class="tl-projects">
-        <article class="tl-project">
-          <figure class="tl-project-media">
-            <img src="assets/timeline/tl-indoor.jpg" alt="Gabinete de cultivo indoor con dos cámaras iluminadas y plantas." loading="lazy" decoding="async"/>
+        <article class="tl-card" data-year="2023">
+          <div class="tl-card-year"><span>2023</span><small>1 de 1</small></div>
+          <figure class="tl-card-media">
+            <img src="assets/timeline/tl-indoor.jpg" alt="Gabinete de cultivo indoor con dos cámaras iluminadas y plantas." decoding="async"/>
             <figcaption>Indoor</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Archifarm</p>
             <h3>Indoor</h3>
             <p class="tl-description">Sistema de cultivo indoor con control de luz, temperatura, humedad y riego. Registro de datos para seguir las condiciones del cultivo.</p>
@@ -89,21 +99,14 @@
             <a class="tl-link" href="https://github.com/NewsanLab/ArchiFarm" target="_blank" rel="noopener">Repositorio ArchiFarm</a>
           </div>
         </article>
-      </div>
-    </article>
 
-    <article class="tl-year" id="anio-2024">
-      <div class="tl-year-head">
-        <h2 class="tl-year-number">2024</h2>
-        <p class="tl-year-count">2 proyectos</p>
-      </div>
-      <div class="tl-projects">
-        <article class="tl-project">
-          <figure class="tl-project-media">
-            <img src="assets/timeline/tl-k9.jpg" alt="Vista de corte del lanzador K9 Trainner con mecanismo de resorte y motor." loading="lazy" decoding="async"/>
+        <article class="tl-card" data-year="2024">
+          <div class="tl-card-year"><span>2024</span><small>1 de 2</small></div>
+          <figure class="tl-card-media">
+            <img src="assets/timeline/tl-k9.jpg" alt="Vista de corte del lanzador K9 Trainner con mecanismo de resorte y motor." decoding="async"/>
             <figcaption>K9 Trainner</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Adiestramiento K9</p>
             <h3>K9 Trainner</h3>
             <p class="tl-description">Lanzador de pelotas para el adiestramiento de caninos del Servicio Penitenciario. Archi controla el mecanismo y una app móvil registra los tiempos.</p>
@@ -117,12 +120,13 @@
           </div>
         </article>
 
-        <article class="tl-project">
-          <figure class="tl-project-media">
-            <img src="assets/timeline/tl-simulador.jpg" alt="Puente de mando del simulador de navegación con tres pantallas y rueda de timón." loading="lazy" decoding="async"/>
+        <article class="tl-card" data-year="2024">
+          <div class="tl-card-year"><span>2024</span><small>2 de 2</small></div>
+          <figure class="tl-card-media">
+            <img src="assets/timeline/tl-simulador.jpg" alt="Puente de mando del simulador de navegación con tres pantallas y rueda de timón." decoding="async"/>
             <figcaption>Simulador de Navegación</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Simulación naval</p>
             <h3>Simulador de Navegación</h3>
             <p class="tl-description">Sistema de navegación para el adiestramiento de la Armada Argentina. Escenarios virtuales, instrumentos y plataforma abierta.</p>
@@ -134,21 +138,14 @@
             <p class="tl-tags">Software, 3D, instrumentos</p>
           </div>
         </article>
-      </div>
-    </article>
 
-    <article class="tl-year" id="anio-2025">
-      <div class="tl-year-head">
-        <h2 class="tl-year-number">2025</h2>
-        <p class="tl-year-count">3 proyectos</p>
-      </div>
-      <div class="tl-projects">
-        <article class="tl-project">
-          <figure class="tl-project-media">
-            <img src="assets/timeline/tl-simulador.jpg" alt="Puente de mando del simulador de navegación con tres pantallas y rueda de timón." loading="lazy" decoding="async"/>
+        <article class="tl-card" data-year="2025">
+          <div class="tl-card-year"><span>2025</span><small>1 de 3</small></div>
+          <figure class="tl-card-media">
+            <img src="assets/timeline/tl-simulador.jpg" alt="Puente de mando del simulador de navegación con tres pantallas y rueda de timón." decoding="async"/>
             <figcaption>Simulador, Puerto Belgrano</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Simulación naval, segunda versión</p>
             <h3>Simulador de Navegación</h3>
             <p class="tl-description">Segunda versión instalada en Puerto Belgrano. Mejoras de realismo, estabilidad y nuevos escenarios, con instrumentos y controles integrados.</p>
@@ -161,12 +158,13 @@
           </div>
         </article>
 
-        <article class="tl-project">
-          <figure class="tl-project-media">
-            <img src="assets/timeline/tl-boya.svg" alt="Ilustración técnica de una boya oceanográfica con panel solar, sensores y línea de cultivo de mejillones." loading="lazy" decoding="async"/>
+        <article class="tl-card" data-year="2025">
+          <div class="tl-card-year"><span>2025</span><small>2 de 3</small></div>
+          <figure class="tl-card-media">
+            <img src="assets/timeline/tl-boya.svg" alt="Ilustración técnica de una boya oceanográfica con panel solar, sensores y línea de cultivo de mejillones." decoding="async"/>
             <figcaption>Boya Oceanográfica</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Oceanografía</p>
             <h3>Boya Oceanográfica</h3>
             <p class="tl-description">Puesta en marcha de una boya para el cultivo de mejillones con el CONICET. Sensores de temperatura, salinidad y oxígeno, con monitoreo remoto.</p>
@@ -179,15 +177,16 @@
           </div>
         </article>
 
-        <article class="tl-project">
-          <figure class="tl-project-media is-duo">
+        <article class="tl-card" data-year="2025">
+          <div class="tl-card-year"><span>2025</span><small>3 de 3</small></div>
+          <figure class="tl-card-media is-duo">
             <div>
-              <img src="assets/timeline/tl-jig.jpg" alt="Detalle del cabezal neumático del jig de antena RF." loading="lazy" decoding="async"/>
-              <img src="assets/timeline/tl-jig-3.jpg" alt="Jig de testing con pantalla de estado y actuador neumático." loading="lazy" decoding="async"/>
+              <img src="assets/timeline/tl-jig.jpg" alt="Detalle del cabezal neumático del jig de antena RF." decoding="async"/>
+              <img src="assets/timeline/tl-jig-3.jpg" alt="Jig de testing con pantalla de estado y actuador neumático." decoding="async"/>
             </div>
             <figcaption>JIGs Automotriz</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Test automotriz</p>
             <h3>JIGs Automotriz</h3>
             <p class="tl-description">Dos celdas de testing para la línea automotriz: antena RF y placa de carga inalámbrica de 15 W en versión unitaria.</p>
@@ -200,21 +199,14 @@
             <a class="tl-link" href="https://github.com/NewsanLab/Jig-Felko" target="_blank" rel="noopener">Repositorio Jig-Felko</a>
           </div>
         </article>
-      </div>
-    </article>
 
-    <article class="tl-year" id="anio-2026">
-      <div class="tl-year-head">
-        <h2 class="tl-year-number">2026</h2>
-        <p class="tl-year-count">1 proyecto</p>
-      </div>
-      <div class="tl-projects">
-        <article class="tl-project">
-          <figure class="tl-project-media">
-            <img src="assets/timeline/tl-jig-2.jpg" alt="Jig matricial con pantalla azul y luces de estación." loading="lazy" decoding="async"/>
+        <article class="tl-card" data-year="2026">
+          <div class="tl-card-year"><span>2026</span><small>1 de 1</small></div>
+          <figure class="tl-card-media">
+            <img src="assets/timeline/tl-jig-2.jpg" alt="Jig matricial con pantalla azul y luces de estación." decoding="async"/>
             <figcaption>JIGs Automotriz x5</figcaption>
           </figure>
-          <div class="tl-project-copy">
+          <div class="tl-card-body">
             <p class="tl-category">Automotriz, matricial</p>
             <h3>JIGs Automotriz x5</h3>
             <p class="tl-description">Evolución matricial del jig de carga de 15 W: cinco estaciones en paralelo, secuencia automática y registro centralizado de resultados.</p>
@@ -227,7 +219,12 @@
           </div>
         </article>
       </div>
-    </article>
+    </div>
+
+    <div class="tl-rail-foot">
+      <div class="tl-rail-progress" aria-hidden="true"><span id="tl-rail-progress"></span></div>
+      <p>Deslizá <span class="tl-hint-arrows">o usá las flechas </span>para recorrer los ocho proyectos.</p>
+    </div>
   </section>
 
   <section class="tl-closing" aria-labelledby="tl-closing-title">
@@ -243,6 +240,6 @@
   <p>2022—2026</p>
 </footer>
 
-<script src="timeline.js?v=9"></script>
+<script src="timeline.js?v=12"></script>
 </body>
 </html>
