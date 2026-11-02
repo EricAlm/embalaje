@@ -43,7 +43,7 @@
   root.classList.add('motion-ready');
 
   const parallaxItems = [...document.querySelectorAll('[data-parallax]')];
-  const navLinks = [...document.querySelectorAll('.site-nav a')];
+  const navLinks = [...document.querySelectorAll('.site-nav a')].filter(link => link.hash);
   const navSections = navLinks.map(link => document.querySelector(link.hash));
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   let framePending = false;
