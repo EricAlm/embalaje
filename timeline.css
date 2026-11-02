@@ -1231,3 +1231,32 @@ body { background: var(--bg); }
   background: #F1EEE7;
   color: var(--muted);
 }
+/* Legibilidad de la ficha y un solo año resaltado a la vez */
+.tl-project { font-size: 18px; }
+.tl-category { font-size: 13px; }
+
+.tl-card { height: min(700px, calc(100dvh - 3rem)); }
+
+.tl-year-count { font-size: .78rem; letter-spacing: .05em; }
+.tl-year-project { padding: 20px 0; }
+.tl-year-project-category { font-size: .75rem; letter-spacing: .06em; }
+.tl-year-project h3 {
+  font-size: clamp(1.6rem, 2.2vw, 2.05rem);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+}
+.tl-year-project p { font-size: 1rem; line-height: 1.6; }
+.tl-year-project details summary { font-size: .73rem; letter-spacing: .04em; }
+.tl-year-project .tl-details li { font-size: .9rem; line-height: 1.45; }
+.tl-tags, .tl-note { font-size: .78rem; }
+.tl-link { font-size: .8rem; }
+.tl-image-cell figcaption { font-size: .7rem; letter-spacing: .03em; }
+
+.tl-milestones:has(.tl-node:hover) .tl-milestone.is-current:not(:hover) .tl-year {
+  color: var(--muted);
+}
+.tl-milestones:has(.tl-node:hover) .tl-milestone.is-current:not(:hover) .tl-dot {
+  border-color: rgba(23, 25, 21, .45);
+  background: var(--bg);
+  box-shadow: none;
+}

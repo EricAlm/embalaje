@@ -285,7 +285,7 @@ body.v2 .sim-load {
 body.v2 .section {
   width: min(1320px, calc(100vw - 96px));
   margin-inline: auto;
-  padding-block: clamp(40px, 4.5vw, 64px);
+  padding-block: clamp(40px, 4vw, 56px) clamp(32px, 3vw, 44px);
 }
 
 body.v2 .section-index {
@@ -910,7 +910,7 @@ body.v2 .people-section {
   width: min(1320px, calc(100vw - 96px));
   max-width: none;
   margin-inline: auto;
-  padding-block: clamp(40px, 4.5vw, 64px);
+  padding-block: clamp(40px, 4vw, 56px) clamp(32px, 3vw, 44px);
   background: transparent;
   color: var(--ink);
 }
