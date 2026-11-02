@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0B0D0C"/>
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=2"/>
 <link rel="stylesheet" href="site.css?v=20261102e"/>
-<link rel="stylesheet" href="redesign.css?v=10"/>
+<link rel="stylesheet" href="redesign.css?v=11"/>
 <script src="site.js?v=20261102f" defer></script>
 </head>
 <body class="v2">
@@ -290,11 +290,11 @@
 
   <div class="control-overview">
     <figure class="panel-shot reveal">
-      <a class="diagram-link" href="assets/panel-produccion.webp" data-lightbox data-caption="Panel SCADA · Vista de producción y estados por estación" aria-label="Ampliar la captura del panel de producción">
-        <img src="assets/panel-produccion.webp" width="1440" height="1168" loading="lazy" decoding="async" alt="Captura del panel SCADA con cinco estaciones conectadas, sensores de elevadores y conveyors, motores, ejes cartesianos y estados de impresoras."/>
+      <a class="diagram-link" href="assets/panel-produccion.webp?v=2" data-lightbox data-caption="Panel SCADA · Vista de producción y estados por estación" aria-label="Ampliar la captura del panel de producción">
+        <img src="assets/panel-produccion.webp?v=2" width="1440" height="1407" loading="lazy" decoding="async" alt="Captura del panel SCADA de producción con siete estaciones, sensores de elevadores y conveyors, motores, ejes cartesianos y estados de impresoras."/>
         <span class="image-expand" aria-hidden="true">↗</span>
       </a>
-      <figcaption><span>Producción, visión del proceso</span><span>Captura del panel</span></figcaption>
+      <figcaption><span>Producción, visión de la línea</span><span>Captura del panel</span></figcaption>
     </figure>
     <ol class="control-connections">
       <li class="reveal">
@@ -317,44 +317,43 @@
 
   <div class="control-gallery">
     <figure class="panel-shot reveal">
-      <a class="diagram-link" href="assets/panel-estacion.webp" data-lightbox data-caption="Estación 01 · Configuración del elevador, movimiento relativo y Home" aria-label="Ampliar la configuración de la estación">
-        <img src="assets/panel-estacion.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla de la estación 01 con velocidad, aceleración, pulsos, AutoHome y botones de movimiento del elevador."/>
+      <a class="diagram-link" href="assets/panel-estacion.webp?v=2" data-lightbox data-caption="Estación 01 · Configuración del elevador, movimiento relativo y Home" aria-label="Ampliar la configuración de la estación">
+        <img src="assets/panel-estacion.webp?v=2" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla de la estación 01 con velocidad, aceleración, pulsos, AutoHome y botones de movimiento del elevador."/>
         <span class="image-expand" aria-hidden="true">↗</span>
       </a>
-      <figcaption><span>Estación, elevador y conveyor</span><span>Captura del panel</span></figcaption>
+      <figcaption><span>Estación 01, configuración del elevador</span><span>Captura del panel</span></figcaption>
     </figure>
     <figure class="panel-shot reveal">
-      <a class="diagram-link" href="assets/panel-ejes.webp" data-lightbox data-caption="Cartesiano del teléfono · Parámetros compartidos y selección de ejes X, Y, Z" aria-label="Ampliar la configuración del cartesiano">
-        <img src="assets/panel-ejes.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla del cartesiano del teléfono con parámetros compartidos, AutoHome y selección de ejes X, Y y Z."/>
+      <a class="diagram-link" href="assets/panel-ejes.webp?v=2" data-lightbox data-caption="Cartesiano del teléfono · Parámetros compartidos y selección de ejes X, Y, Z" aria-label="Ampliar la configuración del cartesiano">
+        <img src="assets/panel-ejes.webp?v=2" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla del cartesiano del teléfono con parámetros compartidos, AutoHome, selección de ejes X, Y y Z, movimiento relativo y parada de emergencia."/>
         <span class="image-expand" aria-hidden="true">↗</span>
       </a>
       <figcaption><span>Cartesiano, configuración XYZ</span><span>Captura del panel</span></figcaption>
+    </figure>
+    <figure class="panel-shot reveal">
+      <a class="diagram-link" href="assets/panel-configuracion.webp?v=1" data-lightbox data-caption="Configuración de línea · Búsqueda de modelo, estación y puestos" aria-label="Ampliar la configuración de línea">
+        <img src="assets/panel-configuracion.webp?v=1" width="1440" height="900" loading="lazy" decoding="async" alt="Ventana de configuración de línea con búsqueda de modelo, selección de estación y puestos, y guardado de cambios."/>
+        <span class="image-expand" aria-hidden="true">↗</span>
+      </a>
+      <figcaption><span>Configuración de línea</span><span>Modelo y puestos</span></figcaption>
     </figure>
   </div>
 
   <div class="control-demo-heading reveal">
     <h3>Así se usa el panel.</h3>
-    <p>Dos recorridos breves, con explicaciones en pantalla. Reproducilos o abrilos a pantalla completa para ver cada ajuste.</p>
+    <p>Un recorrido por la producción, la configuración de estación y el ajuste del eje cartesiano.</p>
   </div>
-  <div class="control-demos">
+  <div class="control-demos is-single">
     <article class="control-demo reveal">
-      <div class="control-demo-meta"><span>Recorrido 01</span><span>27 s, sin audio</span></div>
-      <h4>Configurar una estación.</h4>
-      <video class="panel-demo-video" src="assets/panel-demo-estacion.mp4" poster="assets/panel-estacion.webp" width="1440" height="900" controls muted playsinline preload="none" aria-label="Demostración de configuración de una estación" aria-describedby="demo-estacion-description">
-        <a href="assets/panel-demo-estacion.mp4">Ver el video de configuración de una estación.</a>
+      <div class="control-demo-meta"><span>Recorrido por el panel</span><span>17 s, sin audio</span></div>
+      <h4>De la producción al ajuste fino.</h4>
+      <video class="panel-demo-video" src="assets/panel-demo-panel.mp4" poster="assets/panel-estacion.webp?v=2" width="1440" height="900" controls muted playsinline preload="none" aria-label="Recorrido por el panel SCADA, la configuración de estación y el eje cartesiano" aria-describedby="demo-panel-description">
+        <a href="assets/panel-demo-panel.mp4">Ver el recorrido por el panel.</a>
       </video>
-      <p id="demo-estacion-description">De Producción a la estación 01: cambiar velocidad y aceleración del elevador, aplicar parámetros, probar un desplazamiento y ajustar el conveyor y el agarre.</p>
-    </article>
-    <article class="control-demo reveal">
-      <div class="control-demo-meta"><span>Recorrido 02</span><span>27 s, sin audio</span></div>
-      <h4>Preparar el cartesiano.</h4>
-      <video class="panel-demo-video" src="assets/panel-demo-cartesiano.mp4" poster="assets/panel-ejes.webp" width="1440" height="900" controls muted playsinline preload="none" aria-label="Demostración de configuración del cartesiano" aria-describedby="demo-cartesiano-description">
-        <a href="assets/panel-demo-cartesiano.mp4">Ver el video de configuración del cartesiano.</a>
-      </video>
-      <p id="demo-cartesiano-description">Ajustar velocidad y AutoHome, seleccionar el eje Y, realizar un movimiento relativo y un ajuste Jog, volver a Home y probar la toma y liberación de la etiqueta.</p>
+      <p id="demo-panel-description">Producción, estación 01, aplicación de parámetros, movimiento del elevador, eje cartesiano, selección del eje Y y avance relativo.</p>
     </article>
   </div>
-  <p class="control-demo-note">Capturas y recorridos grabados sobre la interfaz de demostración. Los valores y las acciones mostrados son ejemplos de uso del panel.</p>
+  <p class="control-demo-note">Capturas del panel real de configuración y supervisión. Los valores y las acciones mostrados son ejemplos de uso.</p>
 </section>
 
 <section class="section people-section" id="ingenieria" aria-labelledby="people-heading">
