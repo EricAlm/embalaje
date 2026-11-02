@@ -38,9 +38,15 @@
       entry.target.classList.add('is-visible');
       revealObserver.unobserve(entry.target);
     }
-  }), { threshold: .08, rootMargin: '0px 0px -20px 0px' });
+  }), { threshold: .01, rootMargin: '0px 0px 12% 0px' });
   document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
   root.classList.add('motion-ready');
+  // Red de seguridad: si el observer no llega a dispararse, nada queda invisible.
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.is-visible)').forEach(element => {
+      if (element.getBoundingClientRect().top < innerHeight * 1.2) element.classList.add('is-visible');
+    });
+  }, 2500);
 
   const parallaxItems = [...document.querySelectorAll('[data-parallax]')];
   const navLinks = [...document.querySelectorAll('.site-nav a')].filter(link => link.hash);
@@ -58,8 +64,9 @@
     const range = document.documentElement.scrollHeight - height;
     document.getElementById('reading-progress').style.transform = `scaleX(${range > 0 ? y / range : 0})`;
     const progress = clamp(y / Math.max(1, hero.offsetHeight), 0, 1);
-    document.getElementById('hero-copy').style.setProperty('--hero-copy-y', `${reduced ? 0 : -progress * 65}px`);
-    document.getElementById('hero-copy').style.setProperty('--hero-copy-opacity', String(reduced ? 1 : 1 - progress * .8));
+    const heroFade = clamp((progress - .35) / .28, 0, 1);
+    document.getElementById('hero-copy').style.setProperty('--hero-copy-y', `${reduced ? 0 : -progress * 40}px`);
+    document.getElementById('hero-copy').style.setProperty('--hero-copy-opacity', String(reduced ? 1 : 1 - heroFade));
     for (const element of parallaxItems) {
       const rect = element.getBoundingClientRect();
       if (rect.bottom < -100 || rect.top > height + 100) continue;
