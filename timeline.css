@@ -1264,3 +1264,8 @@ body { background: var(--bg); }
 .tl-image-grid.is-4 { padding: 14px; gap: 10px; }
 .tl-image-grid.is-4 .tl-image-cell { width: 100%; }
 .tl-image-grid.is-4 .tl-image-cell img { object-fit: cover; }
+/* Las figure traían el margen por defecto del navegador (40px laterales):
+   eso corría la grilla a la derecha y achicaba las imágenes. */
+.tl-image-cell { margin: 0; }
+.tl-image-grid.is-4 .tl-image-cell { margin: 0; width: 100%; }
+.tl-image-grid.is-4 .tl-image-cell img { object-fit: contain; }
