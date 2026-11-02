@@ -764,7 +764,7 @@ body.v2 .control-overview {
 body.v2 .panel-shot {
   margin: 0;
   border: 1px solid var(--ink);
-  background: var(--night);
+  background: var(--paper-2);
 }
 
 body.v2 .panel-shot .diagram-link {
@@ -829,6 +829,7 @@ body.v2 .control-connections p { grid-column: 2; grid-row: 2; font-size: 15px; l
 body.v2 .control-gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  align-items: start;
   gap: 24px;
   margin-top: 44px;
 }
