@@ -1269,3 +1269,8 @@ body { background: var(--bg); }
 .tl-image-cell { margin: 0; }
 .tl-image-grid.is-4 .tl-image-cell { margin: 0; width: 100%; }
 .tl-image-grid.is-4 .tl-image-cell img { object-fit: contain; }
+/* En 2025, la segunda fila son fotos verticales: mostrarlas completas
+   en celdas verticales para que no se recorte el contenido. */
+@media (min-width: 901px) {
+  .tl-image-grid.is-4 .tl-image-cell:nth-child(n+3) { aspect-ratio: 2 / 3; }
+}

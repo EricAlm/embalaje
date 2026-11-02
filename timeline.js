@@ -155,12 +155,12 @@ const years = [
         tags: "RF · Test · Trazabilidad",
         images: [
           {
-            src: "assets/timeline/tl-jig.jpg",
+            src: "assets/timeline/jig.jpeg",
             alt: "Detalle del cabezal neumático del jig de antena RF.",
             label: "JIG · antena RF"
           },
           {
-            src: "assets/timeline/tl-jig-3.jpg",
+            src: "assets/timeline/jig-3.jpeg",
             alt: "Jig de testing con pantalla de estado y actuador neumático.",
             label: "JIG · carga 15 W"
           }
