@@ -14,13 +14,14 @@
   };
   function setExplore(value, focus = true) {
     stage.classList.toggle('is-exploring', value);
-    hud.hidden = !value;
+    // La ficha de control ya no se muestra; el simulador sigue funcionando.
+    hud.hidden = true;
     document.getElementById('sim-explore').hidden = value;
     document.getElementById('sim-explore').setAttribute('aria-expanded', String(value));
     document.getElementById('sim-exit').hidden = !value;
     document.getElementById('c').tabIndex = value ? 0 : -1;
     document.dispatchEvent(new Event('simulatorviewchange'));
-    if (focus) (value ? document.getElementById('hud-close') : document.getElementById('sim-explore')).focus({ preventScroll: true });
+    if (focus) (value ? document.getElementById('sim-exit') : document.getElementById('sim-explore')).focus({ preventScroll: true });
   }
   document.querySelectorAll('[data-open-simulator]').forEach(button => button.addEventListener('click', () => {
     hero.scrollIntoView({ behavior: root.classList.contains('reduce-motion') ? 'instant' : 'smooth' });
