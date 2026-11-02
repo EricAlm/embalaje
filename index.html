@@ -5,25 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Embalaje · Más control para tu producción</title>
 <meta name="description" content="Conectá identificación, etiquetado y verificación en una línea automatizada. Descubrí cómo EMBALAJE integra el equipo y su caja en un mismo flujo de producción."/>
-<meta name="theme-color" content="#101512"/>
-<link rel="stylesheet" href="assets/fonts/fonts.css"/>
+<meta name="theme-color" content="#0B0D0C"/>
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=2"/>
 <link rel="stylesheet" href="site.css?v=20261102e"/>
-<script src="site.js?v=20261102b" defer></script>
+<link rel="stylesheet" href="redesign.css?v=4"/>
+<script src="site.js?v=20261102e" defer></script>
 </head>
-<body>
+<body class="v2">
 <div id="page-loader" role="status" aria-live="polite" aria-label="Cargando la experiencia">
   <div class="loader-inner">
     <span class="loader-mark"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</span>
     <span class="loader-track"><i id="loader-bar"></i></span>
-    <span class="loader-note" id="loader-note">PREPARANDO LA EXPERIENCIA 3D…</span>
+    <span class="loader-note" id="loader-note">Preparando la simulación</span>
   </div>
 </div>
 <a class="skip-link" href="#puestos">Saltar al contenido</a>
 <header class="site-header" id="site-header">
-  <a class="wordmark" href="#inicio" aria-label="Embalaje · Inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a>
-  <nav class="site-nav" aria-label="Navegación principal"><a href="#sistema">El sistema</a><a href="#precision">La precisión</a><a href="#control">El control</a><a href="#detalles">El detalle</a><a href="timeline.html" target="_blank" rel="noopener">Timeline <span aria-hidden="true">↗</span></a></nav>
-  <a class="mobile-timeline-link" href="timeline.html" target="_blank" rel="noopener">Timeline <span aria-hidden="true">↗</span></a>
-  <button class="nav-action" type="button" data-open-simulator>Explorar 3D <span aria-hidden="true">↗</span></button>
+  <a class="wordmark" href="#inicio" aria-label="Embalaje, inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a>
+  <nav class="site-nav" aria-label="Navegación principal"><a href="#sistema">Sistema</a><a href="#precision">Precisión</a><a href="#control">Control</a><a href="#detalles">Detalles</a><a href="timeline.html">Trayectoria</a></nav>
+  <a class="mobile-timeline-link" href="timeline.html">Trayectoria</a>
+  <button class="nav-action" type="button" data-open-simulator>Abrir simulador</button>
 </header>
 <div class="reading-progress" aria-hidden="true"><span id="reading-progress"></span></div>
 <main id="main-content">
@@ -34,21 +35,21 @@
     <canvas id="c" aria-label="Simulación 3D de la línea automatizada de montaje" tabindex="-1"></canvas>
   </div>
   <div class="hero-shade" aria-hidden="true"></div>
-  <div class="hero-topline"><span><i class="live-dot" aria-hidden="true"></i>EXPERIENCIA 3D EN TIEMPO REAL</span><span id="model-count">PREPARANDO LA LÍNEA</span></div>
-  <div id="sim-load" class="sim-load" role="status">Iniciando la experiencia 3D…</div>
+  <div class="hero-topline"><span><i class="live-dot" aria-hidden="true"></i>Simulación en vivo</span><span id="model-count">Preparando la línea</span></div>
+  <div id="sim-load" class="sim-load" role="status">Iniciando la simulación…</div>
   <div class="hero-copy" id="hero-copy">
-    <p class="kicker">IDENTIFICACIÓN · ETIQUETADO · VERIFICACIÓN</p>
+    <p class="kicker">Línea de identificación y embalaje</p>
     <h1 id="hero-heading">Más control.<br/><span>Mejor embalaje.</span></h1>
-    <p class="hero-description">Identificación, etiquetado y verificación en una sola línea.<br/>Del equipo a la caja, cada movimiento suma control a tu producción.</p>
+    <p class="hero-description">Una sola línea conecta el IMEI del equipo con su etiqueta y su caja.<br/>Del equipo al embalaje, cada paso queda identificado.</p>
   </div>
   <div class="hero-bottom">
-    <div class="live-state"><span class="micro-label">EN LA SIMULACIÓN</span><span id="live-station">C1 · Lectura e inspección</span></div>
+    <div class="live-state"><span class="micro-label">Estación en curso</span><span id="live-station">C1 · Lectura e inspección</span></div>
     <div class="hero-controls">
       <button id="sim-pause" class="round-control" type="button" disabled aria-pressed="false">Ⅱ <span>Pausar</span></button>
-      <button id="sim-explore" class="pill-button" type="button" data-open-simulator aria-expanded="false" aria-controls="hud">Explorar en 3D <span aria-hidden="true">↗</span></button>
+      <button id="sim-explore" class="pill-button" type="button" data-open-simulator aria-expanded="false" aria-controls="hud">Explorar en 3D</button>
       <button id="sim-exit" class="pill-button" type="button" data-close-simulator hidden>Salir de 3D <span aria-hidden="true">×</span></button>
     </div>
-    <a class="scroll-cue" href="#puestos"><span>CONOCÉ EL SISTEMA</span><span class="circle-arrow" aria-hidden="true">↓</span></a>
+    <a class="scroll-cue" href="#puestos"><span>Conocer el sistema</span><span class="circle-arrow" aria-hidden="true">↓</span></a>
   </div>
 <div id="hud" hidden aria-label="Controles de la simulación">
   <button id="hud-close" class="hud-close" type="button" data-close-simulator aria-label="Cerrar controles 3D">×</button>
@@ -143,150 +144,145 @@
 </section>
 
 <section class="section puestos-section" id="puestos" aria-labelledby="puestos-heading">
-  <div class="section-index reveal"><span>01 / LOS PUESTOS</span><span>DEL DATO AL EMBALAJE · TC 11 S</span></div>
+  <div class="section-index reveal"><span class="index-number">01</span><span class="index-label">Los puestos</span><span class="index-note">Del dato al embalaje</span></div>
   <div class="puestos-intro">
-    <h2 class="display-heading reveal" id="puestos-heading">Cuatro puestos.<br/><em>Un mismo ciclo.</em></h2>
+    <h2 class="display-heading reveal" id="puestos-heading">Cuatro puestos.<br/>Un mismo ciclo.</h2>
     <div class="puestos-intro-copy reveal"><p>El proceso se organiza en cuatro puestos sobre un circuito de doble nivel: identificación, etiquetado, manipulación y descarga, con verificación óptica integrada. Tres operarios acompañan el flujo en las zonas de carga, rampa y descarga.</p><p>Todo el sistema comparte un mismo tiempo de ciclo: la estación más lenta debe indexar un pallet cada 11 segundos como máximo.</p></div>
   </div>
   <div class="puestos-key-specs reveal">
-    <div><span class="micro-label">TIEMPO DE CICLO</span><strong>11 s</strong><p>Indexado máximo por estación.</p></div>
-    <div><span class="micro-label">OPERARIOS</span><strong>3</strong><p>Carga, abastecimiento de cajas y descarga.</p></div>
-    <div><span class="micro-label">PALLETS</span><strong>24 × 35 cm</strong><p>Universales, con cavidades para equipo, SIM Tray y caja.</p></div>
+    <div><span class="micro-label">Tiempo de ciclo</span><strong>11 s</strong><p>Indexado máximo por estación.</p></div>
+    <div><span class="micro-label">Operarios</span><strong>3</strong><p>Carga, abastecimiento de cajas y descarga.</p></div>
+    <div><span class="micro-label">Pallets</span><strong>24 × 35 cm</strong><p>Universales, con cavidades para equipo, SIM Tray y caja.</p></div>
   </div>
-  <div class="puestos-carousel reveal" data-puestos-carousel role="region" aria-roledescription="carrusel" aria-label="Puestos del proceso de etiquetado">
-    <div class="puestos-track" id="puestos-track" data-carousel-track tabindex="0" aria-label="Recorrido de puestos: usá las flechas izquierda y derecha">
-      <article class="puesto-slide is-current" data-carousel-slide role="group" aria-roledescription="puesto" aria-label="Puesto 01 de 04: Carga e identificación">
-        <figure class="puesto-media">
-          <a class="diagram-link" href="assets/sim-lectura.webp" data-lightbox data-caption="Puesto 01 · Carga e identificación · Captura del simulador 3D"><img src="assets/sim-lectura.webp" width="810" height="600" loading="lazy" decoding="async" alt="Celular y SIM Tray sobre el pallet, junto al módulo USB y el elevador del puesto 01."/><span class="image-expand" aria-hidden="true">↗</span></a>
-          <figcaption><span>PUESTO 01</span><span>SIMULADOR 3D</span></figcaption>
+  <div class="stations reveal" data-stations>
+    <div class="station-tabs" role="tablist" aria-label="Puestos del proceso">
+      <button class="station-tab is-active" id="station-tab-1" type="button" role="tab" aria-selected="true" aria-controls="station-panel-1" tabindex="0"><span class="tab-number">01</span><span class="tab-title">Carga</span><span class="tab-sub">Identificación del equipo</span></button>
+      <button class="station-tab" id="station-tab-2" type="button" role="tab" aria-selected="false" aria-controls="station-panel-2" tabindex="-1"><span class="tab-number">02</span><span class="tab-title">Etiquetado</span><span class="tab-sub">Equipo y SIM Tray</span></button>
+      <button class="station-tab" id="station-tab-3" type="button" role="tab" aria-selected="false" aria-controls="station-panel-3" tabindex="-1"><span class="tab-number">03</span><span class="tab-title">Caja</span><span class="tab-sub">Etiquetado y acomodo</span></button>
+      <button class="station-tab" id="station-tab-4" type="button" role="tab" aria-selected="false" aria-controls="station-panel-4" tabindex="-1"><span class="tab-number">04</span><span class="tab-title">Descarga</span><span class="tab-sub">Control y retorno</span></button>
+    </div>
+    <div class="station-panels">
+      <section class="station-panel" id="station-panel-1" role="tabpanel" aria-labelledby="station-tab-1">
+        <figure class="station-figure">
+          <a class="diagram-link" href="assets/sim-lectura.webp" data-lightbox data-caption="Puesto 01, carga e identificación. Captura del simulador 3D"><img src="assets/sim-lectura.webp" width="810" height="600" decoding="async" alt="Celular y SIM Tray sobre el pallet, junto al módulo USB y el elevador del puesto 01."/></a>
+          <figcaption><span>Estación 01</span><span>Operador de carga</span></figcaption>
         </figure>
-        <div class="puesto-body">
-          <span class="micro-label">ESTACIÓN 01 · OPERADOR DE CARGA</span>
+        <div class="station-copy">
+          <p class="station-role">Operador de carga</p>
           <h3>Carga e identificación del equipo</h3>
-          <p>El pallet llega elevado de forma automática desde el conveyor inferior. El operador carga el celular —encendido y con el display hacia abajo— y la SIM Tray en las cavidades del pallet. Un sistema de visión verifica la presencia y la posición de ambas piezas.</p>
+          <p>El pallet llega elevado de forma automática desde el conveyor inferior. El operador carga el celular, encendido y con el display hacia abajo, y la SIM Tray en las cavidades del pallet. Un sistema de visión verifica la presencia y la posición de ambas piezas.</p>
           <p>El USB se desplaza y se inserta en el conector del equipo. Se lee el IMEI del teléfono y la información se envía a los puestos de impresión y grabado.</p>
-          <dl class="puesto-specs">
+          <dl class="station-specs">
             <div><dt>Tolerancia del conector USB</dt><dd>± 0,10 mm</dd></div>
             <div><dt>Indexado hacia el puesto 02</dt><dd>± 0,10 mm</dd></div>
-            <div><dt>Lectura del IMEI</dt><dd>USB · ADB o similar</dd></div>
+            <div><dt>Lectura del IMEI</dt><dd>USB, ADB o similar</dd></div>
             <div><dt>Puesto de trabajo</dt><dd>De pie y de frente</dd></div>
           </dl>
         </div>
-      </article>
-      <article class="puesto-slide" data-carousel-slide role="group" aria-roledescription="puesto" aria-label="Puesto 02 de 04: Etiquetado del equipo y grabado de SIM Tray">
-        <figure class="puesto-media">
-          <a class="diagram-link" href="assets/sim-impresoras.webp" data-lightbox data-caption="Puesto 02 · Etiquetado del equipo y grabado de SIM Tray · Captura del simulador 3D"><img src="assets/sim-impresoras.webp" width="779" height="585" loading="lazy" decoding="async" alt="Vista elevada del puesto 02: impresora con cabezal de succión y grabadora láser Zeigen marcando la SIM Tray sobre el pallet."/><span class="image-expand" aria-hidden="true">↗</span></a>
-          <figcaption><span>PUESTO 02</span><span>SIMULADOR 3D</span></figcaption>
+      </section>
+      <section class="station-panel" id="station-panel-2" role="tabpanel" aria-labelledby="station-tab-2" hidden>
+        <figure class="station-figure">
+          <a class="diagram-link" href="assets/sim-impresoras.webp" data-lightbox data-caption="Puesto 02, etiquetado del equipo y grabado de SIM Tray. Captura del simulador 3D"><img src="assets/sim-impresoras.webp" width="779" height="585" decoding="async" alt="Vista elevada del puesto 02: impresora con cabezal de succión y grabadora láser Zeigen marcando la SIM Tray sobre el pallet."/></a>
+          <figcaption><span>Estación 02</span><span>Etiquetado del equipo</span></figcaption>
         </figure>
-        <div class="puesto-body">
-          <span class="micro-label">ESTACIÓN 02 · ETIQUETADO DEL EQUIPO</span>
+        <div class="station-copy">
+          <p class="station-role">Etiquetado del equipo</p>
           <h3>Del dato a la etiqueta del equipo</h3>
-          <p>Se imprime la etiqueta de IMEI del equipo, se verifica mediante OCR la correcta impresión de la misma y un sistema de eje cartesiano la toma y la pega sobre la tapa trasera del celular. En paralelo, un láser industrial graba el número de IMEI en la SIM Tray: la impresión y el grabado se ejecutan con el pallet detenido en la posición de trabajo.</p>
-          <dl class="puesto-specs">
+          <p>Se imprime la etiqueta de IMEI del equipo, se verifica mediante OCR la correcta impresión y un eje cartesiano la toma y la pega sobre la tapa trasera del celular. En paralelo, un láser industrial graba el número de IMEI en la SIM Tray: la impresión y el grabado se ejecutan con el pallet detenido en la posición de trabajo.</p>
+          <dl class="station-specs">
             <div><dt>Precisión de aplicación</dt><dd>± 1,5 mm</dd></div>
-            <div><dt>Etiqueta del equipo</dt><dd>28 × 31 mm · rollo de 38 mm</dd></div>
-            <div><dt>Grabado láser</dt></div>
+            <div><dt>Etiqueta del equipo</dt><dd>28 × 31 mm, rollo de 38 mm</dd></div>
+            <div><dt>Grabado láser</dt><dd>Sobre la SIM Tray</dd></div>
             <div><dt>Indexado hacia el puesto 03</dt><dd>± 0,50 mm</dd></div>
           </dl>
         </div>
-      </article>
-      <article class="puesto-slide" data-carousel-slide role="group" aria-roledescription="puesto" aria-label="Puesto 03 de 04: Etiquetado y acomodo de la caja">
-        <figure class="puesto-media">
-          <a class="diagram-link" href="assets/sim-caja.webp" data-lightbox data-caption="Puesto 03 · Etiquetado y acomodo de la caja · Captura del simulador 3D"><img src="assets/sim-caja.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Rampa de cajas, manipulador y pallet con el conjunto en el puesto 03."/><span class="image-expand" aria-hidden="true">↗</span></a>
-          <figcaption><span>PUESTO 03</span><span>SIMULADOR 3D</span></figcaption>
+      </section>
+      <section class="station-panel" id="station-panel-3" role="tabpanel" aria-labelledby="station-tab-3" hidden>
+        <figure class="station-figure">
+          <a class="diagram-link" href="assets/sim-caja.webp" data-lightbox data-caption="Puesto 03, etiquetado y acomodo de la caja. Captura del simulador 3D"><img src="assets/sim-caja.webp" width="1210" height="610" decoding="async" alt="Rampa de cajas, manipulador y pallet con el conjunto en el puesto 03."/></a>
+          <figcaption><span>Estación 03</span><span>Etiquetado de caja</span></figcaption>
         </figure>
-        <div class="puesto-body">
-          <span class="micro-label">ESTACIÓN 03 · ETIQUETADO DE CAJA</span>
+        <div class="station-copy">
+          <p class="station-role">Etiquetado de caja</p>
           <h3>La caja encuentra su lugar</h3>
-          <p>Se imprime la etiqueta de IMEI de la caja, se verifica mediante OCR la correcta impresión de la etiqueta. El sistema de manipulación toma la caja desde la rampa y la sostiene en posición mientras se aplica la etiqueta en su lateral mediante un sistema de eje cartesiano, dentro de las marcas de referencia. Después la coloca en la cavidad correspondiente del pallet.</p>
+          <p>Se imprime la etiqueta de IMEI de la caja y se verifica mediante OCR la correcta impresión. El sistema de manipulación toma la caja desde la rampa y la sostiene en posición mientras se aplica la etiqueta en su lateral mediante un eje cartesiano, dentro de las marcas de referencia. Después la coloca en la cavidad correspondiente del pallet.</p>
           <p>El operador de rampa trabaja de frente: completa la caja con sus accesorios y la carga para que el sistema la tome.</p>
-          <dl class="puesto-specs">
+          <dl class="station-specs">
             <div><dt>Precisión de pegado</dt><dd>± 1,0 mm</dd></div>
-            <div><dt>Etiqueta de caja</dt><dd>38 × 75 mm · rollo de 80 mm</dd></div>
+            <div><dt>Etiqueta de caja</dt><dd>38 × 75 mm, rollo de 80 mm</dd></div>
             <div><dt>Manipulación</dt><dd>Brazo robot</dd></div>
-            <div><dt>Formato</dt><dd>Caja blanda con accesorios o tapa semi-rígida</dd></div>
+            <div><dt>Formato</dt><dd>Caja blanda con accesorios o tapa semirrígida</dd></div>
           </dl>
         </div>
-      </article>
-      <article class="puesto-slide" data-carousel-slide role="group" aria-roledescription="puesto" aria-label="Puesto 04 de 04: Descarga y retorno">
-        <figure class="puesto-media">
-          <a class="diagram-link" href="assets/sim-retorno.webp" data-lightbox data-caption="Puesto 04 · Descarga y retorno · Captura del simulador 3D"><img src="assets/sim-retorno.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Puesto de descarga C4: el pallet con el celular y la caja etiquetados en el elevador, con las estaciones C1 a C3 al fondo."/><span class="image-expand" aria-hidden="true">↗</span></a>
-          <figcaption><span>PUESTO 04</span><span>SIMULADOR 3D</span></figcaption>
+      </section>
+      <section class="station-panel" id="station-panel-4" role="tabpanel" aria-labelledby="station-tab-4" hidden>
+        <figure class="station-figure">
+          <a class="diagram-link" href="assets/sim-retorno.webp" data-lightbox data-caption="Puesto 04, descarga y retorno. Captura del simulador 3D"><img src="assets/sim-retorno.webp" width="1210" height="610" decoding="async" alt="Puesto de descarga C4: el pallet con el celular y la caja etiquetados en el elevador, con las estaciones C1 a C3 al fondo."/></a>
+          <figcaption><span>Estación 04</span><span>Operador de descarga</span></figcaption>
         </figure>
-        <div class="puesto-body">
-          <span class="micro-label">ESTACIÓN 04 · OPERADOR DE DESCARGA</span>
+        <div class="station-copy">
+          <p class="station-role">Operador de descarga</p>
           <h3>El conjunto sale, el soporte continúa</h3>
           <p>El operador de descarga recibe el pallet con el celular etiquetado, la caja etiquetada y la SIM Tray. Las tres partes deben corresponderse entre sí. Por último, remueve las piezas del pallet.</p>
           <p>Un sistema AOI verifica que el pallet quede vacío. El elevador desciende, descarga el pallet en el conveyor inferior y el ciclo comienza nuevamente.</p>
-          <dl class="puesto-specs">
-            <div><dt>Control de descarga</dt><dd>AOI · Pallet vacío</dd></div>
-            <div><dt>Correspondencia</dt><dd>Celular + SIM Tray + caja</dd></div>
+          <dl class="station-specs">
+            <div><dt>Control de descarga</dt><dd>AOI, pallet vacío</dd></div>
+            <div><dt>Correspondencia</dt><dd>Celular, SIM Tray y caja</dd></div>
             <div><dt>Retorno</dt><dd>Automático por conveyor inferior</dd></div>
             <div><dt>Puesto de trabajo</dt><dd>De pie y de costado</dd></div>
           </dl>
         </div>
-      </article>
+      </section>
     </div>
-    <div class="puestos-controls">
-      <button class="carousel-arrow" type="button" data-carousel-prev aria-label="Puesto anterior" disabled><span aria-hidden="true">←</span></button>
-      <div class="carousel-progress" role="group" aria-label="Ir al puesto">
-        <button type="button" data-carousel-dot aria-label="Ir al puesto 01" aria-current="true"><i></i></button>
-        <button type="button" data-carousel-dot aria-label="Ir al puesto 02"><i></i></button>
-        <button type="button" data-carousel-dot aria-label="Ir al puesto 03"><i></i></button>
-        <button type="button" data-carousel-dot aria-label="Ir al puesto 04"><i></i></button>
-      </div>
-      <span class="carousel-counter" data-carousel-counter aria-live="polite">01 / 04</span>
-      <button class="carousel-arrow" type="button" data-carousel-next aria-label="Puesto siguiente"><span aria-hidden="true">→</span></button>
-    </div>
-    <p class="carousel-hint">Deslizá o usá las flechas para recorrer los cuatro puestos.</p>
   </div>
 </section>
 
 <section class="section intro" id="vision" aria-labelledby="vision-heading">
-  <div class="section-index reveal"><span>02 / LA VISIÓN</span><span>AUTOMATIZACIÓN QUE CIERRA EL CICLO</span></div>
+  <div class="section-index reveal"><span class="index-number">02</span><span class="index-label">La visión</span><span class="index-note">Automatización que cierra el ciclo</span></div>
   <div class="intro-grid">
-    <h2 class="display-heading reveal" id="vision-heading" data-parallax="-22">Del equipo<br/>a la caja.<br/><em>Todo conectado.</em></h2>
-    <div class="intro-copy reveal" data-parallax="24"><p class="lead">Menos tareas aisladas. Más control sobre el conjunto.</p><p>EMBALAJE conecta la lectura del IMEI con las etiquetas del teléfono y de su caja. El pallet mantiene reunidos el equipo, la SIM Tray y la caja, mientras cada estación aporta identificación, posicionamiento y control visual.</p><a class="text-link" href="#puestos">Descubrí cómo se conecta el proceso <span aria-hidden="true">↘</span></a></div>
+    <h2 class="display-heading reveal" id="vision-heading" data-parallax="-22">Del equipo<br/>a la caja.<br/>Todo conectado.</h2>
+    <div class="intro-copy reveal" data-parallax="24"><p class="lead">Menos tareas aisladas. Más control sobre el conjunto.</p><p>EMBALAJE conecta la lectura del IMEI con las etiquetas del teléfono y de su caja. El pallet mantiene reunidos el equipo, la SIM Tray y la caja, mientras cada estación aporta identificación, posicionamiento y control visual.</p><a class="text-link" href="#puestos">Ver cómo se conecta el proceso</a></div>
   </div>
   <div class="project-metrics">
-    <div class="metric reveal"><span class="metric-number">01</span><div><strong>Fuente de datos única</strong><p>El IMEI sale del propio equipo, sin digitación.</p></div></div>
-    <div class="metric reveal"><span class="metric-number">02</span><div><strong>Componentes reunidos</strong><p>Equipo, SIM Tray y caja en un mismo pallet.</p></div></div>
-    <div class="metric reveal"><span class="metric-number">03</span><div><strong>Puntos de etiquetado</strong><p>Equipo y caja identificados dentro del mismo flujo.</p></div></div>
+    <div class="metric reveal"><div><strong>Fuente de datos única</strong><p>El IMEI sale del propio equipo, sin digitación.</p></div></div>
+    <div class="metric reveal"><div><strong>Componentes reunidos</strong><p>Equipo, SIM Tray y caja en un mismo pallet.</p></div></div>
+    <div class="metric reveal"><div><strong>Puntos de etiquetado</strong><p>Equipo y caja identificados dentro del mismo flujo.</p></div></div>
   </div>
   <p class="source-note">Explorá la representación 3D del sistema y conocé cómo se integran sus estaciones.</p>
 </section>
 
 <section class="section system-section" id="sistema" aria-labelledby="system-heading">
-  <div class="section-index reveal"><span>03 / EL SISTEMA</span><span>DISEÑADO PARA VOLVER A EMPEZAR</span></div>
+  <div class="section-index reveal"><span class="index-number">03</span><span class="index-label">El sistema</span><span class="index-note">Diseñado para volver a empezar</span></div>
   <div class="editorial-grid">
     <figure class="diagram-card system-diagram reveal" data-parallax="-32">
-      <a class="diagram-link" href="assets/sim-circuito.webp" data-lightbox data-caption="Circuito de ida y retorno · Captura del simulador 3D" aria-label="Ampliar el circuito de conveyors del simulador"><img src="assets/sim-circuito.webp" width="755" height="530" loading="lazy" decoding="async" alt="Vista del circuito del simulador 3D, con conveyors de doble nivel, pallet y elevadores en los extremos."/><span class="image-expand" aria-hidden="true">↗</span></a>
-      <figcaption><span>FIG. 01 — CIRCUITO CERRADO</span><span>SIMULADOR 3D</span></figcaption>
+      <a class="diagram-link" href="assets/sim-circuito.webp" data-lightbox data-caption="Circuito de ida y retorno. Captura del simulador 3D" aria-label="Ampliar el circuito de conveyors del simulador"><img src="assets/sim-circuito.webp" width="755" height="530" loading="lazy" decoding="async" alt="Vista del circuito del simulador 3D, con conveyors de doble nivel, pallet y elevadores en los extremos."/></a>
+      <figcaption><span>Circuito cerrado</span><span>Simulador 3D</span></figcaption>
     </figure>
-    <div class="editorial-copy" data-parallax="24"><p class="kicker reveal">IDA. RETORNO. CONTINUIDAD.</p><h2 class="section-heading reveal" id="system-heading">Un flujo que<br/>vuelve a empezar.</h2><p class="reveal">El nivel superior lleva cada pallet de una operación a la siguiente. El inferior lo devuelve al inicio. Los elevadores conectan ambos recorridos y automatizan la recirculación.</p><p class="reveal">La distribución reúne transporte, estaciones y acceso a consumibles en un mismo entorno, con las zonas de carga y descarga al alcance del operador.</p><div class="inline-specs reveal"><div><strong>Doble nivel</strong><span>Transporte y recirculación</span></div><div><strong>Acceso directo</strong><span>Carga, consumibles y descarga</span></div></div></div>
+    <div class="editorial-copy" data-parallax="24"><p class="kicker reveal">Ida, retorno, continuidad</p><h2 class="section-heading reveal" id="system-heading">Un flujo que<br/>vuelve a empezar.</h2><p class="reveal">El nivel superior lleva cada pallet de una operación a la siguiente. El inferior lo devuelve al inicio. Los elevadores conectan ambos recorridos y automatizan la recirculación.</p><p class="reveal">La distribución reúne transporte, estaciones y acceso a consumibles en un mismo entorno, con las zonas de carga y descarga al alcance del operador.</p><div class="inline-specs reveal"><div><strong>Doble nivel</strong><span>Transporte y recirculación</span></div><div><strong>Acceso directo</strong><span>Carga, consumibles y descarga</span></div></div></div>
   </div>
 </section>
 
 <section class="section precision-section" id="precision" aria-labelledby="precision-heading">
-  <div class="section-index reveal"><span>04 / LA PRECISIÓN</span><span>CADA APOYO TIENE UN PORQUÉ</span></div>
+  <div class="section-index reveal"><span class="index-number">04</span><span class="index-label">La precisión</span><span class="index-note">Cada apoyo tiene un porqué</span></div>
   <div class="precision-grid">
-    <div><h2 class="section-heading reveal" id="precision-heading">Cada formato.<br/><em>Su ajuste preciso.</em></h2><p class="reveal">Una base común acompaña distintos modelos. Las cavidades regulables y las referencias del pallet ordenan el posicionamiento de las piezas y facilitan los cambios de formato.</p>
+    <div><h2 class="section-heading reveal" id="precision-heading">Cada formato.<br/>Su ajuste preciso.</h2><p class="reveal">Una base común acompaña distintos modelos. Las cavidades regulables y las referencias del pallet ordenan el posicionamiento de las piezas y facilitan los cambios de formato.</p>
       <details class="spec-detail reveal" open><summary>Adaptación del equipo <span aria-hidden="true">+</span></summary><dl><div><dt>Largo del teléfono</dt><dd>152–172 mm</dd></div><div><dt>Ancho</dt><dd>70–78 mm</dd></div><div><dt>Espesor</dt><dd>5,9–9,2 mm</dd></div></dl></details>
       <details class="spec-detail reveal"><summary>Adaptación de la caja <span aria-hidden="true">+</span></summary><dl><div><dt>Largo</dt><dd>169–190 mm</dd></div><div><dt>Ancho</dt><dd>82–97 mm</dd></div><div><dt>Altura</dt><dd>42–62 mm</dd></div></dl></details>
       <details class="spec-detail reveal"><summary>Conexión USB guiada <span aria-hidden="true">+</span></summary><p>El conector se aproxima al puerto desde una posición controlada. El soporte regulable acompaña el ajuste del pallet para adaptar la conexión al formato del equipo.</p></details>
     </div>
-    <figure class="diagram-card pallet-diagram reveal" data-parallax="-38"><a class="diagram-link" href="assets/sim-pallet.webp" data-lightbox data-caption="Pallet universal y zonas de ajuste · Captura del simulador 3D" aria-label="Ampliar el pallet del simulador"><img src="assets/sim-pallet.webp" width="755" height="590" loading="lazy" decoding="async" alt="Vista de detalle del pallet GLB del simulador, con alojamientos, apoyos y tornillos de ajuste para caja, teléfono y SIM Tray."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>FIG. 02 — PALLET UNIVERSAL</span><span>REFERENCIAS Y AJUSTES</span></figcaption></figure>
+    <figure class="diagram-card pallet-diagram reveal" data-parallax="-38"><a class="diagram-link" href="assets/sim-pallet.webp" data-lightbox data-caption="Pallet universal y zonas de ajuste · Captura del simulador 3D" aria-label="Ampliar el pallet del simulador"><img src="assets/sim-pallet.webp" width="755" height="590" loading="lazy" decoding="async" alt="Vista de detalle del pallet GLB del simulador, con alojamientos, apoyos y tornillos de ajuste para caja, teléfono y SIM Tray."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>Pallet universal</span><span>Referencias y ajustes</span></figcaption></figure>
   </div>
-  <div class="tolerance-grid"><div class="reveal"><span class="micro-label">IDENTIFICACIÓN DIRECTA</span><strong>USB</strong><p>El dato parte del dispositivo y se integra al etiquetado.</p></div><div class="reveal"><span class="micro-label">INSPECCIÓN ÓPTICA</span><strong>OCR</strong><p>La lectura de las etiquetas acompaña el control del proceso.</p></div><div class="reveal"><span class="micro-label">MOVIMIENTO COORDINADO</span><strong>XYZ</strong><p>Los ejes cartesianos llevan cada aplicación a su posición.</p></div></div>
+  <div class="tolerance-grid"><div class="reveal"><span class="micro-label">Identificación directa</span><strong>USB</strong><p>El dato parte del dispositivo y se integra al etiquetado.</p></div><div class="reveal"><span class="micro-label">Inspección óptica</span><strong>OCR</strong><p>La lectura de las etiquetas acompaña el control del proceso.</p></div><div class="reveal"><span class="micro-label">Movimiento coordinado</span><strong>XYZ</strong><p>Los ejes cartesianos llevan cada aplicación a su posición.</p></div></div>
 </section>
 
 <section class="section control-section" id="control" aria-labelledby="control-heading">
   <div class="section-index reveal">
-    <span>05 / EL CONTROL</span>
-    <span>SUPERVISIÓN Y CONFIGURACIÓN DE LA LÍNEA</span>
+    <span class="index-number">05</span>
+    <span class="index-label">El control</span>
+    <span class="index-note">Supervisión y configuración de la línea</span>
   </div>
   <div class="control-intro">
-    <h2 class="display-heading reveal" id="control-heading">Toda la línea.<br/><em>Un mismo control.</em></h2>
+    <h2 class="display-heading reveal" id="control-heading">Toda la línea.<br/>Un mismo control.</h2>
     <div class="reveal">
       <p>El movimiento de cada pieza forma parte de un proceso conectado. El panel SCADA reúne la supervisión de sensores, motores e impresoras y la configuración de las estaciones en una misma interfaz.</p>
       <p>Está pensado para vincular la carga, el transporte, el posicionamiento y el etiquetado: desde la visión general de producción hasta el ajuste de un eje.</p>
@@ -299,21 +295,21 @@
         <img src="assets/panel-produccion.webp" width="1440" height="1168" loading="lazy" decoding="async" alt="Captura del panel SCADA con cinco estaciones conectadas, sensores de elevadores y conveyors, motores, ejes cartesianos y estados de impresoras."/>
         <span class="image-expand" aria-hidden="true">↗</span>
       </a>
-      <figcaption><span>PRODUCCIÓN · VISIÓN DEL PROCESO</span><span>CAPTURA DEL PANEL</span></figcaption>
+      <figcaption><span>Producción, visión del proceso</span><span>Captura del panel</span></figcaption>
     </figure>
     <ol class="control-connections">
       <li class="reveal">
-        <span class="micro-label">01 / OBSERVAR</span>
+        <span class="micro-label">Paso 01. Observar</span>
         <h3>El estado de cada estación.</h3>
         <p>Entradas y salidas de pallet, límites, referencias Home y estados de impresora. La vista de producción organiza las señales siguiendo el recorrido de la línea.</p>
       </li>
       <li class="reveal">
-        <span class="micro-label">02 / AJUSTAR</span>
+        <span class="micro-label">Paso 02. Ajustar</span>
         <h3>Los parámetros, en su lugar.</h3>
         <p>Velocidad, aceleración, pulsos y referencias de origen se agrupan por módulo. Elevadores y conveyors tienen su configuración dentro de la misma estación.</p>
       </li>
       <li class="reveal">
-        <span class="micro-label">03 / COORDINAR</span>
+        <span class="micro-label">Paso 03. Coordinar</span>
         <h3>Del transporte al etiquetado.</h3>
         <p>Los módulos cartesianos reúnen selección de eje, movimientos, ajustes finos y succión. Son las operaciones que posicionan el cabezal para tomar y colocar la etiqueta.</p>
       </li>
@@ -326,14 +322,14 @@
         <img src="assets/panel-estacion.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla de la estación 01 con velocidad, aceleración, pulsos, AutoHome y botones de movimiento del elevador."/>
         <span class="image-expand" aria-hidden="true">↗</span>
       </a>
-      <figcaption><span>ESTACIÓN · ELEVADOR Y CONVEYOR</span><span>AMPLIAR ↗</span></figcaption>
+      <figcaption><span>Estación, elevador y conveyor</span><span>Captura del panel</span></figcaption>
     </figure>
     <figure class="panel-shot reveal">
       <a class="diagram-link" href="assets/panel-ejes.webp" data-lightbox data-caption="Cartesiano del teléfono · Parámetros compartidos y selección de ejes X, Y, Z" aria-label="Ampliar la configuración del cartesiano">
         <img src="assets/panel-ejes.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Pantalla del cartesiano del teléfono con parámetros compartidos, AutoHome y selección de ejes X, Y y Z."/>
         <span class="image-expand" aria-hidden="true">↗</span>
       </a>
-      <figcaption><span>CARTESIANO · CONFIGURACIÓN XYZ</span><span>AMPLIAR ↗</span></figcaption>
+      <figcaption><span>Cartesiano, configuración XYZ</span><span>Captura del panel</span></figcaption>
     </figure>
   </div>
 
@@ -343,7 +339,7 @@
   </div>
   <div class="control-demos">
     <article class="control-demo reveal">
-      <div class="control-demo-meta"><span>RECORRIDO 01</span><span>27 S · SIN AUDIO</span></div>
+      <div class="control-demo-meta"><span>Recorrido 01</span><span>27 s, sin audio</span></div>
       <h4>Configurar una estación.</h4>
       <video class="panel-demo-video" src="assets/panel-demo-estacion.mp4" poster="assets/panel-estacion.webp" width="1440" height="900" controls muted playsinline preload="none" aria-label="Demostración de configuración de una estación" aria-describedby="demo-estacion-description">
         <a href="assets/panel-demo-estacion.mp4">Ver el video de configuración de una estación.</a>
@@ -351,7 +347,7 @@
       <p id="demo-estacion-description">De Producción a la estación 01: cambiar velocidad y aceleración del elevador, aplicar parámetros, probar un desplazamiento y ajustar el conveyor y el agarre.</p>
     </article>
     <article class="control-demo reveal">
-      <div class="control-demo-meta"><span>RECORRIDO 02</span><span>27 S · SIN AUDIO</span></div>
+      <div class="control-demo-meta"><span>Recorrido 02</span><span>27 s, sin audio</span></div>
       <h4>Preparar el cartesiano.</h4>
       <video class="panel-demo-video" src="assets/panel-demo-cartesiano.mp4" poster="assets/panel-ejes.webp" width="1440" height="900" controls muted playsinline preload="none" aria-label="Demostración de configuración del cartesiano" aria-describedby="demo-cartesiano-description">
         <a href="assets/panel-demo-cartesiano.mp4">Ver el video de configuración del cartesiano.</a>
@@ -363,35 +359,35 @@
 </section>
 
 <section class="section people-section" id="ingenieria" aria-labelledby="people-heading">
-  <div class="section-index reveal"><span>06 / INGENIERÍA PARA OPERAR</span><span>EL SISTEMA COMPLETO IMPORTA</span></div>
+  <div class="section-index reveal"><span class="index-number">06</span><span class="index-label">Ingeniería para operar</span><span class="index-note">El sistema completo importa</span></div>
   <div class="people-heading"><h2 class="display-heading reveal" id="people-heading" data-parallax="-18">Automatizar el proceso.</h2><p class="reveal">La carga, el abastecimiento y la descarga se organizan alrededor de una línea que conecta las operaciones repetitivas. Más claridad en el flujo y acceso directo a cada zona de trabajo.</p></div>
-  <figure class="diagram-card wide-diagram reveal"><a class="diagram-link" href="assets/sim-conjunto.webp" data-lightbox data-caption="Distribución general y puestos de operación · Captura del simulador 3D" aria-label="Ampliar la distribución general"><img src="assets/sim-conjunto.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Vista general del simulador 3D sin operarios, con elevadores, conveyors, robots cartesianos y puestos de impresión." data-parallax="18"/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>FIG. 03 — VISIÓN DE CONJUNTO</span><span>SIMULADOR 3D</span></figcaption></figure>
-  <div class="principles"><article class="reveal"><span>01</span><h3>Acceso simple</h3><p>Impresoras y consumibles al alcance para facilitar el cambio de rollos y la asistencia.</p></article><article class="reveal"><span>02</span><h3>Operaciones conectadas</h3><p>Transporte, etiquetado y manipulación coordinados dentro del mismo recorrido.</p></article><article class="reveal"><span>03</span><h3>Control a la vista</h3><p>Sensores, actuadores y estados de estación que permiten seguir el funcionamiento de la línea.</p></article></div>
+  <figure class="diagram-card wide-diagram reveal"><a class="diagram-link" href="assets/sim-conjunto.webp" data-lightbox data-caption="Distribución general y puestos de operación. Captura del simulador 3D" aria-label="Ampliar la distribución general"><img src="assets/sim-conjunto.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Vista general del simulador 3D sin operarios, con elevadores, conveyors, robots cartesianos y puestos de impresión." data-parallax="18"/></a><figcaption><span>Visión de conjunto</span><span>Simulador 3D</span></figcaption></figure>
+  <div class="principles"><article class="reveal"><h3>Acceso simple</h3><p>Impresoras y consumibles al alcance para facilitar el cambio de rollos y la asistencia.</p></article><article class="reveal"><h3>Operaciones conectadas</h3><p>Transporte, etiquetado y manipulación coordinados dentro del mismo recorrido.</p></article><article class="reveal"><h3>Control a la vista</h3><p>Sensores, actuadores y estados de estación que permiten seguir el funcionamiento de la línea.</p></article></div>
 </section>
 
 <section class="section gallery-section" id="detalles" aria-labelledby="gallery-heading">
-  <div class="section-index reveal"><span>07 / EL DETALLE</span><span>INGENIERÍA QUE SE VE DE CERCA</span></div>
-  <div class="gallery-intro"><h2 class="display-heading reveal" id="gallery-heading">Acercate al sistema.<br/><em>Descubrí sus detalles.</em></h2><p class="reveal">Desde la entrada del equipo hasta la entrega del conjunto: una distribución que une las operaciones y hace visible el recorrido.</p></div>
+  <div class="section-index reveal"><span class="index-number">07</span><span class="index-label">El detalle</span><span class="index-note">Ingeniería que se ve de cerca</span></div>
+  <div class="gallery-intro"><h2 class="display-heading reveal" id="gallery-heading">Acercate al sistema.<br/>Descubrí sus detalles.</h2><p class="reveal">Desde la entrada del equipo hasta la entrega del conjunto: una distribución que une las operaciones y hace visible el recorrido.</p></div>
   <div class="gallery-grid">
-    <figure class="diagram-card gallery-card reveal" data-parallax="-16"><a class="diagram-link" href="assets/sim-identificacion.webp" data-lightbox data-caption="Estación de identificación · Captura del simulador 3D" aria-label="Ampliar la estación de identificación"><img src="assets/sim-identificacion.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Captura del simulador: elevador C1, pallet, cámara de inspección y módulo de lectura USB."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>IDENTIFICACIÓN</span><span>LECTURA USB</span></figcaption></figure>
-    <figure class="diagram-card gallery-card reveal" data-parallax="16"><a class="diagram-link" href="assets/sim-descarga.webp" data-lightbox data-caption="Puesto de descarga · Captura del simulador 3D" aria-label="Ampliar el puesto de descarga"><img src="assets/sim-descarga.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Captura del simulador: elevador C4 y pallet con teléfono, SIM Tray y caja listos para la descarga."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>DESCARGA</span><span>CONJUNTO REUNIDO</span></figcaption></figure>
+    <figure class="diagram-card gallery-card reveal" data-parallax="-16"><a class="diagram-link" href="assets/sim-identificacion.webp" data-lightbox data-caption="Estación de identificación. Captura del simulador 3D" aria-label="Ampliar la estación de identificación"><img src="assets/sim-identificacion.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Captura del simulador: elevador C1, pallet, cámara de inspección y módulo de lectura USB."/></a><figcaption><span>Identificación</span><span>Lectura USB</span></figcaption></figure>
+    <figure class="diagram-card gallery-card reveal" data-parallax="16"><a class="diagram-link" href="assets/sim-descarga.webp" data-lightbox data-caption="Puesto de descarga. Captura del simulador 3D" aria-label="Ampliar el puesto de descarga"><img src="assets/sim-descarga.webp" width="1210" height="610" loading="lazy" decoding="async" alt="Captura del simulador: elevador C4 y pallet con teléfono, SIM Tray y caja listos para la descarga."/></a><figcaption><span>Descarga</span><span>Conjunto reunido</span></figcaption></figure>
   </div>
   <div class="photo-band">
-    <div class="photo-band-head"><p class="kicker reveal">LOS COMPONENTES, DE CERCA</p><p class="reveal">Equipo, soporte, caja e impresión: las piezas de tu operación, conectadas en una misma solución.</p></div>
+    <div class="photo-band-head"><p class="kicker reveal">Los componentes, de cerca</p><p class="reveal">Equipo, soporte, caja e impresión: las piezas de tu operación, conectadas en una misma solución.</p></div>
     <div class="photo-grid">
-      <figure class="photo-card reveal" data-parallax="-16"><a class="diagram-link" href="assets/operacion.webp" data-lightbox data-caption="Operación de referencia · Componentes del proceso" aria-label="Ampliar la foto de operación de referencia"><img src="assets/operacion.webp" width="606" height="455" loading="lazy" decoding="async" alt="Fotografía de la operación de referencia con los componentes del proceso."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>OPERACIÓN DE REFERENCIA</span><span>FIG. 09</span></figcaption></figure>
-      <figure class="photo-card reveal" data-parallax="-22"><a class="diagram-link" href="assets/componentes.webp" data-lightbox data-caption="Componentes del proceso · Equipo y bandeja" aria-label="Ampliar la foto de los componentes"><img src="assets/componentes.webp" width="834" height="624" loading="lazy" decoding="async" alt="Fotografía de los componentes que se cargan en el pallet."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>COMPONENTES DEL PROCESO</span><span>FIG. 10</span></figcaption></figure>
-      <figure class="photo-card reveal" data-parallax="-10"><a class="diagram-link" href="assets/caja-blanda.webp" data-lightbox data-caption="Caja blanda · Accesorios y cuna" aria-label="Ampliar la foto de la caja blanda"><img src="assets/caja-blanda.webp" width="798" height="599" loading="lazy" decoding="async" alt="Fotografía de la caja blanda con sus accesorios y la cuna para el equipo."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>CAJA BLANDA CON ACCESORIOS</span><span>FIG. 11</span></figcaption></figure>
-      <figure class="photo-card reveal" data-parallax="20"><a class="diagram-link" href="assets/impresoras.webp" data-lightbox data-caption="Impresoras de transferencia · Zebra y SATO" aria-label="Ampliar la foto de las impresoras"><img src="assets/impresoras.webp" width="779" height="585" loading="lazy" decoding="async" alt="Fotografía de las impresoras de transferencia térmica para etiquetas."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>IMPRESORAS DE ETIQUETAS</span><span>FIG. 13</span></figcaption></figure>
-      <figure class="photo-card reveal" data-parallax="26"><a class="diagram-link" href="assets/dispensado.webp" data-lightbox data-caption="Dispensado de etiquetas · Salida repetitiva" aria-label="Ampliar la foto del dispensado de etiquetas"><img src="assets/dispensado.webp" width="779" height="585" loading="lazy" decoding="async" alt="Fotografía de la salida de etiquetas dispensadas con papel base acerado."/><span class="image-expand" aria-hidden="true">↗</span></a><figcaption><span>DISPENSADO DE ETIQUETAS</span><span>FIG. 14</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="-16"><a class="diagram-link" href="assets/operacion.webp" data-lightbox data-caption="Operación de referencia. Componentes del proceso" aria-label="Ampliar la foto de operación de referencia"><img src="assets/operacion.webp" width="606" height="455" loading="lazy" decoding="async" alt="Fotografía de la operación de referencia con los componentes del proceso."/></a><figcaption><span>Operación de referencia</span><span>Caja etiquetada</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="-22"><a class="diagram-link" href="assets/componentes.webp" data-lightbox data-caption="Componentes del proceso. Equipo y bandeja" aria-label="Ampliar la foto de los componentes"><img src="assets/componentes.webp" width="834" height="624" loading="lazy" decoding="async" alt="Fotografía de los componentes que se cargan en el pallet."/></a><figcaption><span>Componentes del proceso</span><span>Equipo y bandeja</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="-10"><a class="diagram-link" href="assets/caja-blanda.webp" data-lightbox data-caption="Caja blanda. Accesorios y cuna" aria-label="Ampliar la foto de la caja blanda"><img src="assets/caja-blanda.webp" width="798" height="599" loading="lazy" decoding="async" alt="Fotografía de la caja blanda con sus accesorios y la cuna para el equipo."/></a><figcaption><span>Caja blanda con accesorios</span><span>Protección del equipo</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="20"><a class="diagram-link" href="assets/impresoras.webp" data-lightbox data-caption="Impresoras de transferencia. Zebra y SATO" aria-label="Ampliar la foto de las impresoras"><img src="assets/impresoras.webp" width="779" height="585" loading="lazy" decoding="async" alt="Fotografía de las impresoras de transferencia térmica para etiquetas."/></a><figcaption><span>Impresoras de etiquetas</span><span>Transferencia térmica</span></figcaption></figure>
+      <figure class="photo-card reveal" data-parallax="26"><a class="diagram-link" href="assets/dispensado.webp" data-lightbox data-caption="Dispensado de etiquetas. Salida repetitiva" aria-label="Ampliar la foto del dispensado de etiquetas"><img src="assets/dispensado.webp" width="779" height="585" loading="lazy" decoding="async" alt="Fotografía de la salida de etiquetas dispensadas con papel base acerado."/></a><figcaption><span>Dispensado de etiquetas</span><span>Salida repetitiva</span></figcaption></figure>
     </div>
   </div>
 </section>
 
-<section class="closing section" aria-labelledby="closing-heading"><p class="kicker reveal">EL VALOR ESTÁ EN CÓMO SE CONECTA TODO</p><h2 class="display-heading reveal" id="closing-heading">Conocé el sistema.<br/><em>Imaginá el próximo paso.</em></h2><a class="pill-button large-button reveal" href="#inicio">Explorar EMBALAJE en 3D <span aria-hidden="true">↑</span></a></section>
+<section class="closing section" aria-labelledby="closing-heading"><p class="kicker reveal">El valor está en cómo se conecta todo</p><h2 class="display-heading reveal" id="closing-heading">Conocé el sistema.<br/>Imaginá el próximo paso.</h2><div class="closing-copy reveal"><p>Recorré la línea completa, estación por estación, en la simulación 3D.</p><a class="pill-button large-button" href="#inicio">Explorar la línea en 3D</a></div></section>
 
 </main>
-<footer class="site-footer"><a class="wordmark" href="#inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a><p>Automatización y trazabilidad.<br/>Presentación del sistema y simulación en vivo.</p><nav class="footer-nav" aria-label="Enlaces de sección"><a href="timeline.html" target="_blank" rel="noopener">Timeline ↗</a><a href="#inicio">Inicio</a></nav></footer>
+<footer class="site-footer"><a class="wordmark" href="#inicio"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>EMBALAJE</a><p>Automatización y trazabilidad para líneas de embalaje.<br/>Presentación del sistema y simulación en vivo.</p><nav class="footer-nav" aria-label="Enlaces de sección"><a href="timeline.html">Trayectoria</a><a href="#inicio">Inicio</a></nav></footer>
 <dialog id="diagram-dialog" class="diagram-dialog" aria-labelledby="dialog-caption"><button class="dialog-close" type="button" aria-label="Cerrar imagen">×</button><img id="dialog-image" alt=""/><p id="dialog-caption"></p></dialog>
 <script type="importmap">
 {"imports":{"three":"./vendor/three/three.module.js","three/addons/":"./vendor/three/addons/"}}

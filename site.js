@@ -61,6 +61,7 @@
     const y = window.scrollY, height = window.innerHeight;
     const reduced = root.classList.contains('reduce-motion');
     header.classList.toggle('is-scrolled', y > 40);
+    header.classList.toggle('is-light', y > hero.offsetHeight - header.offsetHeight);
     const range = document.documentElement.scrollHeight - height;
     document.getElementById('reading-progress').style.transform = `scaleX(${range > 0 ? y / range : 0})`;
     const progress = clamp(y / Math.max(1, hero.offsetHeight), 0, 1);
@@ -130,46 +131,36 @@
     if (document.hidden) panelDemos.forEach(video => video.pause());
   });
 
-  // Carrusel de puestos: navegación por flechas, controles y deslizamiento.
-  const puestosCarousel = document.querySelector('[data-puestos-carousel]');
-  if (puestosCarousel) {
-    const track = puestosCarousel.querySelector('[data-carousel-track]');
-    const slides = [...puestosCarousel.querySelectorAll('[data-carousel-slide]')];
-    const prevButton = puestosCarousel.querySelector('[data-carousel-prev]');
-    const nextButton = puestosCarousel.querySelector('[data-carousel-next]');
-    const dots = [...puestosCarousel.querySelectorAll('[data-carousel-dot]')];
-    const counter = puestosCarousel.querySelector('[data-carousel-counter]');
-    let puestoIndex = 0;
-    let carouselFrame = false;
-    const slideStart = slide => slide.offsetLeft - slides[0].offsetLeft;
-    function syncCarousel() {
-      carouselFrame = false;
-      const x = track.scrollLeft;
-      let index = 0;
-      for (let i = 1; i < slides.length; i++) if (Math.abs(slideStart(slides[i]) - x) < Math.abs(slideStart(slides[index]) - x)) index = i;
-      puestoIndex = index;
-      slides.forEach((slide, i) => slide.classList.toggle('is-current', i === index));
-      dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
-      counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
-      prevButton.disabled = index === 0;
-      nextButton.disabled = index === slides.length - 1;
-    }
-    function goToPuesto(index) {
-      const target = slides[clamp(index, 0, slides.length - 1)];
-      track.scrollTo({ left: slideStart(target), behavior: root.classList.contains('reduce-motion') ? 'auto' : 'smooth' });
-    }
-    track.addEventListener('scroll', () => {
-      if (!carouselFrame) { carouselFrame = true; requestAnimationFrame(syncCarousel); }
-    }, { passive: true });
-    track.addEventListener('keydown', event => {
-      if (event.key === 'ArrowRight') { event.preventDefault(); goToPuesto(puestoIndex + 1); }
-      if (event.key === 'ArrowLeft') { event.preventDefault(); goToPuesto(puestoIndex - 1); }
+  // Puestos: selector accesible, sin carrusel ni contenido fuera de pantalla.
+  const stations = document.querySelector('[data-stations]');
+  if (stations) {
+    const tabs = [...stations.querySelectorAll('[role="tab"]')];
+    const panels = [...stations.querySelectorAll('[role="tabpanel"]')];
+    const activate = (index, focus = false) => {
+      tabs.forEach((tab, position) => {
+        const selected = position === index;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        tab.classList.toggle('is-active', selected);
+        panels[position].hidden = !selected;
+      });
+      if (focus) tabs[index].focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activate(index));
+      tab.addEventListener('keydown', event => {
+        let next = null;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = tabs.length - 1;
+        if (next !== null) {
+          event.preventDefault();
+          activate(next, true);
+        }
+      });
     });
-    prevButton.addEventListener('click', () => goToPuesto(puestoIndex - 1));
-    nextButton.addEventListener('click', () => goToPuesto(puestoIndex + 1));
-    dots.forEach((dot, index) => dot.addEventListener('click', () => goToPuesto(index)));
-    window.addEventListener('resize', () => { track.scrollLeft = slideStart(slides[puestoIndex]); }, { passive: true });
-    syncCarousel();
+    activate(0);
   }
 
   setMotion();
