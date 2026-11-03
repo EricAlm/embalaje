@@ -134,8 +134,8 @@ const years = [
         tags: "Sensores · Telemetría",
         images: [
           {
-            src: "assets/timeline/tl-boya.svg",
-            alt: "Ilustración técnica de una boya oceanográfica con panel solar, sensores y línea de cultivo de mejillones.",
+            src: "assets/timeline/boya.jpg",
+            alt: "Boya oceanográfica amarilla con panel solar y mástil de sensores flotando en el mar.",
             label: "Boya Oceanográfica"
           }
         ],
